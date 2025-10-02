@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>conicey.net</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    background: #0d0d0d;
+    font-family: 'Arial Black', Gadget, sans-serif;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  img.logo {
+    width: 350px;
+    max-width: 90%;
+    height: auto;
+    margin-bottom: 20px;
+    filter: grayscale(100%) contrast(120%);
+    transition: transform 0.3s ease;
+  }
+  img.logo:hover { transform: scale(1.05); }
+
+  .tagline {
+    font-size: 1rem;
+    text-align: center;
+    max-width: 600px;
+    color: #a0a0a0;
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  a.social {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #e0e0e0;
+    text-decoration: none;
+    border: 2px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1a1a1a;
+    text-transform: lowercase;
+    transition: all 0.3s ease-in-out;
+  }
+
+  a.social::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+  }
+  a.social:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
+
+  a.social::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(90deg, #bbb, #eee, #bbb);
+    transition: width 0.3s ease;
+  }
+  a.social:hover::after { width: 100%; }
+
+  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
+
+  footer { margin-top: 40px; font-size: 0.8rem; color: #666; }
+
+  @media (max-width: 500px) {
+    .tagline { font-size: 0.9rem; }
+    a.social { font-size: 0.9rem; }
+  }
+</style>
+</head>
+<body>
+
+<img src="coniceypng.png" alt="conicey" class="logo">
+
+<div class="tagline">
+  We ❤ Conicey
+</div>
+<div class="tagline">
+  Developer • Animator • Whitehatter • Server Manager • Community Manager • Designer • Creator
+</div>
+
+<div class="content">
+  <a href="https://guns.lol/conicey" class="social" target="_blank" rel="noopener noreferrer">guns.lol</a>
+  <a href="https://discord.com/users/920912709862703115" class="social" target="_blank" rel="noopener noreferrer">discord</a>
+  <a href="https://www.roblox.com/users/3754010089/profile" class="social" target="_blank" rel="noopener noreferrer">roblox</a>
+  <a href="https://www.twitch.tv/coniceyy" class="social" target="_blank" rel="noopener noreferrer">twitch</a>
+  <a href="https://open.spotify.com/user/31pktw5i4vqzf2zmrfc355qfqlli?si=42335e83fe234cc9" class="social" target="_blank" rel="noopener noreferrer">spotify</a>
+  <a href="https://www.youtube.com/@coniceyy" class="social" target="_blank" rel="noopener noreferrer">youtube</a>
+  <a href="https://x.com/conicey" class="social" target="_blank" rel="noopener noreferrer">x</a>
+  <a href="https://www.tiktok.com/@coniceyy" class="social" target="_blank" rel="noopener noreferrer">tiktok</a>
+  <a href="https://www.instagram.com/coniceyyy" class="social" target="_blank" rel="noopener noreferrer">instagram</a>
+  <a href="https://linktr.ee/conicey" class="social" target="_blank" rel="noopener noreferrer">linktree</a>
+</div>
+
+<footer>© conicey • The GOAT</footer>
+
+</body>
+</html>
