@@ -1,128 +1,260 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>conicey.net</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Biolink Button — Example</title>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    margin: 0;
-    padding: 40px 20px;
-    background: #0d0d0d;
-    font-family: 'Arial Black', Gadget, sans-serif;
-    color: #e0e0e0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-height: 100vh;
-    position: relative;
+  /* Basic page layout for demo */
+  :root{
+    --accent:#1f2937;
+    --bg:#0f1724;
+    --panel:#0b1220;
+    --text:#ffffff;
+    --muted:#9ca3af;
+  }
+  html,body{
+    height:100%;
+    margin:0;
+    font-family:Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    background:linear-gradient(180deg,var(--bg), #071020 120%);
+    color:var(--text);
+    -webkit-font-smoothing:antialiased;
+    -moz-osx-font-smoothing:grayscale;
   }
 
-  img.logo {
-    width: 350px;
-    max-width: 90%;
-    height: auto;
-    margin-bottom: 20px;
-    filter: grayscale(100%) contrast(120%);
-    transition: transform 0.3s ease;
-  }
-  img.logo:hover { transform: scale(1.05); }
-
-  .tagline {
-    font-size: 1rem;
-    text-align: center;
-    max-width: 600px;
-    color: #a0a0a0;
-    line-height: 1.5;
-    margin-bottom: 30px;
+  /* Container holding the button */
+  .topbar {
+    height:72px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:0 18px;
+    box-sizing:border-box;
+    position:relative;
+    z-index:5;
   }
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    max-width: 400px;
+  /* The "biolink" button */
+  .biolink-btn {
+    position:relative;
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 14px;
+    background:linear-gradient(90deg,#111827,#0b1220);
+    border-radius:12px;
+    box-shadow:0 6px 18px rgba(2,6,23,0.6);
+    color:var(--text);
+    text-decoration:none;
+    font-weight:600;
+    cursor:pointer;
+    border:1px solid rgba(255,255,255,0.04);
+    transition:transform .12s ease, box-shadow .12s ease;
+    user-select:none;
+  }
+  .biolink-btn:hover, .biolink-btn:focus{
+    transform:translateY(-2px);
+    box-shadow:0 12px 30px rgba(2,6,23,0.75);
   }
 
-  a.social {
-    position: relative;
-    width: 100%;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 1rem;
-    color: #e0e0e0;
-    text-decoration: none;
-    border: 2px solid #444;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #1a1a1a;
-    text-transform: lowercase;
-    transition: all 0.3s ease-in-out;
+  /* Right slide-out panel (hidden by default) */
+  .side-panel {
+    --panel-width:320px;
+    position:fixed;
+    top:0;
+    right:calc(-1 * var(--panel-width));
+    width:var(--panel-width);
+    height:100vh;
+    background:linear-gradient(180deg,var(--panel), #071228);
+    box-shadow:-20px 0 40px rgba(2,6,23,0.7);
+    border-left:1px solid rgba(255,255,255,0.03);
+    padding:22px;
+    box-sizing:border-box;
+    transform:translateX(0);
+    transition: right .22s cubic-bezier(.2,.9,.2,1), opacity .18s ease;
+    opacity:0;
+    pointer-events:none;
+    z-index:20;
   }
 
-  a.social::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -75%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
-    transform: skewX(-25deg);
+  /* When the parent container is hovered/focused, bring panel into view */
+  .panel-trigger:hover ~ .side-panel,
+  .panel-trigger:focus-within ~ .side-panel,
+  .side-panel.open {
+    right:0;
+    opacity:1;
+    pointer-events:auto;
   }
-  a.social:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
 
-  a.social::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 2px;
-    width: 0;
-    background: linear-gradient(90deg, #bbb, #eee, #bbb);
-    transition: width 0.3s ease;
+  /* Panel header */
+  .side-panel .panel-head {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:12px;
+    margin-bottom:14px;
   }
-  a.social:hover::after { width: 100%; }
-
-  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
-
-  footer { margin-top: 40px; font-size: 0.8rem; color: #666; }
-
-  @media (max-width: 500px) {
-    .tagline { font-size: 0.9rem; }
-    a.social { font-size: 0.9rem; }
+  .side-panel h3 {
+    margin:0;
+    font-size:1.05rem;
+    letter-spacing:0.2px;
   }
+  .side-panel p { margin:0; color:var(--muted); font-size:0.86rem; }
+
+  /* Links list */
+  .links {
+    margin-top:18px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+  .links a {
+    display:block;
+    padding:12px 14px;
+    border-radius:10px;
+    text-decoration:none;
+    background:rgba(255,255,255,0.02);
+    border:1px solid rgba(255,255,255,0.02);
+    color:var(--text);
+    font-weight:600;
+    transition:transform .08s ease, background .12s ease;
+    overflow:hidden;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+  }
+  .links a:hover, .links a:focus {
+    transform:translateX(6px);
+    background:rgba(255,255,255,0.03);
+  }
+
+  /* small instructions for demo */
+  .demo-note {
+    margin-left:12px;
+    color:var(--muted);
+    font-size:0.9rem;
+  }
+
+  /* small accessible close button inside panel (for touch / keyboard) */
+  .close-btn {
+    background:transparent;
+    border:0;
+    color:var(--muted);
+    cursor:pointer;
+    font-size:1.05rem;
+    padding:6px;
+    border-radius:8px;
+  }
+  .close-btn:focus { outline:2px solid rgba(255,255,255,0.08); }
+
+  /* responsive: make panel narrower on small screens */
+  @media (max-width:420px){
+    .side-panel { --panel-width:260px; }
+  }
+
 </style>
 </head>
 <body>
 
-<img src="coniceypng.png" alt="conicey" class="logo">
+  <div class="topbar">
+    <!-- The trigger element. Hovering over this (or focusing inside it) will open the panel. -->
+    <div class="panel-trigger" style="display:flex;align-items:center;gap:8px;">
+      <a href="#" class="biolink-btn" id="biolinkTrigger" aria-haspopup="true" aria-expanded="false">
+        <!-- optional icon -->
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M10 13a5 5 0 0 0 7.07 0l1.41-1.41" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 11a5 5 0 0 0-7.07 0L5.51 12.41" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <span>biolink</span>
+      </a>
+      <div class="demo-note">hover "biolink" to open</div>
+    </div>
 
-<div class="tagline">
-  We ❤ Conicey
-</div>
-<div class="tagline">
-  Developer • Animator • Whitehatter • Server Manager • Community Manager • Designer • Creator
-</div>
+    <!-- Side panel (sibling to the trigger). It slides in from the right on hover/focus or when open class is added (JS). -->
+    <aside class="side-panel" id="biolinkPanel" role="menu" aria-hidden="true">
+      <div class="panel-head">
+        <div>
+          <h3>Biolink</h3>
+          <p>Quick links</p>
+        </div>
+        <div>
+          <button class="close-btn" id="panelClose" aria-label="Close panel">✕</button>
+        </div>
+      </div>
 
-<div class="content">
-  <a href="https://guns.lol/conicey" class="social" target="_blank" rel="noopener noreferrer">guns.lol</a>
-  <a href="https://discord.com/users/920912709862703115" class="social" target="_blank" rel="noopener noreferrer">discord</a>
-  <a href="https://www.roblox.com/users/3754010089/profile" class="social" target="_blank" rel="noopener noreferrer">roblox</a>
-  <a href="https://www.twitch.tv/coniceyy" class="social" target="_blank" rel="noopener noreferrer">twitch</a>
-  <a href="https://open.spotify.com/user/31pktw5i4vqzf2zmrfc355qfqlli?si=42335e83fe234cc9" class="social" target="_blank" rel="noopener noreferrer">spotify</a>
-  <a href="https://www.youtube.com/@coniceyy" class="social" target="_blank" rel="noopener noreferrer">youtube</a>
-  <a href="https://x.com/conicey" class="social" target="_blank" rel="noopener noreferrer">x</a>
-  <a href="https://www.tiktok.com/@coniceyy" class="social" target="_blank" rel="noopener noreferrer">tiktok</a>
-  <a href="https://www.instagram.com/coniceyyy" class="social" target="_blank" rel="noopener noreferrer">instagram</a>
-  <a href="https://linktr.ee/conicey" class="social" target="_blank" rel="noopener noreferrer">linktree</a>
-</div>
+      <nav class="links" aria-label="Biolink links">
+        <a href="https://guns.lol/conicey" target="_blank" rel="noopener noreferrer">guns.lol/conicey</a>
+        <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg/pow</a>
+        <a href="https://cutz.lol/pow" target="_blank" rel="noopener noreferrer">cutz.lol/pow</a>
+      </nav>
 
-<footer>© conicey • The GOAT</footer>
+      <!-- optional extra content -->
+      <div style="margin-top:18px;color:var(--muted);font-size:.85rem;">
+        Tip: on mobile tap the button to open.
+      </div>
+    </aside>
+
+<script>
+  // Small JS to improve accessibility and make the panel usable on touch devices:
+  (function(){
+    const trigger = document.getElementById('biolinkTrigger');
+    const panel  = document.getElementById('biolinkPanel');
+    const close  = document.getElementById('panelClose');
+
+    // Toggle panel for click/tap
+    let isOpen = false;
+    function openPanel(){
+      panel.classList.add('open');
+      panel.setAttribute('aria-hidden','false');
+      trigger.setAttribute('aria-expanded','true');
+      isOpen = true;
+    }
+    function closePanel(){
+      panel.classList.remove('open');
+      panel.setAttribute('aria-hidden','true');
+      trigger.setAttribute('aria-expanded','false');
+      isOpen = false;
+    }
+
+    // On click: toggle (useful for touch devices where :hover isn't available)
+    trigger.addEventListener('click', function(e){
+      // prevent '#' default behavior
+      e.preventDefault();
+      if(isOpen) closePanel();
+      else openPanel();
+    });
+
+    close.addEventListener('click', function(){ closePanel(); });
+
+    // Close when clicking outside the panel and trigger
+    document.addEventListener('click', function(e){
+      const insidePanel = panel.contains(e.target);
+      const insideTrigger = trigger.contains(e.target);
+      if(!insidePanel && !insideTrigger && isOpen){
+        closePanel();
+      }
+    });
+
+    // Keyboard: Escape to close
+    document.addEventListener('keydown', function(e){
+      if(e.key === 'Escape' && isOpen){
+        closePanel();
+        trigger.focus();
+      }
+    });
+
+    // Keep ARIA states in sync when hover triggers CSS opening:
+    // detect mouseenter/mouseleave on the parent .panel-trigger to set aria attributes
+    const parent = trigger.closest('.panel-trigger');
+    if(parent){
+      parent.addEventListener('mouseenter', function(){ panel.setAttribute('aria-hidden','false'); trigger.setAttribute('aria-expanded','true'); });
+      parent.addEventListener('mouseleave', function(){
+        // only reset if not opened via click
+        if(!isOpen){ panel.setAttribute('aria-hidden','true'); trigger.setAttribute('aria-expanded','false'); }
+      });
+    }
+  })();
+</script>
 
 </body>
 </html>
