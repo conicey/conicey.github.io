@@ -151,7 +151,7 @@
   .popout-menu {
     position: absolute;
     top: 0;
-    left: 100%;
+    left: calc(100% + 4px); /* small gap so it’s not attached */
     background-color: #1a1a1a;
     border: 2px solid #444;
     border-radius: 8px;
@@ -159,7 +159,7 @@
     min-width: 200px;
     opacity: 0;
     pointer-events: none;
-    transform: translateX(20px);
+    transform: translateX(0);
     transition: all 0.3s ease;
     z-index: 2;
   }
@@ -167,7 +167,6 @@
   .biolink-wrapper:hover .popout-menu {
     opacity: 1;
     pointer-events: auto;
-    transform: translateX(0);
   }
 
   .popout-menu a {
@@ -186,7 +185,7 @@
 <img src="coniceypng.png" alt="conicey" class="logo">
 
 <div class="tagline">
-  We ❤ Conicey
+  We luv Conicey
 </div>
 <div class="tagline">
   Developer • Animator • Whitehatter • Server Manager • Community Manager • Designer • Creator
@@ -197,9 +196,9 @@
   <div class="biolink-wrapper">
     <a class="biolink-btn">biolink</a>
     <div class="popout-menu">
-      <a href="#">Link 1</a>
-      <a href="#">Link 2</a>
-      <a href="#">Link 3</a>
+      <a href="https://guns.lol/conicey" target="_blank" rel="noopener noreferrer">guns.lol</a>
+      <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg</a>
+      <a href="https://cutz.lol/pow" target="_blank" rel="noopener noreferrer">cutz.lol</a>
     </div>
   </div>
 
@@ -214,7 +213,7 @@
   <a href="https://linktr.ee/conicey" class="social" target="_blank" rel="noopener noreferrer">linktree</a>
 </div>
 
-<footer>© conicey • The GOAT</footer>
+<footer>conicey • my goat </footer>
 
 </body>
 </html>
