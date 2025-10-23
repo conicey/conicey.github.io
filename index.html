@@ -63,6 +63,7 @@
     background: #1a1a1a;
     text-transform: lowercase;
     transition: all 0.3s ease-in-out;
+    cursor: pointer;
   }
 
   a.social::before {
@@ -91,7 +92,7 @@
 
   a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
 
-  /* Biolink hover menu */
+  /* Biolink hover/click menu */
   .biolink-container {
     position: relative;
     width: 100%;
@@ -122,7 +123,13 @@
   .biolink-menu a:last-child { border-bottom: none; }
   .biolink-menu a:hover { background: #333; color: #fff; }
 
+  /* Show menu on hover */
   .biolink-container:hover .biolink-menu {
+    display: flex;
+  }
+
+  /* Show menu when 'open' class added (for mobile tap) */
+  .biolink-container.open .biolink-menu {
     display: flex;
   }
 
@@ -147,9 +154,9 @@
 </div>
 
 <div class="content">
-  <!-- Biolink button styled exactly like other social buttons -->
-  <div class="biolink-container">
-    <a class="social">biolink</a>
+  <!-- Biolink button with hover menu -->
+  <div class="biolink-container" id="biolinkContainer">
+    <a class="social" id="biolinkButton">biolink</a>
     <div class="biolink-menu">
       <a href="https://guns.lol/conicey" target="_blank" rel="noopener noreferrer">guns.lol</a>
       <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg</a>
@@ -169,6 +176,24 @@
 </div>
 
 <footer>© conicey • The GOAT</footer>
+
+<script>
+  // Mobile tap functionality
+  const biolinkContainer = document.getElementById('biolinkContainer');
+  const biolinkButton = document.getElementById('biolinkButton');
+
+  biolinkButton.addEventListener('click', function(e) {
+    e.preventDefault();
+    biolinkContainer.classList.toggle('open');
+  });
+
+  // Close menu if clicking outside
+  document.addEventListener('click', function(e) {
+    if (!biolinkContainer.contains(e.target)) {
+      biolinkContainer.classList.remove('open');
+    }
+  });
+</script>
 
 </body>
 </html>
