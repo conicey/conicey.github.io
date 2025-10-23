@@ -63,7 +63,6 @@
     background: #1a1a1a;
     text-transform: lowercase;
     transition: all 0.3s ease-in-out;
-    cursor: pointer;
   }
 
   a.social::before {
@@ -92,7 +91,7 @@
 
   a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
 
-  /* Biolink menu styles */
+  /* Biolink hover menu */
   .biolink-container {
     position: relative;
     width: 100%;
@@ -101,7 +100,7 @@
   .biolink-menu {
     display: none;
     position: absolute;
-    left: 105%; /* menu appears right of the button */
+    left: 105%;
     top: 0;
     background: #1a1a1a;
     border: 2px solid #444;
@@ -123,7 +122,6 @@
   .biolink-menu a:last-child { border-bottom: none; }
   .biolink-menu a:hover { background: #333; color: #fff; }
 
-  /* Show menu on hover */
   .biolink-container:hover .biolink-menu {
     display: flex;
   }
@@ -149,7 +147,7 @@
 </div>
 
 <div class="content">
-  <!-- Biolink button with hover menu -->
+  <!-- Biolink button styled exactly like other social buttons -->
   <div class="biolink-container">
     <a class="social">biolink</a>
     <div class="biolink-menu">
