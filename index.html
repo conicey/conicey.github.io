@@ -17,7 +17,6 @@
     align-items: center;
     text-align: center;
     min-height: 100vh;
-    position: relative;
   }
 
   img.logo {
@@ -49,6 +48,7 @@
     position: relative;
   }
 
+  /* Original social button style */
   a.social {
     position: relative;
     width: 100%;
@@ -57,15 +57,23 @@
     font-size: 1rem;
     color: #e0e0e0;
     text-decoration: none;
-    border: 2px solid #444;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
-    background: #1a1a1a;
-    text-transform: lowercase;
-    transition: all 0.3s ease-in-out;
+    font-weight: 600;
+    background: linear-gradient(90deg, #111827 0%, #0b1220 100%);
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
+    transition: transform 0.12s ease, box-shadow 0.12s ease;
     cursor: pointer;
+    text-transform: lowercase;
   }
 
+  a.social:hover, a.social:focus {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 30px rgba(2,6,23,0.75);
+  }
+
+  /* Hover shine effect */
   a.social::before {
     content: '';
     position: absolute;
@@ -78,6 +86,7 @@
   }
   a.social:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
 
+  /* Underline animation */
   a.social::after {
     content: '';
     position: absolute;
@@ -90,9 +99,7 @@
   }
   a.social:hover::after { width: 100%; }
 
-  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
-
-  /* Biolink hover/click menu */
+  /* Biolink hover menu */
   .biolink-container {
     position: relative;
     width: 100%;
@@ -103,9 +110,10 @@
     position: absolute;
     left: 105%;
     top: 0;
-    background: #1a1a1a;
-    border: 2px solid #444;
-    border-radius: 8px;
+    background: linear-gradient(90deg, #111827 0%, #0b1220 100%);
+    border-radius: 12px;
+    border: 1px solid rgba(255,255,255,0.04);
+    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
     min-width: 150px;
     flex-direction: column;
     overflow: hidden;
@@ -113,22 +121,19 @@
   }
 
   .biolink-menu a {
-    padding: 8px 12px;
+    padding: 10px 14px;
     font-size: 0.9rem;
     color: #e0e0e0;
     text-decoration: none;
-    border-bottom: 1px solid #333;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
     transition: background 0.2s ease;
+    display: block;
   }
   .biolink-menu a:last-child { border-bottom: none; }
-  .biolink-menu a:hover { background: #333; color: #fff; }
+  .biolink-menu a:hover { background: rgba(255,255,255,0.03); color: #fff; }
 
-  /* Show menu on hover */
-  .biolink-container:hover .biolink-menu {
-    display: flex;
-  }
-
-  /* Show menu when 'open' class added (for mobile tap) */
+  /* Show menu on hover or when open (mobile tap) */
+  .biolink-container:hover .biolink-menu,
   .biolink-container.open .biolink-menu {
     display: flex;
   }
@@ -137,7 +142,6 @@
 
   @media (max-width: 500px) {
     .tagline { font-size: 0.9rem; }
-    a.social { font-size: 0.9rem; }
     .biolink-menu { left: 0; top: 100%; min-width: 120px; }
   }
 </style>
@@ -154,7 +158,7 @@
 </div>
 
 <div class="content">
-  <!-- Biolink button with hover menu -->
+  <!-- Biolink button identical to other socials -->
   <div class="biolink-container" id="biolinkContainer">
     <a class="social" id="biolinkButton">biolink</a>
     <div class="biolink-menu">
