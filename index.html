@@ -17,6 +17,7 @@
     align-items: center;
     text-align: center;
     min-height: 100vh;
+    position: relative;
   }
 
   img.logo {
@@ -45,10 +46,8 @@
     gap: 12px;
     width: 100%;
     max-width: 400px;
-    position: relative;
   }
 
-  /* Original social button style */
   a.social {
     position: relative;
     width: 100%;
@@ -57,23 +56,14 @@
     font-size: 1rem;
     color: #e0e0e0;
     text-decoration: none;
-    border-radius: 12px;
+    border: 2px solid #444;
+    border-radius: 8px;
     overflow: hidden;
-    font-weight: 600;
-    background: linear-gradient(90deg, #111827 0%, #0b1220 100%);
-    border: 1px solid rgba(255,255,255,0.04);
-    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-    cursor: pointer;
+    background: #1a1a1a;
     text-transform: lowercase;
+    transition: all 0.3s ease-in-out;
   }
 
-  a.social:hover, a.social:focus {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 30px rgba(2,6,23,0.75);
-  }
-
-  /* Hover shine effect */
   a.social::before {
     content: '';
     position: absolute;
@@ -86,7 +76,6 @@
   }
   a.social:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
 
-  /* Underline animation */
   a.social::after {
     content: '';
     position: absolute;
@@ -99,50 +88,13 @@
   }
   a.social:hover::after { width: 100%; }
 
-  /* Biolink hover menu */
-  .biolink-container {
-    position: relative;
-    width: 100%;
-  }
-
-  .biolink-menu {
-    display: none;
-    position: absolute;
-    left: 105%;
-    top: 0;
-    background: linear-gradient(90deg, #111827 0%, #0b1220 100%);
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.04);
-    box-shadow: 0 6px 18px rgba(2,6,23,0.6);
-    min-width: 150px;
-    flex-direction: column;
-    overflow: hidden;
-    z-index: 10;
-  }
-
-  .biolink-menu a {
-    padding: 10px 14px;
-    font-size: 0.9rem;
-    color: #e0e0e0;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(255,255,255,0.04);
-    transition: background 0.2s ease;
-    display: block;
-  }
-  .biolink-menu a:last-child { border-bottom: none; }
-  .biolink-menu a:hover { background: rgba(255,255,255,0.03); color: #fff; }
-
-  /* Show menu on hover or when open (mobile tap) */
-  .biolink-container:hover .biolink-menu,
-  .biolink-container.open .biolink-menu {
-    display: flex;
-  }
+  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
 
   footer { margin-top: 40px; font-size: 0.8rem; color: #666; }
 
   @media (max-width: 500px) {
     .tagline { font-size: 0.9rem; }
-    .biolink-menu { left: 0; top: 100%; min-width: 120px; }
+    a.social { font-size: 0.9rem; }
   }
 </style>
 </head>
@@ -158,16 +110,7 @@
 </div>
 
 <div class="content">
-  <!-- Biolink button identical to other socials -->
-  <div class="biolink-container" id="biolinkContainer">
-    <a class="social" id="biolinkButton">biolink</a>
-    <div class="biolink-menu">
-      <a href="https://guns.lol/conicey" target="_blank" rel="noopener noreferrer">guns.lol</a>
-      <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg</a>
-      <a href="https://cutz.lol/pow" target="_blank" rel="noopener noreferrer">cutz.lol</a>
-    </div>
-  </div>
-
+  <a href="https://guns.lol/conicey" class="social" target="_blank" rel="noopener noreferrer">guns.lol</a>
   <a href="https://discord.com/users/920912709862703115" class="social" target="_blank" rel="noopener noreferrer">discord</a>
   <a href="https://www.roblox.com/users/3754010089/profile" class="social" target="_blank" rel="noopener noreferrer">roblox</a>
   <a href="https://www.twitch.tv/coniceyy" class="social" target="_blank" rel="noopener noreferrer">twitch</a>
@@ -180,24 +123,6 @@
 </div>
 
 <footer>© conicey • The GOAT</footer>
-
-<script>
-  // Mobile tap functionality
-  const biolinkContainer = document.getElementById('biolinkContainer');
-  const biolinkButton = document.getElementById('biolinkButton');
-
-  biolinkButton.addEventListener('click', function(e) {
-    e.preventDefault();
-    biolinkContainer.classList.toggle('open');
-  });
-
-  // Close menu if clicking outside
-  document.addEventListener('click', function(e) {
-    if (!biolinkContainer.contains(e.target)) {
-      biolinkContainer.classList.remove('open');
-    }
-  });
-</script>
 
 </body>
 </html>
