@@ -100,6 +100,7 @@
     a.social { font-size: 0.9rem; }
   }
 
+  /* Biolink Button */
   .biolink-wrapper {
     position: relative;
     width: 100%;
@@ -149,6 +150,7 @@
 
   .biolink-btn:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
 
+  /* Popout Menu */
   .popout-menu {
     position: absolute;
     top: 0;
@@ -163,18 +165,44 @@
     transform: translateX(0);
     transition: all 0.3s ease;
     z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
 
-  .biolink-wrapper:hover .popout-menu {
-    opacity: 1;
-    pointer-events: auto;
+  /* Desktop hover */
+  @media (min-width: 501px) {
+    .biolink-wrapper:hover .popout-menu {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  /* Mobile dropdown */
+  @media (max-width: 500px) {
+    .popout-menu {
+      position: relative;
+      left: 0;
+      top: 0;
+      width: 100%;
+      transform: translateY(-10px);
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .popout-menu.show {
+      opacity: 1;
+      max-height: 1000px;
+      transform: translateY(0);
+    }
   }
 
   .popout-menu a {
     display: block;
     color: #e0e0e0;
     text-decoration: none;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
     transition: color 0.2s ease;
   }
 
@@ -194,12 +222,15 @@
 
 <div class="content">
   <div class="biolink-wrapper">
-    <a class="biolink-btn">biolink</a>
-    <div class="popout-menu">
-      <a href="https://guns.lol/conicey" target="_blank" rel="noopener noreferrer">guns.lol</a>
-      <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg</a>
-      <a href="https://cutz.lol/pow" target="_blank" rel="noopener noreferrer">cutz.lol</a>
-      <a href="https://linktr.ee/conicey" target="_blank" rel="noopener noreferrer">linktree</a>
+    <a class="biolink-btn" id="biolinkBtn">biolink</a>
+    <div class="popout-menu" id="biolinkMenu">
+      <a href="https://haunt.gg/christmas" target="_blank" rel="noopener noreferrer">haunt.gg/christmas</a>
+      <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg/pow</a>
+      <a href="https://cutz.lol/pow" target="_blank" rel="noopener noreferrer">cutz.lol/pow</a>
+      <a href="https://linktr.ee/conicey" target="_blank" rel="noopener noreferrer">linktr.ee/conicey</a>
+      <a href="https://guns.lol/conicey" target="_blank" rel="noopener noreferrer">guns.lol/conicey</a>
+      <a href="https://guns.lol/8fov" target="_blank" rel="noopener noreferrer">guns.lol/8fov</a>
+      <a href="https://guns.lol/eightfov" target="_blank" rel="noopener noreferrer">guns.lol/eightfov</a>
     </div>
   </div>
 
@@ -214,6 +245,27 @@
 </div>
 
 <footer>conicey • my goat </footer>
+
+<script>
+  // Mobile dropdown toggle
+  const biolinkBtn = document.getElementById('biolinkBtn');
+  const biolinkMenu = document.getElementById('biolinkMenu');
+
+  biolinkBtn.addEventListener('click', () => {
+    if(window.innerWidth <= 500){
+      biolinkMenu.classList.toggle('show');
+    }
+  });
+
+  // Optional: close menu if clicked outside (mobile)
+  document.addEventListener('click', (e) => {
+    if(window.innerWidth <= 500){
+      if(!biolinkBtn.contains(e.target) && !biolinkMenu.contains(e.target)){
+        biolinkMenu.classList.remove('show');
+      }
+    }
+  });
+</script>
 
 </body>
 </html>
