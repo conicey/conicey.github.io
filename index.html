@@ -225,12 +225,12 @@
     <a class="biolink-btn" id="biolinkBtn">biolink</a>
     <div class="popout-menu" id="biolinkMenu">
       <a href="https://haunt.gg/christmas" target="_blank" rel="noopener noreferrer">haunt.gg/christmas</a>
-      <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg/pow</a>
-      <a href="https://cutz.lol/pow" target="_blank" rel="noopener noreferrer">cutz.lol/pow</a>
-      <a href="https://linktr.ee/conicey" target="_blank" rel="noopener noreferrer">linktr.ee/conicey</a>
       <a href="https://guns.lol/conicey" target="_blank" rel="noopener noreferrer">guns.lol/conicey</a>
       <a href="https://guns.lol/8fov" target="_blank" rel="noopener noreferrer">guns.lol/8fov</a>
       <a href="https://guns.lol/eightfov" target="_blank" rel="noopener noreferrer">guns.lol/eightfov</a>
+      <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg/pow</a>
+      <a href="https://cutz.lol/pow" target="_blank" rel="noopener noreferrer">cutz.lol/pow</a>
+      <a href="https://linktr.ee/conicey" target="_blank" rel="noopener noreferrer">linktr.ee/conicey</a>
     </div>
   </div>
 
@@ -247,17 +247,17 @@
 <footer>conicey • my goat </footer>
 
 <script>
-  // Mobile dropdown toggle
   const biolinkBtn = document.getElementById('biolinkBtn');
   const biolinkMenu = document.getElementById('biolinkMenu');
 
-  biolinkBtn.addEventListener('click', () => {
+  // Only toggle dropdown if the button itself is clicked
+  biolinkBtn.addEventListener('click', (e) => {
     if(window.innerWidth <= 500){
       biolinkMenu.classList.toggle('show');
     }
   });
 
-  // Optional: close menu if clicked outside (mobile)
+  // Close menu if clicked outside the button or links (mobile)
   document.addEventListener('click', (e) => {
     if(window.innerWidth <= 500){
       if(!biolinkBtn.contains(e.target) && !biolinkMenu.contains(e.target)){
