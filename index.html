@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>conicey luv</title>
 
-<link rel="icon" type="image/png" href="favicon.ico">
+<!-- Favicon setup -->
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -233,7 +235,7 @@
   const biolinkBtn = document.getElementById('biolinkBtn');
   const biolinkMenu = document.getElementById('biolinkMenu');
 
-  // Toggle dropdown on mobile only
+  // Toggle dropdown only when button is clicked (mobile)
   biolinkBtn.addEventListener('click', (e) => {
     if(window.innerWidth <= 500){
       biolinkMenu.classList.toggle('show');
@@ -247,15 +249,6 @@
         biolinkMenu.classList.remove('show');
       }
     }
-  });
-
-  // Fix: prevent menu from closing when clicking a link on mobile
-  const mobileLinks = biolinkMenu.querySelectorAll('a');
-  mobileLinks.forEach(link => {
-    link.addEventListener('click', (e) => {
-      // Stop click from propagating to document
-      e.stopPropagation();
-    });
   });
 </script>
 
