@@ -1,158 +1,263 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>conicey.net</title>
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
-      font-family: Arial, sans-serif;
-      background: #0a0a0a;
-      color: #fff;
-      padding: 40px 20px;
-      text-align: center;
-    }
-    img.banner {
-      width: 100%;
-      max-width: 800px;
-      border-radius: 12px;
-      margin-bottom: 30px;
-    }
-    .menu {
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 15px;
-    }
-    .menu button {
-      background: #181818;
-      border: 1px solid #333;
-      color: #fff;
-      padding: 12px 20px;
-      border-radius: 10px;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
-    }
-    .menu button:hover {
-      background: #222;
-      transform: translateY(-2px);
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>conicey luv</title>
 
-    /* Dropdown */
-    .dropdown {
-      position: relative;
-      display: inline-block;
-    }
+<link rel="icon" type="image/png" href="favicon.ico">
 
-    .dropdown-content {
-      display: none;
-      flex-direction: column;
-      position: absolute;
-      top: 100%;
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    background: #0d0d0d;
+    font-family: 'Arial Black', Gadget, sans-serif;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  img.logo {
+    width: 350px;
+    max-width: 90%;
+    height: auto;
+    margin-bottom: 20px;
+    filter: grayscale(100%) contrast(120%);
+    transition: transform 0.3s ease;
+  }
+  img.logo:hover { transform: scale(1.05); }
+
+  .tagline {
+    font-size: 1rem;
+    text-align: center;
+    max-width: 600px;
+    color: #a0a0a0;
+    line-height: 1.5;
+    margin-bottom: 30px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  a.social {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #e0e0e0;
+    text-decoration: none;
+    border: 2px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1a1a1a;
+    text-transform: lowercase;
+    transition: all 0.3s ease-in-out;
+  }
+
+  a.social::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+  }
+  a.social:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
+
+  a.social::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(90deg, #bbb, #eee, #bbb);
+    transition: width 0.3s ease;
+  }
+  a.social:hover::after { width: 100%; }
+
+  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
+
+  footer { margin-top: 40px; font-size: 0.8rem; color: #666; }
+
+  @media (max-width: 500px) {
+    .tagline { font-size: 0.9rem; }
+    a.social { font-size: 0.9rem; }
+  }
+
+  /* Biolink Button */
+  .biolink-wrapper { position: relative; width: 100%; }
+  .biolink-btn {
+    position: relative;
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #e0e0e0;
+    text-decoration: none;
+    border: 2px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1a1a1a;
+    text-transform: lowercase;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+  }
+  .biolink-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+  }
+  .biolink-btn:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
+  .biolink-btn::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(90deg, #bbb, #eee, #bbb);
+    transition: width 0.3s ease;
+  }
+  .biolink-btn:hover::after { width: 100%; }
+  .biolink-btn:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
+
+  /* Popout Menu */
+  .popout-menu {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 4px);
+    background-color: #1a1a1a;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    min-width: 200px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  /* Desktop hover */
+  @media (min-width: 501px) {
+    .biolink-wrapper:hover .popout-menu { opacity: 1; pointer-events: auto; }
+  }
+
+  /* Mobile dropdown */
+  @media (max-width: 500px) {
+    .popout-menu {
+      position: relative;
       left: 0;
-      background-color: #111;
-      border: 1px solid #333;
-      border-radius: 10px;
-      padding: 10px;
-      margin-top: 6px;
-      z-index: 10;
-      animation: fadeIn 0.2s ease;
+      top: 0;
+      width: 100%;
+      transform: translateY(-10px);
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
     }
+    .popout-menu.show {
+      opacity: 1;
+      max-height: 1000px;
+      transform: translateY(0);
+    }
+  }
 
-    .dropdown-content a {
-      color: #fff;
-      text-decoration: none;
-      margin: 4px 0;
-      padding: 6px 10px;
-      border-radius: 6px;
-      transition: background 0.2s;
-    }
-
-    .dropdown-content a:hover {
-      background: #222;
-    }
-
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(-5px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    /* Show dropdown on hover (PC) */
-    @media (hover: hover) and (pointer: fine) {
-      .dropdown:hover .dropdown-content {
-        display: flex;
-      }
-    }
-
-    /* Mobile dropdown animation */
-    @media (hover: none) and (pointer: coarse) {
-      .dropdown-content {
-        position: static;
-        margin-top: 10px;
-        animation: slideDown 0.3s ease;
-      }
-      @keyframes slideDown {
-        from { opacity: 0; max-height: 0; }
-        to { opacity: 1; max-height: 500px; }
-      }
-    }
-  </style>
+  .popout-menu a {
+    display: block;
+    color: #e0e0e0;
+    text-decoration: none;
+    margin-bottom: 4px;
+    transition: color 0.2s ease;
+  }
+  .popout-menu a:hover { color: #fff; }
+</style>
 </head>
 <body>
-  <img src="banner.png" alt="Banner" class="banner">
-  <div class="menu">
-    <div class="dropdown">
-      <button id="biolinkButton">Biolink ▼</button>
-      <div class="dropdown-content" id="biolinkDropdown">
-        <a href="https://haunt.gg/christmas" target="_blank">haunt.gg/christmas</a>
-        <a href="https://guns.lol/conicey" target="_blank">guns.lol/conicey</a>
-        <a href="https://guns.lol/8fov" target="_blank">guns.lol/8fov</a>
-        <a href="https://guns.lol/eightfov" target="_blank">guns.lol/eightfov</a>
-        <a href="https://haunt.gg/pow" target="_blank">haunt.gg/pow</a>
-        <a href="https://cutz.lol/pow" target="_blank">cutz.lol/pow</a>
-        <a href="https://linktr.ee/conicey" target="_blank">linktr.ee/conicey</a>
-      </div>
+
+<img src="banner.png" alt="conicey" class="logo">
+
+<div class="tagline">We luv Conicey</div>
+<div class="tagline">Developer • Animator • Whitehatter • Server Manager • Community Manager • Designer • Creator • Creator</div>
+
+<div class="content">
+  <div class="biolink-wrapper">
+    <a class="biolink-btn" id="biolinkBtn">biolink</a>
+    <div class="popout-menu" id="biolinkMenu">
+      <a href="https://haunt.gg/christmas" target="_blank" rel="noopener noreferrer">haunt.gg/christmas</a>
+      <a href="https://guns.lol/conicey" target="_blank" rel="noopener noreferrer">guns.lol/conicey</a>
+      <a href="https://guns.lol/8fov" target="_blank" rel="noopener noreferrer">guns.lol/8fov</a>
+      <a href="https://guns.lol/eightfov" target="_blank" rel="noopener noreferrer">guns.lol/eightfov</a>
+      <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg/pow</a>
+      <a href="https://cutz.lol/pow" target="_blank" rel="noopener noreferrer">cutz.lol/pow</a>
+      <a href="https://linktr.ee/conicey" target="_blank" rel="noopener noreferrer">linktr.ee/conicey</a>
     </div>
-    <button>About</button>
-    <button>Projects</button>
   </div>
 
-  <script>
-    // Mobile dropdown fix
-    const biolinkButton = document.getElementById('biolinkButton');
-    const dropdown = document.getElementById('biolinkDropdown');
+  <a href="https://discord.com/users/920912709862703115" class="social" target="_blank" rel="noopener noreferrer">discord</a>
+  <a href="https://www.roblox.com/users/3754010089/profile" class="social" target="_blank" rel="noopener noreferrer">roblox</a>
+  <a href="https://www.twitch.tv/coniceyy" class="social" target="_blank" rel="noopener noreferrer">twitch</a>
+  <a href="https://open.spotify.com/user/31pktw5i4vqzf2zmrfc355qfqlli?si=42335e83fe234cc9" class="social" target="_blank" rel="noopener noreferrer">spotify</a>
+  <a href="https://www.youtube.com/@coniceyy" class="social" target="_blank" rel="noopener noreferrer">youtube</a>
+  <a href="https://x.com/conicey" class="social" target="_blank" rel="noopener noreferrer">x</a>
+  <a href="https://www.tiktok.com/@coniceyy" class="social" target="_blank" rel="noopener noreferrer">tiktok</a>
+  <a href="https://www.instagram.com/coniceyyy" class="social" target="_blank" rel="noopener noreferrer">instagram</a>
+</div>
 
-    // Only apply click dropdown for touch devices
-    if (window.matchMedia('(hover: none) and (pointer: coarse)').matches) {
-      let open = false;
+<footer>conicey • my goat </footer>
 
-      biolinkButton.addEventListener('click', (e) => {
-        const rect = biolinkButton.getBoundingClientRect();
-        const clickY = e.clientY - rect.top;
+<script>
+  const biolinkBtn = document.getElementById('biolinkBtn');
+  const biolinkMenu = document.getElementById('biolinkMenu');
 
-        // Only trigger dropdown toggle if the click is on the TOP part of the button
-        if (clickY < rect.height * 0.6) {
-          e.preventDefault();
-          open = !open;
-          dropdown.style.display = open ? 'flex' : 'none';
-        }
-      });
-
-      // Prevent dropdown from closing when clicking inside it
-      dropdown.addEventListener('click', (e) => {
-        e.stopPropagation();
-      });
-
-      document.addEventListener('click', (e) => {
-        if (!biolinkButton.contains(e.target) && !dropdown.contains(e.target)) {
-          dropdown.style.display = 'none';
-          open = false;
-        }
-      });
+  // Toggle dropdown on mobile only
+  biolinkBtn.addEventListener('click', (e) => {
+    if(window.innerWidth <= 500){
+      biolinkMenu.classList.toggle('show');
     }
-  </script>
+  });
+
+  // Close dropdown if clicked outside (mobile)
+  document.addEventListener('click', (e) => {
+    if(window.innerWidth <= 500){
+      if(!biolinkBtn.contains(e.target) && !biolinkMenu.contains(e.target)){
+        biolinkMenu.classList.remove('show');
+      }
+    }
+  });
+
+  // Fix: prevent menu from closing when clicking a link on mobile
+  const mobileLinks = biolinkMenu.querySelectorAll('a');
+  mobileLinks.forEach(link => {
+    link.addEventListener('click', (e) => {
+      // Stop click from propagating to document
+      e.stopPropagation();
+    });
+  });
+</script>
+
 </body>
 </html>
