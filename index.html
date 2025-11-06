@@ -58,7 +58,7 @@
   .roles-line {
     display: flex;
     justify-content: center;
-    gap: 8px; /* space between items and bullets */
+    gap: 8px; 
     flex-wrap: wrap;
   }
 
@@ -212,7 +212,7 @@
   }
   .popout-menu a:hover { color: #fff; }
 
-  /* Left subsite button */
+  /* Left subsite button with fluid marble glow */
   .subsite-btn {
     position: fixed;
     top: 45%;
@@ -224,14 +224,28 @@
     color: #fff;
     border-radius: 6px;
     border: 1px solid #888;
-    box-shadow: 0 0 8px #666;
     text-decoration: none;
-    transition: all 0.3s ease;
     z-index: 1000;
+    animation: marble-glow 3s infinite alternate;
   }
-  .subsite-btn:hover {
-    background: #777;
-    box-shadow: 0 0 12px #999;
+  .subsite-btn:hover { background: #777; }
+
+  @keyframes marble-glow {
+    0% {
+      box-shadow: 0 0 8px #888, 0 0 12px #aaa, 0 0 20px #ccc;
+    }
+    25% {
+      box-shadow: 0 0 12px #aaa, 0 0 16px #ccc, 0 0 24px #eee;
+    }
+    50% {
+      box-shadow: 0 0 8px #888, 0 0 14px #bbb, 0 0 22px #ddd;
+    }
+    75% {
+      box-shadow: 0 0 10px #999, 0 0 18px #ccc, 0 0 26px #fff;
+    }
+    100% {
+      box-shadow: 0 0 8px #888, 0 0 12px #aaa, 0 0 20px #ccc;
+    }
   }
 </style>
 </head>
@@ -285,14 +299,12 @@ const biolinkBtn = document.getElementById('biolinkBtn');
 const biolinkMenu = document.getElementById('biolinkMenu');
 let hideTimeout;
 
-// Show popup
 function showMenu() {
   clearTimeout(hideTimeout);
   biolinkMenu.style.opacity = '1';
   biolinkMenu.style.pointerEvents = 'auto';
 }
 
-// Hide popup with delay
 function hideMenu() {
   hideTimeout = setTimeout(() => {
     biolinkMenu.style.opacity = '0';
@@ -300,7 +312,6 @@ function hideMenu() {
   }, 200);
 }
 
-// Desktop hover tracking
 if (window.innerWidth > 500) {
   biolinkBtn.addEventListener('mouseenter', showMenu);
   biolinkBtn.addEventListener('mouseleave', hideMenu);
@@ -308,14 +319,12 @@ if (window.innerWidth > 500) {
   biolinkMenu.addEventListener('mouseleave', hideMenu);
 }
 
-// Mobile click toggle
 biolinkBtn.addEventListener('click', () => {
   if(window.innerWidth <= 500){
     biolinkMenu.classList.toggle('show');
   }
 });
 
-// Mobile click outside
 document.addEventListener('click', (e) => {
   if(window.innerWidth <= 500){
     if(!biolinkBtn.contains(e.target) && !biolinkMenu.contains(e.target)){
