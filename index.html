@@ -44,14 +44,22 @@
     margin-bottom: 20px;
   }
 
+  /* Two-line roles */
   .roles {
     display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 8px;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
     font-size: 0.95rem;
     color: #c0c0c0;
     margin-bottom: 30px;
+  }
+
+  .roles-line {
+    display: flex;
+    justify-content: center;
+    gap: 8px; /* space between items and bullets */
+    flex-wrap: wrap;
   }
 
   .content {
@@ -176,14 +184,6 @@
     z-index: 2;
   }
 
-  @media (min-width: 501px) {
-    .biolink-container:hover .popout-menu,
-    .popout-menu:hover {
-      opacity: 1;
-      pointer-events: auto;
-    }
-  }
-
   @media (max-width: 500px) {
     .popout-menu {
       position: relative;
@@ -215,8 +215,8 @@
   /* Left subsite button */
   .subsite-btn {
     position: fixed;
-    top: 45%; /* slightly up */
-    left: 18%; /* more left */
+    top: 45%;
+    left: 18%;
     transform: translate(-50%, -50%);
     padding: 8px 12px;
     font-size: 0.9rem;
@@ -244,9 +244,14 @@
 
 <div class="tagline">We luv Conicey</div>
 
-<!-- Evenly spaced roles -->
+<!-- Two lines of roles -->
 <div class="roles">
-  <span>Developer</span>•<span>Animator</span>•<span>Whitehatter</span>•<span>Server Manager</span>•<span>Community Manager</span>•<span>Designer</span>•<span>Creator</span>
+  <div class="roles-line">
+    <span>Developer</span>•<span>Animator</span>•<span>Whitehatter</span>•<span>Server Manager</span>
+  </div>
+  <div class="roles-line">
+    <span>Community Manager</span>•<span>Designer</span>•<span>Creator</span>
+  </div>
 </div>
 
 <div class="content">
@@ -276,22 +281,48 @@
 <footer>conicey™</footer>
 
 <script>
-  const biolinkBtn = document.getElementById('biolinkBtn');
-  const biolinkMenu = document.getElementById('biolinkMenu');
+const biolinkBtn = document.getElementById('biolinkBtn');
+const biolinkMenu = document.getElementById('biolinkMenu');
+let hideTimeout;
 
-  biolinkBtn.addEventListener('click', () => {
-    if(window.innerWidth <= 500){
-      biolinkMenu.classList.toggle('show');
-    }
-  });
+// Show popup
+function showMenu() {
+  clearTimeout(hideTimeout);
+  biolinkMenu.style.opacity = '1';
+  biolinkMenu.style.pointerEvents = 'auto';
+}
 
-  document.addEventListener('click', (e) => {
-    if(window.innerWidth <= 500){
-      if(!biolinkBtn.contains(e.target) && !biolinkMenu.contains(e.target)){
-        biolinkMenu.classList.remove('show');
-      }
+// Hide popup with delay
+function hideMenu() {
+  hideTimeout = setTimeout(() => {
+    biolinkMenu.style.opacity = '0';
+    biolinkMenu.style.pointerEvents = 'none';
+  }, 200);
+}
+
+// Desktop hover tracking
+if (window.innerWidth > 500) {
+  biolinkBtn.addEventListener('mouseenter', showMenu);
+  biolinkBtn.addEventListener('mouseleave', hideMenu);
+  biolinkMenu.addEventListener('mouseenter', showMenu);
+  biolinkMenu.addEventListener('mouseleave', hideMenu);
+}
+
+// Mobile click toggle
+biolinkBtn.addEventListener('click', () => {
+  if(window.innerWidth <= 500){
+    biolinkMenu.classList.toggle('show');
+  }
+});
+
+// Mobile click outside
+document.addEventListener('click', (e) => {
+  if(window.innerWidth <= 500){
+    if(!biolinkBtn.contains(e.target) && !biolinkMenu.contains(e.target)){
+      biolinkMenu.classList.remove('show');
     }
-  });
+  }
+});
 </script>
 
 </body>
