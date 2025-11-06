@@ -1,1 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conicey Dev Subsite</title>
+<style>
+  /* --- General Styles --- */
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f0f0;
+    color: #333;
+    padding: 40px 20px;
+  }
 
+  header {
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  h1 { font-size: 2rem; margin-bottom: 10px; }
+  p { font-size: 1rem; color: #555; }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background: #ff7f50;
+    border: none;
+    border-radius: 6px;
+    color: white;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background: #ff5722;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Welcome to the Dev Subsite</h1>
+  <p>This is a single-file subsite under <code>/dev</code>.</p>
+</header>
+
+<main style="text-align: center;">
+  <button id="demoBtn">Click Me</button>
+</main>
+
+<script>
+  // --- JavaScript ---
+  document.getElementById('demoBtn').addEventListener('click', () => {
+    alert('Hello from the Dev subsite!');
+  });
+</script>
+
+</body>
+</html>
