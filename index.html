@@ -41,6 +41,16 @@
     max-width: 600px;
     color: #a0a0a0;
     line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .roles {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-size: 0.95rem;
+    color: #c0c0c0;
     margin-bottom: 30px;
   }
 
@@ -166,7 +176,6 @@
     z-index: 2;
   }
 
-  /* Desktop: show menu when hovering container or menu itself */
   @media (min-width: 501px) {
     .biolink-container:hover .popout-menu,
     .popout-menu:hover {
@@ -175,7 +184,6 @@
     }
   }
 
-  /* Mobile dropdown */
   @media (max-width: 500px) {
     .popout-menu {
       position: relative;
@@ -207,8 +215,8 @@
   /* Left subsite button */
   .subsite-btn {
     position: fixed;
-    top: 50%;
-    left: 25%;
+    top: 45%; /* slightly up */
+    left: 18%; /* more left */
     transform: translate(-50%, -50%);
     padding: 8px 12px;
     font-size: 0.9rem;
@@ -225,7 +233,6 @@
     background: #777;
     box-shadow: 0 0 12px #999;
   }
-
 </style>
 </head>
 <body>
@@ -236,7 +243,11 @@
 <img src="banner.png" alt="conicey" class="logo">
 
 <div class="tagline">We luv Conicey</div>
-<div class="tagline">Developer • Animator • Whitehatter • Server Manager • Community Manager • Designer • Creator</div>
+
+<!-- Evenly spaced roles -->
+<div class="roles">
+  <span>Developer</span>•<span>Animator</span>•<span>Whitehatter</span>•<span>Server Manager</span>•<span>Community Manager</span>•<span>Designer</span>•<span>Creator</span>
+</div>
 
 <div class="content">
   <div class="biolink-container">
@@ -268,14 +279,12 @@
   const biolinkBtn = document.getElementById('biolinkBtn');
   const biolinkMenu = document.getElementById('biolinkMenu');
 
-  // Mobile click toggle
   biolinkBtn.addEventListener('click', () => {
     if(window.innerWidth <= 500){
       biolinkMenu.classList.toggle('show');
     }
   });
 
-  // Close dropdown if clicked outside (mobile)
   document.addEventListener('click', (e) => {
     if(window.innerWidth <= 500){
       if(!biolinkBtn.contains(e.target) && !biolinkMenu.contains(e.target)){
