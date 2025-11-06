@@ -5,56 +5,104 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Conicey Dev Subsite</title>
 <style>
-  /* --- General Styles --- */
+  /* --- Reset & base --- */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: Arial, sans-serif;
-    background: #f0f0f0;
-    color: #333;
+    font-family: "Courier New", Courier, monospace;
+    background-color: #121212;
+    color: #e0e0e0;
     padding: 40px 20px;
+    line-height: 1.6;
   }
 
+  /* --- Header --- */
   header {
-    margin-bottom: 30px;
     text-align: center;
+    margin-bottom: 40px;
+  }
+  header h1 {
+    font-size: 2.5rem;
+    letter-spacing: 2px;
+    color: #cfcfcf;
+    margin-bottom: 10px;
+  }
+  header p {
+    font-size: 1rem;
+    color: #a0a0a0;
   }
 
-  h1 { font-size: 2rem; margin-bottom: 10px; }
-  p { font-size: 1rem; color: #555; }
-
-  button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background: #ff7f50;
-    border: none;
-    border-radius: 6px;
-    color: white;
-    transition: background 0.3s;
+  /* --- Section styling --- */
+  section {
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: #1e1e1e;
+    border-left: 4px solid #444;
+    font-size: 1rem;
+    color: #d0d0d0;
   }
 
-  button:hover {
-    background: #ff5722;
+  section h2 {
+    font-size: 1.5rem;
+    color: #cfcfcf;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  section p {
+    margin-bottom: 10px;
+  }
+
+  /* --- Retro code/terminal vibe --- */
+  code {
+    background-color: #2a2a2a;
+    padding: 2px 4px;
+    border-radius: 3px;
+    font-family: "Courier New", monospace;
+    font-size: 0.95rem;
+    color: #f5f5f5;
+  }
+
+  /* --- Footer --- */
+  footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.85rem;
+    color: #777;
+    border-top: 1px solid #444;
+    padding-top: 15px;
   }
 </style>
 </head>
 <body>
 
 <header>
-  <h1>Welcome to the Dev Subsite</h1>
-  <p>This is a single-file subsite under <code>/dev</code>.</p>
+  <h1>Dev Subsite</h1>
+  <p>Information hub — dark, retro, monotone.</p>
 </header>
 
-<main style="text-align: center;">
-  <button id="demoBtn">Click Me</button>
+<main>
+  <section>
+    <h2>About</h2>
+    <p>This section is for explaining the purpose of this subsite.</p>
+    <p>Keep your descriptions minimal, monotone, and retro-styled, as if reading an old terminal.</p>
+  </section>
+
+  <section>
+    <h2>Guides</h2>
+    <p>Provide your information here. You can list steps or explanations in plain text.</p>
+    <p>Example of code-like highlight: <code>git clone https://github.com/conicey/conicey.github.io.git</code></p>
+  </section>
+
+  <section>
+    <h2>Resources</h2>
+    <p>Links, references, or notes about development can go here. Use <code>inline code style</code> for emphasis.</p>
+  </section>
 </main>
 
-<script>
-  // --- JavaScript ---
-  document.getElementById('demoBtn').addEventListener('click', () => {
-    alert('Hello from the Dev subsite!');
-  });
-</script>
+<footer>
+  &copy; 2025 Conicey. All rights reserved.
+</footer>
 
 </body>
 </html>
