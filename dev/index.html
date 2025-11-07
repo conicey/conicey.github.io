@@ -8,7 +8,7 @@
   /* --- Reset & base --- */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: "Courier New", Courier, monospace;
+    font-family: "Segoe UI", "Courier New", monospace;
     background-color: #121212;
     color: #e0e0e0;
     padding: 40px 20px;
@@ -22,8 +22,8 @@
   }
   header h1 {
     font-size: 2.5rem;
-    letter-spacing: 2px;
-    color: #cfcfcf;
+    letter-spacing: 1px;
+    color: #f5f5f5;
     margin-bottom: 10px;
   }
   header p {
@@ -32,15 +32,52 @@
   }
 
   /* --- Scrollable instruction box --- */
-  .binary-box {
+  .instruction-box {
     background-color: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 10px;
     color: #d0d0d0;
-    padding: 20px;
-    height: 400px; /* fixed height for scrolling */
-    overflow-y: scroll;
-    font-size: 0.9rem;
-    line-height: 1.4;
-    white-space: pre-wrap; /* preserve formatting */
+    padding: 25px;
+    height: 480px;
+    overflow-y: auto;
+    font-size: 0.95rem;
+    line-height: 1.6;
+  }
+
+  .instruction-box a {
+    color: #5ea7ff;
+    text-decoration: none;
+  }
+  .instruction-box a:hover {
+    text-decoration: underline;
+  }
+
+  .instruction-box b {
+    color: #ffffff;
+  }
+
+  .instruction-box ul {
+    list-style-type: disc;
+    margin-left: 20px;
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+
+  .instruction-box li {
+    margin-bottom: 10px;
+  }
+
+  .note {
+    color: #ffdf7f;
+    font-style: italic;
+    margin-top: 10px;
+  }
+
+  .section-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+    margin-top: 20px;
+    color: #fff;
   }
 
   /* --- Footer --- */
@@ -60,41 +97,57 @@
 </header>
 
 <main>
-  <div class="binary-box">
-Go to https://discord.com/developers/applications, and create a new application on the account you want the badge on.
-Go to the bot tab and generate a bot account for the application.
-Click the "Reset Token" button to generate a token (if you have 2fa enabled, you'll need your code).
-Copy the token to your clipboard.
-Click this badge to clone this repo to a new repl in Replit -> Run on Repl.it
-You will be redirected to Replit, you might have to create an account (you can Register with Google).
-Replit is a website, and does not run off your computer!
-Wait for the repo has finished cloning and the repl to fully connect.
-Click the green "Run" button at the top.
-Go to the console (big black square on the right) and paste in the token you copied earlier (Note: CTRL + V won't work, you'll need to do CTRL + Shift + V or right-click and click paste).
-Press the 'Enter' key.
-Wait for it to print 'DONE | Application/Bot is up and running. DO NOT CLOSE THIS TAB UNLESS YOU ARE FINISHED USING THE BOT, IT WILL PUT THE BOT OFFLINE.' in the console, DON'T STOP THE PROGRAM OR CLOSE THE TAB YET OR THE BOT WILL CONSIDERED BY DISCORD AS 'UNRESPONSIVE'
-Go back to the application page, go to the "General Information" tab, scroll down and copy application id.
-Create a new discord server (you can delete it at the end).
-Enable community on the server (you only need to do this if you don't own any other discord server with community enabled)
-Return back to https://discord.com/developers/applications.
-Copy the application id.
-Use this invite link to add the application to the server: (replace {applicationid} with what you copied) https://discord.com/oauth2/authorize?client_id={applicationid}&scope=bot%20applications.commands&permissions=105227086912
-In the server, go to a channel and use the /ping command on the bot.
-Go to the https://discord.com/developers/active-developer page and register everything (if it says you're not eligible, it's because you're not registered in their system yet. you might have to wait up to 24 hours).
-Congrats on that shiny new badge.
-NOTE: Make sure you have the “Use data to improve Discord” setting enabled under User Settings > Privacy & Safety otherwise you won't be able to be marked as eligible.
+  <div class="instruction-box">
+    <ul>
+      <li>Go to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>, and create a new application on the account you want the badge on.</li>
+      <li>Go to the <b>Bot</b> tab and generate a bot account for the application.</li>
+      <li>Click the <b>“Reset Token”</b> button to generate a token (if you have 2FA enabled, you'll need your code).</li>
+      <li>Copy the token to your clipboard.</li>
+      <li>Click this badge to clone this repo to a new repl in Replit → <b>Run on Repl.it</b>.</li>
+      <li>You will be redirected to Replit — you may need to create an account (you can register with Google).</li>
+      <li>Replit runs online — it does <b>not</b> run on your computer.</li>
+      <li>Wait for the repo to finish cloning and the Repl to connect fully.</li>
+      <li>Click the green <b>“Run”</b> button at the top.</li>
+      <li>Go to the console and paste in the token you copied earlier. (<b>Note:</b> CTRL + V won’t work, use CTRL + SHIFT + V or right-click → paste.)</li>
+      <li>Press the <b>Enter</b> key.</li>
+      <li>Wait for it to print <b>“DONE | Application/Bot is up and running”</b>. Do <b>not</b> close the tab or stop the program — the bot will go offline!</li>
+      <li>Go back to your application page → <b>General Information</b> tab → scroll down and copy the Application ID.</li>
+      <li>Create a new Discord server (you can delete it later).</li>
+      <li>Enable Community on the server (if you don’t already own a community-enabled one).</li>
+      <li>Return to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>.</li>
+      <li>Copy the Application ID.</li>
+      <li>Use this invite link to add the bot to the server:<br>
+        <code>https://discord.com/oauth2/authorize?client_id={applicationid}&scope=bot%20applications.commands&permissions=105227086912</code>
+      </li>
+      <li>In the server, use the <b>/ping</b> command on your bot.</li>
+      <li>Go to the <a href="https://discord.com/developers/active-developer" target="_blank">Active Developer page</a> and register your bot.</li>
+      <li>If it says you’re not eligible, wait up to 24 hours — it’s just syncing with Discord’s system.</li>
+    </ul>
 
-NOTE 2: You do not need to keep the Replit tab open 24/7. Only go to the Replit url whenever you want to run your bot.
+    <div class="note">
+      <b>NOTE:</b> Make sure you have the “Use data to improve Discord” setting enabled under User Settings → Privacy & Safety, otherwise you won’t be eligible.
+    </div>
 
-If you're encountering any issues, create a new GitHub issue or join this server and ping me in the #general channel.
+    <div class="note">
+      <b>NOTE 2:</b> You don’t need to keep the Replit tab open 24/7 — only open it when you want to run your bot.
+    </div>
 
-Star the repo!!!
-If you were able to successfully get the badge from this, star this repository so more people can see it and feel free to join our Discord server: https://discord.gg/M5MSE9CvNM
+    <div class="section-title">If you encounter issues:</div>
+    <p>
+      Create a new <a href="#" target="_blank">GitHub issue</a> or join our Discord server and ping me in the <b>#general</b> channel.
+    </p>
 
-No, it's not "patched"
-I've seen a lot of people say that this method has been patched or something. It's not. It still works (people are still getting the badge from it), if you're unable to get the badge after 24 hours of waiting, you probably didn't follow the instructions correctly.
+    <div class="section-title">⭐ Star the repo!!!</div>
+    <p>
+      If this worked for you, star the repo so more people can see it and join our server:<br>
+      <a href="https://discord.gg/M5MSE9CvNM" target="_blank">https://discord.gg/M5MSE9CvNM</a>
+    </p>
 
-I think people think this is patched because of NoTextToSpeech's video but that video linked to another repository that works a different way, not this one.
+    <div class="section-title">❗ It's not patched</div>
+    <p>
+      This method still works. If it didn’t after 24 hours, you likely missed a step.<br>
+      The confusion came from another repo linked in a video, not this one.
+    </p>
   </div>
 </main>
 
