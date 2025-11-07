@@ -56,14 +56,13 @@
     color: #ffffff;
   }
 
-  .instruction-box ol {
-    margin-left: 20px;
-    margin-top: 10px;
-    margin-bottom: 15px;
+  .step {
+    margin-bottom: 12px;
   }
 
-  .instruction-box li {
-    margin-bottom: 10px;
+  .step-number {
+    font-weight: bold;
+    color: #ffffff;
   }
 
   .note {
@@ -90,31 +89,29 @@
 
 <main>
   <div class="instruction-box">
-    <ol>
-      <li>Go to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>, and create a new application on the account you want the badge on.</li>
-      <li>Go to the <b>Bot</b> tab and generate a bot account for the application.</li>
-      <li>Click the <b>“Reset Token”</b> button to generate a token (if you have 2FA enabled, you'll need your code).</li>
-      <li>Copy the token to your clipboard.</li>
-      <li>Click this badge to clone this repo to a new repl in Replit → <b>Run on Repl.it</b>.</li>
-      <li>You will be redirected to Replit — you may need to create an account (you can register with Google).</li>
-      <li>Replit runs online — it does <b>not</b> run on your computer.</li>
-      <li>Wait for the repo to finish cloning and the Repl to connect fully.</li>
-      <li>Click the green <b>“Run”</b> button at the top.</li>
-      <li>Go to the console and paste in the token you copied earlier. (<b>Note:</b> CTRL + V won’t work, use CTRL + SHIFT + V or right-click → paste.)</li>
-      <li>Press the <b>Enter</b> key.</li>
-      <li>Wait for it to print <b>“DONE | Application/Bot is up and running”</b>. Do <b>not</b> close the tab or stop the program — the bot will go offline!</li>
-      <li>Go back to your application page → <b>General Information</b> tab → scroll down and copy the Application ID.</li>
-      <li>Create a new Discord server (you can delete it later).</li>
-      <li>Enable Community on the server (if you don’t already own a community-enabled one).</li>
-      <li>Return to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>.</li>
-      <li>Copy the Application ID.</li>
-      <li>Use this invite link to add the bot to the server:<br>
-        <code>https://discord.com/oauth2/authorize?client_id={applicationid}&scope=bot%20applications.commands&permissions=105227086912</code>
-      </li>
-      <li>In the server, use the <b>/ping</b> command on your bot.</li>
-      <li>Go to the <a href="https://discord.com/developers/active-developer" target="_blank">Active Developer page</a> and register your bot.</li>
-      <li>If it says you’re not eligible, wait up to 24 hours — it’s just syncing with Discord’s system.</li>
-    </ol>
+    <p class="step"><span class="step-number">1 •</span> Go to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>, and create a new application on the account you want the badge on.</p>
+    <p class="step"><span class="step-number">2 •</span> Go to the <b>Bot</b> tab and generate a bot account for the application.</p>
+    <p class="step"><span class="step-number">3 •</span> Click the <b>“Reset Token”</b> button to generate a token (if you have 2FA enabled, you'll need your code).</p>
+    <p class="step"><span class="step-number">4 •</span> Copy the token to your clipboard.</p>
+    <p class="step"><span class="step-number">5 •</span> Click this badge to clone this repo to a new repl in Replit → <b>Run on Repl.it</b>.</p>
+    <p class="step"><span class="step-number">6 •</span> You will be redirected to Replit — you may need to create an account (you can register with Google).</p>
+    <p class="step"><span class="step-number">7 •</span> Replit runs online — it does <b>not</b> run on your computer.</p>
+    <p class="step"><span class="step-number">8 •</span> Wait for the repo to finish cloning and the Repl to connect fully.</p>
+    <p class="step"><span class="step-number">9 •</span> Click the green <b>“Run”</b> button at the top.</p>
+    <p class="step"><span class="step-number">10 •</span> Go to the console and paste in the token you copied earlier. (<b>Note:</b> CTRL + V won’t work, use CTRL + SHIFT + V or right-click → paste.)</p>
+    <p class="step"><span class="step-number">11 •</span> Press the <b>Enter</b> key.</p>
+    <p class="step"><span class="step-number">12 •</span> Wait for it to print <b>“DONE | Application/Bot is up and running”</b>. Do <b>not</b> close the tab or stop the program — the bot will go offline!</p>
+    <p class="step"><span class="step-number">13 •</span> Go back to your application page → <b>General Information</b> tab → scroll down and copy the Application ID.</p>
+    <p class="step"><span class="step-number">14 •</span> Create a new Discord server (you can delete it later).</p>
+    <p class="step"><span class="step-number">15 •</span> Enable Community on the server (if you don’t already own a community-enabled one).</p>
+    <p class="step"><span class="step-number">16 •</span> Return to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>.</p>
+    <p class="step"><span class="step-number">17 •</span> Copy the Application ID.</p>
+    <p class="step"><span class="step-number">18 •</span> Use this invite link to add the bot to the server:<br>
+      <code>https://discord.com/oauth2/authorize?client_id={applicationid}&scope=bot%20applications.commands&permissions=105227086912</code>
+    </p>
+    <p class="step"><span class="step-number">19 •</span> In the server, use the <b>/ping</b> command on your bot.</p>
+    <p class="step"><span class="step-number">20 •</span> Go to the <a href="https://discord.com/developers/active-developer" target="_blank">Active Developer page</a> and register your bot.</p>
+    <p class="step"><span class="step-number">21 •</span> If it says you’re not eligible, wait up to 24 hours — it’s just syncing with Discord’s system.</p>
 
     <div class="note">
       <b>NOTE:</b> Make sure you have the “Use data to improve Discord” setting enabled under User Settings → Privacy & Safety, otherwise you won’t be eligible.
