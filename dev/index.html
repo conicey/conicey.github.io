@@ -3,129 +3,101 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Active Developer Badge</title>
+<title>Discord Active Developer Badge Tutorial</title>
 <style>
-  /* --- Reset & base --- */
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    font-family: "Segoe UI", "Courier New", monospace;
-    background-color: #121212;
-    color: #e0e0e0;
+    background-color: #0d1117;
+    color: #c9d1d9;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 40px 20px;
     line-height: 1.6;
   }
-
-  /* --- Header --- */
-  header {
-    text-align: center;
-    margin-bottom: 40px;
+  main {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
   }
-  header h1 {
-    font-size: 2.5rem;
-    letter-spacing: 1px;
-    color: #f5f5f5;
-    margin-bottom: 10px;
+  h1 {
+    font-size: 1.8rem;
+    color: #58a6ff;
+    margin-bottom: 20px;
   }
-  header p {
+  p {
+    margin: 12px 0;
     font-size: 1rem;
-    color: #a0a0a0;
   }
-
-  /* --- Scrollable instruction box --- */
-  .instruction-box {
-    background-color: #1e1e1e;
-    border: 1px solid #333;
-    border-radius: 10px;
-    color: #d0d0d0;
-    padding: 25px;
-    height: 480px;
-    overflow-y: auto;
-    font-size: 0.95rem;
-    line-height: 1.6;
+  .textbox {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 8px;
+    padding: 15px;
+    color: #c9d1d9;
+    font-family: monospace;
+    white-space: pre-wrap;
   }
-
-  .instruction-box a {
-    color: #5ea7ff;
+  a {
+    color: #58a6ff;
     text-decoration: none;
   }
-  .instruction-box a:hover {
-    text-decoration: underline;
-  }
+  a:hover { text-decoration: underline; }
 
-  .instruction-box b {
-    color: #ffffff;
+  /* Replit button styling */
+  .replit-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #1a1a1a;
+    color: #fff;
+    font-weight: 500;
+    font-family: Arial, sans-serif;
+    border: 1px solid #2e2e2e;
+    border-radius: 6px;
+    padding: 6px 12px;
+    text-decoration: none;
+    margin-left: 6px;
   }
-
-  .step {
-    margin-bottom: 12px;
-  }
-
-  .step-number {
-    font-weight: bold;
-    color: #ffffff;
-  }
-
-  .note {
-    color: #ffdf7f;
-    font-style: italic;
-    margin-top: 10px;
-  }
-
-  /* --- Footer --- */
-  footer {
-    text-align: center;
-    margin-top: 50px;
-    font-size: 0.85rem;
-    color: #777;
+  .replit-dot {
+    width: 8px;
+    height: 8px;
+    background: #f97316;
+    border-radius: 2px;
+    display: inline-block;
   }
 </style>
 </head>
 <body>
-
-<header>
-  <h1>Active Developer Badge</h1>
-  <p>Tutorial by conicey</p>
-</header>
-
 <main>
-  <div class="instruction-box">
-    <p class="step"><span class="step-number">1 •</span> Go to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>, and create a new application on the account you want the badge on.</p>
-    <p class="step"><span class="step-number">2 •</span> Go to the <b>Bot</b> tab and generate a bot account for the application.</p>
-    <p class="step"><span class="step-number">3 •</span> Click the <b>“Reset Token”</b> button to generate a token (if you have 2FA enabled, you'll need your code).</p>
-    <p class="step"><span class="step-number">4 •</span> Copy the token to your clipboard.</p>
-    <p class="step"><span class="step-number">5 •</span> Click this badge to clone this repo to a new repl in Replit → <b>Run on Repl.it</b>.</p>
-    <p class="step"><span class="step-number">6 •</span> You will be redirected to Replit — you may need to create an account (you can register with Google).</p>
-    <p class="step"><span class="step-number">7 •</span> Replit runs online — it does <b>not</b> run on your computer.</p>
-    <p class="step"><span class="step-number">8 •</span> Wait for the repo to finish cloning and the Repl to connect fully.</p>
-    <p class="step"><span class="step-number">9 •</span> Click the green <b>“Run”</b> button at the top.</p>
-    <p class="step"><span class="step-number">10 •</span> Go to the console and paste in the token you copied earlier. (<b>Note:</b> CTRL + V won’t work, use CTRL + SHIFT + V or right-click → paste.)</p>
-    <p class="step"><span class="step-number">11 •</span> Press the <b>Enter</b> key.</p>
-    <p class="step"><span class="step-number">12 •</span> Wait for it to print <b>“DONE | Application/Bot is up and running”</b>. Do <b>not</b> close the tab or stop the program — the bot will go offline!</p>
-    <p class="step"><span class="step-number">13 •</span> Go back to your application page → <b>General Information</b> tab → scroll down and copy the Application ID.</p>
-    <p class="step"><span class="step-number">14 •</span> Create a new Discord server (you can delete it later).</p>
-    <p class="step"><span class="step-number">15 •</span> Enable Community on the server (if you don’t already own a community-enabled one).</p>
-    <p class="step"><span class="step-number">16 •</span> Return to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>.</p>
-    <p class="step"><span class="step-number">17 •</span> Copy the Application ID.</p>
-    <p class="step"><span class="step-number">18 •</span> Use this invite link to add the bot to the server:<br>
-      <code>https://discord.com/oauth2/authorize?client_id={applicationid}&scope=bot%20applications.commands&permissions=105227086912</code>
-    </p>
-    <p class="step"><span class="step-number">19 •</span> In the server, use the <b>/ping</b> command on your bot.</p>
-    <p class="step"><span class="step-number">20 •</span> Go to the <a href="https://discord.com/developers/active-developer" target="_blank">Active Developer page</a> and register your bot.</p>
-    <p class="step"><span class="step-number">21 •</span> If it says you’re not eligible, wait up to 24 hours — it’s just syncing with Discord’s system.</p>
+  <h1>How to Get the Discord Active Developer Badge</h1>
 
-    <div class="note">
-      <b>NOTE:</b> Make sure you have the “Use data to improve Discord” setting enabled under User Settings → Privacy & Safety, otherwise you won’t be eligible.
-    </div>
+  <p><strong>1 •</strong> Go to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a> and create a new application on the account you want the badge on.</p>
 
-    <div class="note">
-      <b>NOTE 2:</b> You don’t need to keep the Replit tab open 24/7 — only open it when you want to run your bot.
-    </div>
+  <p><strong>2 •</strong> Go to the <strong>Bot</strong> tab and generate a bot account for the application.</p>
+
+  <p><strong>3 •</strong> Click the <strong>“Reset Token”</strong> button to generate a token (if you have 2FA enabled, you'll need your code).</p>
+
+  <p><strong>4 •</strong> Copy the token to your clipboard.</p>
+
+  <p><strong>5 •</strong> Click this badge to clone this repo to a new repl in Replit →
+    <a class="replit-btn" href="https://replit.com/github/conicey/discord-active-developer-badge" target="_blank" rel="noopener noreferrer">
+      <span class="replit-dot"></span>
+      <span class="replit-dot"></span>
+      <span class="replit-dot"></span>
+      <span>Run on Replit</span>
+    </a>
+  </p>
+
+  <div class="textbox">
+Go to https://discord.com/developers/applications, and create a new application on the account you want the badge on.
+Go to the Bot tab and generate a bot account for the application.
+Click the "Reset Token" button to generate a token (if you have 2FA enabled, you'll need your code).
+Copy the token to your clipboard.
+Then click the Run on Replit button above to open your own Repl with this bot preloaded.
   </div>
 </main>
-
-<footer>
-  &copy; 2025 Conicey. All rights reserved.
-</footer>
-
 </body>
 </html>
