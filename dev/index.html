@@ -40,33 +40,36 @@
     font-family: monospace;
     white-space: pre-wrap;
   }
-  a {
-    color: #58a6ff;
-    text-decoration: none;
-  }
-  a:hover { text-decoration: underline; }
 
-  /* Replit button styling */
+  /* identical Replit button style */
   .replit-btn {
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
-    background-color: #1a1a1a;
-    color: #fff;
-    font-weight: 500;
-    font-family: Arial, sans-serif;
-    border: 1px solid #2e2e2e;
+    background-color: #1f1f1f;
+    color: #ffffff;
     border-radius: 6px;
-    padding: 6px 12px;
+    padding: 5px 12px;
+    font-weight: 500;
+    font-family: "Inter", "Segoe UI", sans-serif;
     text-decoration: none;
-    margin-left: 6px;
+    border: 1px solid #2a2a2a;
+    transition: background 0.15s ease;
   }
-  .replit-dot {
-    width: 8px;
-    height: 8px;
-    background: #f97316;
-    border-radius: 2px;
-    display: inline-block;
+  .replit-btn:hover {
+    background-color: #2a2a2a;
+  }
+  .replit-icon {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+    align-items: center;
+    justify-content: center;
+  }
+  .replit-icon svg {
+    width: 18px;
+    height: 18px;
   }
 </style>
 </head>
@@ -84,9 +87,11 @@
 
   <p><strong>5 •</strong> Click this badge to clone this repo to a new repl in Replit →
     <a class="replit-btn" href="https://replit.com/github/conicey/discord-active-developer-badge" target="_blank" rel="noopener noreferrer">
-      <span class="replit-dot"></span>
-      <span class="replit-dot"></span>
-      <span class="replit-dot"></span>
+      <span class="replit-icon">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+          <path fill="#ff6b00" d="M331.4 173.2l-79.3-45.8c-9.6-5.6-21.4-5.6-31 0l-79.3 45.8c-9.6 5.6-15.5 15.9-15.5 27.1v91.5c0 11.2 5.9 21.5 15.5 27.1l79.3 45.8c9.6 5.6 21.4 5.6 31 0l79.3-45.8c9.6-5.6 15.5-15.9 15.5-27.1v-91.5c0-11.2-5.9-21.5-15.5-27.1z"/>
+        </svg>
+      </span>
       <span>Run on Replit</span>
     </a>
   </p>
