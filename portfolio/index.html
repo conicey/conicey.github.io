@@ -1,1 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conicey • Portfolio Hub</title>
 
+<style>
+/* ——— Reset ——— */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* ——— Base ——— */
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #0e0e0e;
+  color: #e7e7e7;
+  overflow-x: hidden;
+  padding: 40px 20px;
+}
+
+/* ——— Header ——— */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+h1 {
+  font-size: 3rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: 0 0 15px rgba(180, 120, 255, 0.6);
+}
+
+.subtitle {
+  margin-top: 8px;
+  font-size: 1rem;
+  color: #b5b5b5;
+  letter-spacing: 0.5px;
+}
+
+/* ——— Category Grid ——— */
+.grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+/* ——— Category Cards ——— */
+.card {
+  background: #151515;
+  padding: 25px;
+  border-radius: 15px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 0 10px rgba(120, 60, 255, 0.25);
+  transition: 0.2s;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 0 20px rgba(180, 120, 255, 0.55);
+}
+
+/* Glow edging on hover */
+.card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 15px;
+  padding: 2px;
+  background: linear-gradient(
+    135deg,
+    rgba(190,100,255,0.8),
+    rgba(90,130,255,0.8),
+    rgba(255,100,160,0.8)
+  );
+  -webkit-mask: 
+    linear-gradient(#fff 0 0) content-box, 
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0.0;
+  transition: 0.3s;
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* ——— Card text ——— */
+.card h2 {
+  font-size: 1.4rem;
+  margin-bottom: 10px;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.card p {
+  color: #cfcfcf;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+/* ——— Footer ——— */
+footer {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 0.85rem;
+  color: #777;
+}
+
+footer a {
+  color: #a574ff;
+  text-decoration: none;
+}
+</style>
+
+</head>
+<body>
+
+<header>
+  <h1>Conicey's Portfolio</h1>
+  <p class="subtitle">Developer • Animator • Designer • Community Manager • Creator</p>
+</header>
+
+<!-- ——— Category Grid ——— -->
+<div class="grid">
+
+  <div class="card" onclick="location.href='animation.html'">
+    <h2>Animation</h2>
+    <p>Your full animation portfolio — smooth loops, character movements, effects, and showreels.</p>
+  </div>
+
+  <div class="card" onclick="location.href='design.html'">
+    <h2>Design</h2>
+    <p>Branding, banners, website layouts, UI/UX concepts, thumbnails, and visual identity.</p>
+  </div>
+
+  <div class="card" onclick="location.href='development.html'">
+    <h2>Development</h2>
+    <p>Websites, scripts, tools, automation, FastFlags, Roblox tweaks, and personal projects.</p>
+  </div>
+
+  <div class="card" onclick="location.href='server.html'">
+    <h2>Server Management</h2>
+    <p>Discord server building, roles, systems, moderation tools, and UI setups.</p>
+  </div>
+
+  <div class="card" onclick="location.href='community.html'">
+    <h2>Community Management</h2>
+    <p>Staff work, event hosting, moderation, community structure, and engagement systems.</p>
+  </div>
+
+  <div class="card" onclick="location.href='misc.html'">
+    <h2>Other Work</h2>
+    <p>Side projects, scripts, experiments, branding pieces, and anything extra.</p>
+  </div>
+
+</div>
+
+<footer>
+  <p>© 2025 Conicey • <a href="https://conicey.github.io">Return to main site</a></p>
+</footer>
+
+</body>
+</html>
