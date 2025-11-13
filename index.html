@@ -110,13 +110,73 @@
     transition: width 0.3s ease;
   }
   a.social:hover::after { width: 100%; }
-  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 8px rgba(255, 255, 255, 0.2); }
+  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 6px rgba(255, 255, 255, 0.15); }
 
   footer { margin-top: 40px; font-size: 0.8rem; color: #666; }
 
   @media (max-width: 500px) {
     .tagline { font-size: 0.9rem; }
     a.social { font-size: 0.9rem; }
+  }
+
+  /* ————————————————
+     LEFT-SIDE BUTTONS (UPDATED)
+     ———————————————— */
+  .left-buttons {
+    position: fixed;
+    top: 45%;
+    left: 6%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+  }
+
+  .left-btn {
+    padding: 10px 14px;
+    background: #1a1a1a;
+    border: 2px solid #444;
+    border-radius: 8px;
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    text-transform: lowercase;
+    width: 120px;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .left-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    transition: left 0.6s ease;
+  }
+  .left-btn:hover::before { left: 130%; }
+
+  .left-btn:hover {
+    border-color: #666;
+    color: #fff;
+    box-shadow: 0 0 5px rgba(255,255,255,0.12);
+  }
+
+  @media (max-width: 700px) {
+    .left-buttons {
+      left: 50%;
+      top: auto;
+      bottom: 20px;
+      transform: translateX(-50%);
+      flex-direction: row;
+    }
+    .left-btn { width: auto; padding: 10px 20px; }
   }
 
   /* Biolink Button & Menu */
@@ -211,54 +271,20 @@
     transition: color 0.2s ease;
   }
   .popout-menu a:hover { color: #fff; }
-
-  /* Left subsite button with subtle marble glow */
-  .subsite-btn {
-    position: fixed;
-    top: 45%;
-    left: 18%;
-    transform: translate(-50%, -50%);
-    padding: 8px 12px;
-    font-size: 0.9rem;
-    background: #555;
-    color: #fff;
-    border-radius: 6px;
-    border: 1px solid #888;
-    text-decoration: none;
-    z-index: 1000;
-    animation: marble-glow 3s infinite alternate;
-  }
-  .subsite-btn:hover { background: #666; }
-
-  @keyframes marble-glow {
-    0% {
-      box-shadow: 0 0 4px #666, 0 0 6px #777, 0 0 10px #888;
-    }
-    25% {
-      box-shadow: 0 0 6px #777, 0 0 8px #888, 0 0 12px #999;
-    }
-    50% {
-      box-shadow: 0 0 4px #666, 0 0 7px #888, 0 0 11px #999;
-    }
-    75% {
-      box-shadow: 0 0 5px #777, 0 0 9px #888, 0 0 13px #aaa;
-    }
-    100% {
-      box-shadow: 0 0 4px #666, 0 0 6px #777, 0 0 10px #888;
-    }
-  }
 </style>
 </head>
 <body>
 
-<!-- Left-side subsite button -->
-<a href="/dev" class="subsite-btn">Active Developer Badge</a>
+<!-- NEW LEFT BUTTONS -->
+<div class="left-buttons">
+  <a href="/" class="left-btn">portfolio</a>
+  <a href="/dev" class="left-btn">dev tutorial</a>
+</div>
 
 <img src="banner.png" alt="conicey" class="logo">
 
 <div class="tagline">We luv Conicey</div>
 
-<!-- Two lines of roles -->
 <div class="roles">
   <div class="roles-line">
     <span>Developer</span>•<span>Animator</span>•<span>Whitehatter</span>•<span>Server Manager</span>
@@ -272,24 +298,24 @@
   <div class="biolink-container">
     <a class="biolink-btn" id="biolinkBtn">biolink</a>
     <div class="popout-menu" id="biolinkMenu">
-      <a href="https://haunt.gg/christmas" target="_blank" rel="noopener noreferrer">haunt.gg/christmas</a>
-      <a href="https://guns.lol/conicey" target="_blank" rel="noopener noreferrer">guns.lol/conicey</a>
-      <a href="https://guns.lol/8fov" target="_blank" rel="noopener noreferrer">guns.lol/8fov</a>
-      <a href="https://guns.lol/eightfov" target="_blank" rel="noopener noreferrer">guns.lol/eightfov</a>
-      <a href="https://haunt.gg/pow" target="_blank" rel="noopener noreferrer">haunt.gg/pow</a>
-      <a href="https://cutz.lol/pow" target="_blank" rel="noopener noreferrer">cutz.lol/pow</a>
-      <a href="https://linktr.ee/conicey" target="_blank" rel="noopener noreferrer">linktr.ee/conicey</a>
+      <a href="https://haunt.gg/christmas" target="_blank">haunt.gg/christmas</a>
+      <a href="https://guns.lol/conicey" target="_blank">guns.lol/conicey</a>
+      <a href="https://guns.lol/8fov" target="_blank">guns.lol/8fov</a>
+      <a href="https://guns.lol/eightfov" target="_blank">guns.lol/eightfov</a>
+      <a href="https://haunt.gg/pow" target="_blank">haunt.gg/pow</a>
+      <a href="https://cutz.lol/pow" target="_blank">cutz.lol/pow</a>
+      <a href="https://linktr.ee/conicey" target="_blank">linktr.ee/conicey</a>
     </div>
   </div>
 
-  <a href="https://discord.com/users/920912709862703115" class="social" target="_blank" rel="noopener noreferrer">discord</a>
-  <a href="https://www.roblox.com/users/3754010089/profile" class="social" target="_blank" rel="noopener noreferrer">roblox</a>
-  <a href="https://www.twitch.tv/coniceyy" class="social" target="_blank" rel="noopener noreferrer">twitch</a>
-  <a href="https://open.spotify.com/user/31pktw5i4vqzf2zmrfc355qfqlli?si=42335e83fe234cc9" class="social" target="_blank" rel="noopener noreferrer">spotify</a>
-  <a href="https://www.youtube.com/@coniceyy" class="social" target="_blank" rel="noopener noreferrer">youtube</a>
-  <a href="https://x.com/conicey" class="social" target="_blank" rel="noopener noreferrer">x</a>
-  <a href="https://www.tiktok.com/@coniceyy" class="social" target="_blank" rel="noopener noreferrer">tiktok</a>
-  <a href="https://www.instagram.com/coniceyyy" class="social" target="_blank" rel="noopener noreferrer">instagram</a>
+  <a href="https://discord.com/users/920912709862703115" class="social" target="_blank">discord</a>
+  <a href="https://www.roblox.com/users/3754010089/profile" class="social" target="_blank">roblox</a>
+  <a href="https://www.twitch.tv/coniceyy" class="social" target="_blank">twitch</a>
+  <a href="https://open.spotify.com/user/31pktw5i4vqzf2zmrfc355qfqlli" class="social" target="_blank">spotify</a>
+  <a href="https://www.youtube.com/@coniceyy" class="social" target="_blank">youtube</a>
+  <a href="https://x.com/conicey" class="social" target="_blank">x</a>
+  <a href="https://www.tiktok.com/@coniceyy" class="social" target="_blank">tiktok</a>
+  <a href="https://www.instagram.com/coniceyyy" class="social" target="_blank">instagram</a>
 </div>
 
 <footer>conicey™</footer>
