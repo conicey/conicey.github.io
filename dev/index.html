@@ -75,7 +75,6 @@
     color: #777;
   }
 
-  /* Old orange Replit badge */
   .replit-button {
     display: inline-block;
     vertical-align: middle;
@@ -99,47 +98,54 @@
   <div class="instruction-box">
     <ol>
       <li>Go to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>, and create a new application on the account you want the badge on.</li>
-      <li>Go to the <b>Bot</b> tab and generate a bot account for the application.</li>
-      <li>Click the <b>"Reset Token"</b> button to generate a token (if you have 2FA enabled, you'll need your code).</li>
+
+      <li>Navigate to the <b>Bot</b> tab and click the <b>"Reset Token"</b> button to generate a token (you may need to verify 2FA).</li>
+
       <li>Copy the token to your clipboard.</li>
+
       <li>
-        Click this badge to clone this repo to a new Repl in Replit →
+        Click on this badge to be redirected to Replit →
         <a href="https://replit.com/@conicey/discord-active-developer-badge?fork=1" target="_blank" class="replit-button">
           <img src="https://replit.com/badge/github/conicey/discord-active-developer-badge" alt="Run on Repl.it">
         </a>
         <ul>
-          <li>You will be redirected to Replit, you might have to create an account (you can Register with Google).</li>
-          <li>Replit is a website, and does not run off your computer!</li>
+          <li>Click "Remix this app"</li>
         </ul>
       </li>
-      <li>Wait for the repo to finish cloning and the Repl to fully connect.</li>
+
+      <li>Wait for the repo template to fully load.</li>
+
       <li>Click the green <b>"Run .replit run command"</b> button at the top.</li>
-      <li>Go to the console (window on the right of preview at top) and paste in the token you copied earlier.
-        <ul>
-          <li><b>Note:</b> CTRL + V won't work, you'll need to do CTRL + SHIFT + V or right-click and click paste.</li>
-        </ul>
-      </li>
+
+      <li>Paste the token you previously copied into the console next to where it asks for the application token.</li>
+
       <li>Press the <b>Enter</b> key.</li>
+
       <li>Wait for it to print <b>'DONE | Application/Bot is up and running.'</b> in the console.
         <ul>
           <li><b>Do not close this tab</b> unless you're finished using the bot; it will go offline.</li>
           <li><b>Don't stop the program or close the tab</b> yet or Discord will consider your bot unresponsive.</li>
         </ul>
       </li>
-      <li>Go back to the application page, go to the <b>General Information</b> tab, scroll down, and copy your application ID.</li>
+
+      <li>Go back to Discord’s application page, go to the <b>General Information</b> tab, scroll down, and copy your application ID.</li>
+
       <li>Create a new Discord server (you can delete it later).</li>
-      <li>Enable community on the server (you only need to do this if you don't already own a community-enabled one).</li>
+
+      <li>Enable Community on the server (only needed if you don’t already own a community-enabled server).</li>
+
       <li>Return back to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>.</li>
-      <li>Copy the application ID.</li>
+
+      <li>Copy the application ID again (just to be sure you have it ready).</li>
+
       <li>Use this invite link to add the bot to the server (replace <code>{applicationid}</code> with what you copied):<br>
         <code>https://discord.com/oauth2/authorize?client_id={applicationid}&scope=bot%20applications.commands&permissions=105227086912</code>
       </li>
+
       <li>In the server, go to a channel and use the <b>/ping</b> command on the bot.</li>
-      <li>Go to the <a href="https://discord.com/developers/active-developer" target="_blank">Active Developer page</a> and register everything.
-        <ul>
-          <li>If it says you’re not eligible yet, it’s because you’re not registered in their system — you might have to wait up to 24 hours.</li>
-        </ul>
-      </li>
+
+      <li>Go to the <a href="https://discord.com/developers/active-developer" target="_blank">Active Developer page</a> and register everything. You may need to wait up to 24 hours.</li>
+
       <li>Congrats on that shiny new badge!</li>
     </ol>
 
