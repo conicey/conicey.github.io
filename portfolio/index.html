@@ -12,8 +12,8 @@
 /* ——— Base ——— */
 body {
   font-family: "Segoe UI", sans-serif;
-  background: #0e0e0e;
-  color: #e7e7e7;
+  background: #0d0d0d;        /* matches main site */
+  color: #e0e0e0;
   overflow-x: hidden;
   padding: 40px 20px;
 }
@@ -29,13 +29,13 @@ h1 {
   letter-spacing: 1px;
   font-weight: 700;
   color: #fff;
-  text-shadow: 0 0 15px rgba(180, 120, 255, 0.6);
+  text-shadow: none;          /* remove glow */
 }
 
 .subtitle {
   margin-top: 8px;
   font-size: 1rem;
-  color: #b5b5b5;
+  color: #9a9a9a;             /* soft dull gray */
   letter-spacing: 0.5px;
 }
 
@@ -50,59 +50,37 @@ h1 {
 
 /* ——— Category Cards ——— */
 .card {
-  background: #151515;
+  background: #141414;        /* flat, dull dark */
   padding: 25px;
-  border-radius: 15px;
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  box-shadow: 0 0 10px rgba(120, 60, 255, 0.25);
-  transition: 0.2s;
+  border-radius: 12px;
+  border: 1px solid #2a2a2a;  /* thin neutral border */
+  box-shadow: none;           /* remove glow shadow */
+  transition: 0.15s;
   cursor: pointer;
   position: relative;
-  overflow: hidden;
 }
 
 .card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 0 20px rgba(180, 120, 255, 0.55);
+  transform: translateY(-3px);
+  background: #181818;        /* slight lift effect */
+  border-color: #3a3a3a;
 }
 
-/* Glow edging on hover */
+/* REMOVE gradient-glow edge completely */
 .card::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 15px;
-  padding: 2px;
-  background: linear-gradient(
-    135deg,
-    rgba(190,100,255,0.8),
-    rgba(90,130,255,0.8),
-    rgba(255,100,160,0.8)
-  );
-  -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  opacity: 0.0;
-  transition: 0.3s;
-}
-
-.card:hover::before {
-  opacity: 1;
+  content: none;
 }
 
 /* ——— Card text ——— */
 .card h2 {
-  font-size: 1.4rem;
-  margin-bottom: 10px;
-  letter-spacing: 0.5px;
+  font-size: 1.3rem;
+  margin-bottom: 8px;
   font-weight: 600;
-  color: #fff;
+  color: #f2f2f2;
 }
 
 .card p {
-  color: #cfcfcf;
+  color: #bdbdbd;
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -116,8 +94,12 @@ footer {
 }
 
 footer a {
-  color: #a574ff;
+  color: #aaa;                /* dull neutral link */
   text-decoration: none;
+}
+
+footer a:hover {
+  color: #ccc;
 }
 </style>
 
