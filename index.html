@@ -3,346 +3,152 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>conicey luv</title>
-
-<link rel="icon" href="favicon.ico" type="image/x-icon">
-<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<title>Conicey • Portfolio Hub</title>
 
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+/* ——— Reset ——— */
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-  body {
-    margin: 0;
-    padding: 40px 20px;
-    background: #0d0d0d;
-    font-family: 'Arial Black', Gadget, sans-serif;
-    color: #e0e0e0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    min-height: 100vh;
-    position: relative;
-  }
+/* ——— Base ——— */
+body {
+  font-family: "Segoe UI", sans-serif;
+  background: #0d0d0d;        /* matches main site */
+  color: #e0e0e0;
+  overflow-x: hidden;
+  padding: 40px 20px;
+}
 
-  img.logo {
-    width: 350px;
-    max-width: 90%;
-    height: auto;
-    margin-bottom: 20px;
-    filter: grayscale(100%) contrast(120%);
-    transition: transform 0.3s ease;
-  }
-  img.logo:hover { transform: scale(1.05); }
+/* ——— Header ——— */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
 
-  .tagline {
-    font-size: 1rem;
-    text-align: center;
-    max-width: 600px;
-    color: #a0a0a0;
-    line-height: 1.5;
-    margin-bottom: 20px;
-  }
+h1 {
+  font-size: 3rem;
+  letter-spacing: 1px;
+  font-weight: 700;
+  color: #fff;
+  text-shadow: none;          /* remove glow */
+}
 
-  .roles {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.95rem;
-    color: #c0c0c0;
-    margin-bottom: 30px;
-  }
+.subtitle {
+  margin-top: 8px;
+  font-size: 1rem;
+  color: #9a9a9a;             /* soft dull gray */
+  letter-spacing: 0.5px;
+}
 
-  .roles-line {
-    display: flex;
-    justify-content: center;
-    gap: 8px; 
-    flex-wrap: wrap;
-  }
+/* ——— Category Grid ——— */
+.grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 12px;
-    width: 100%;
-    max-width: 400px;
-  }
+/* ——— Category Cards ——— */
+.card {
+  background: #141414;        /* flat, dull dark */
+  padding: 25px;
+  border-radius: 12px;
+  border: 1px solid #2a2a2a;  /* thin neutral border */
+  box-shadow: none;           /* remove glow shadow */
+  transition: 0.15s;
+  cursor: pointer;
+  position: relative;
+}
 
-  a.social {
-    position: relative;
-    width: 100%;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 1rem;
-    color: #e0e0e0;
-    text-decoration: none;
-    border: 2px solid #444;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #1a1a1a;
-    text-transform: lowercase;
-    transition: all 0.3s ease-in-out;
-  }
+.card:hover {
+  transform: translateY(-3px);
+  background: #181818;        /* slight lift effect */
+  border-color: #3a3a3a;
+}
 
-  a.social::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -75%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
-    transform: skewX(-25deg);
-  }
-  a.social:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
+/* REMOVE gradient-glow edge completely */
+.card::before {
+  content: none;
+}
 
-  a.social::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 2px;
-    width: 0;
-    background: linear-gradient(90deg, #bbb, #eee, #bbb);
-    transition: width 0.3s ease;
-  }
-  a.social:hover::after { width: 100%; }
-  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 6px rgba(255, 255, 255, 0.15); }
+/* ——— Card text ——— */
+.card h2 {
+  font-size: 1.3rem;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #f2f2f2;
+}
 
-  footer { margin-top: 40px; font-size: 0.8rem; color: #666; }
+.card p {
+  color: #bdbdbd;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
 
-  /* LEFT BUTTONS */
-  .left-buttons {
-    position: fixed;
-    top: 45%;
-    left: 6%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    z-index: 1000;
-  }
+/* ——— Footer ——— */
+footer {
+  text-align: center;
+  margin-top: 60px;
+  font-size: 0.85rem;
+  color: #777;
+}
 
-  .left-btn {
-    width: 135px;
-    padding: 10px 0;
-    background: #1a1a1a;
-    border: 2px solid #444;
-    border-radius: 8px;
-    color: #e0e0e0;
-    text-decoration: none;
-    font-size: 0.9rem;
-    text-transform: lowercase;
-    text-align: center;
-    position: relative;
-    transition: all 0.3s ease;
-    overflow: hidden;
-  }
+footer a {
+  color: #aaa;                /* dull neutral link */
+  text-decoration: none;
+}
 
-  .left-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -80%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 100%);
-    transform: skewX(-25deg);
-    transition: left 0.6s ease;
-  }
-  .left-btn:hover::before { left: 130%; }
-
-  .left-btn:hover {
-    border-color: #666;
-    color: #fff;
-    box-shadow: 0 0 5px rgba(255,255,255,0.12);
-  }
-
-  @media (max-width: 700px) {
-    .left-buttons {
-      left: 50%;
-      top: auto;
-      bottom: 20px;
-      transform: translateX(-50%);
-      flex-direction: row;
-    }
-    .left-btn { width: auto; padding: 10px 20px; }
-  }
-
-  .biolink-container { position: relative; width: 100%; }
-
-  .biolink-btn {
-    display: block;
-    width: 100%;
-    text-align: center;
-    padding: 10px 0;
-    font-size: 1rem;
-    color: #e0e0e0;
-    text-decoration: none;
-    border: 2px solid #444;
-    border-radius: 8px;
-    overflow: hidden;
-    background: #1a1a1a;
-    text-transform: lowercase;
-    transition: all 0.3s ease-in-out;
-    cursor: pointer;
-    position: relative;
-  }
-
-  .biolink-btn::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -75%;
-    width: 50%;
-    height: 100%;
-    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
-    transform: skewX(-25deg);
-  }
-  .biolink-btn:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
-
-  .biolink-btn::after {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    height: 2px;
-    width: 0;
-    background: linear-gradient(90deg, #bbb, #eee, #bbb);
-    transition: width 0.3s ease;
-  }
-  .biolink-btn:hover::after { width: 100%; }
-
-  .popout-menu {
-    position: absolute;
-    top: 0;
-    left: calc(100% + 4px);
-    background-color: #1a1a1a;
-    border: 2px solid #444;
-    border-radius: 8px;
-    padding: 15px;
-    min-width: 200px;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s ease;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    z-index: 2;
-  }
-
-  .popout-menu a {
-    color: #e0e0e0;
-    text-decoration: none;
-    margin-bottom: 4px;
-    transition: color 0.2s ease;
-  }
-  .popout-menu a:hover { color: #fff; }
-
-  @media (max-width: 500px) {
-    .popout-menu {
-      position: relative;
-      left: 0;
-      top: 0;
-      width: 100%;
-      transform: translateY(-10px);
-      opacity: 0;
-      max-height: 0;
-      overflow: hidden;
-      transition: all 0.3s ease;
-    }
-    .popout-menu.show {
-      opacity: 1;
-      max-height: 500px;
-      transform: translateY(0);
-    }
-  }
+footer a:hover {
+  color: #ccc;
+}
 </style>
+
 </head>
 <body>
 
-<div class="left-buttons">
-  <a href="https://conicey.github.io/portfolio/" class="left-btn">portfolio</a>
-  <a href="/dev" class="left-btn">badge tutorial</a>
-</div>
+<header>
+  <h1>Conicey's Portfolio</h1>
+  <p class="subtitle">Developer • Animator • Designer • Community Manager • Creator</p>
+</header>
 
-<img src="banner.png" alt="conicey" class="logo">
+<!-- ——— Category Grid ——— -->
+<div class="grid">
 
-<!-- REMOVED TAGLINE -->
-<div class="tagline"></div>
-
-<div class="roles">
-  <div class="roles-line">
-    <span>Developer</span>•<span>Animator</span>•<span>Whitehatter</span>•<span>Server Manager</span>
-  </div>
-  <div class="roles-line">
-    <span>Community Manager</span>•<span>Designer</span>•<span>Creator</span>
-  </div>
-</div>
-
-<div class="content">
-  <div class="biolink-container">
-    <a class="biolink-btn" id="biolinkBtn">biolink</a>
-
-    <div class="popout-menu" id="biolinkMenu">
-      <a href="https://haunt.gg/christmas" target="_blank">haunt.gg/christmas</a>
-      <a href="https://guns.lol/conicey" target="_blank">guns.lol/conicey</a>
-    </div>
+  <div class="card" onclick="location.href='animation/'">
+    <h2>Animation</h2>
+    <p>Your full animation portfolio — smooth loops, character movements, effects, and showreels.</p>
   </div>
 
-  <a href="https://discord.com/users/920912709862703115" class="social" target="_blank">discord</a>
-  <a href="https://www.roblox.com/users/3754010089/profile" class="social" target="_blank">roblox</a>
-  <a href="https://www.twitch.tv/coniceyy" class="social" target="_blank">twitch</a>
-  <a href="https://open.spotify.com/user/31pktw5i4vqzf2zmrfc355qfqlli" class="social" target="_blank">spotify</a>
-  <a href="https://www.youtube.com/@coniceyy" class="social" target="_blank">youtube</a>
-  <a href="https://x.com/conicey" class="social" target="_blank">x</a>
-  <a href="https://www.tiktok.com/@coniceyy" class="social" target="_blank">tiktok</a>
-  <a href="https://www.instagram.com/coniceyyy" class="social" target="_blank">instagram</a>
+  <div class="card" onclick="location.href='design/'">
+    <h2>Design</h2>
+    <p>Branding, banners, website layouts, UI/UX concepts, thumbnails, and visual identity.</p>
+  </div>
+
+  <div class="card" onclick="location.href='development/'">
+    <h2>Development</h2>
+    <p>Websites, scripts, tools, automation, FastFlags, Roblox tweaks, and personal projects.</p>
+  </div>
+
+  <div class="card" onclick="location.href='servermanager/'">
+    <h2>Server Management</h2>
+    <p>Discord server building, roles, systems, moderation tools, and UI setups.</p>
+  </div>
+
+  <div class="card" onclick="location.href='communitymanager/'">
+    <h2>Community Management</h2>
+    <p>Staff work, event hosting, moderation, community structure, and engagement systems.</p>
+  </div>
+
+  <div class="card" onclick="location.href='other/'">
+    <h2>Other Work</h2>
+    <p>Side projects, scripts, experiments, branding pieces, and anything extra.</p>
+  </div>
+
 </div>
 
-<footer>conicey™</footer>
-
-<script>
-const biolinkBtn = document.getElementById('biolinkBtn');
-const biolinkMenu = document.getElementById('biolinkMenu');
-let hideTimeout;
-
-function showMenu() {
-  clearTimeout(hideTimeout);
-  biolinkMenu.style.opacity = '1';
-  biolinkMenu.style.pointerEvents = 'auto';
-}
-
-function hideMenu() {
-  hideTimeout = setTimeout(() => {
-    biolinkMenu.style.opacity = '0';
-    biolinkMenu.style.pointerEvents = 'none';
-  }, 200);
-}
-
-if (window.innerWidth > 500) {
-  biolinkBtn.addEventListener('mouseenter', showMenu);
-  biolinkBtn.addEventListener('mouseleave', hideMenu);
-  biolinkMenu.addEventListener('mouseenter', showMenu);
-  biolinkMenu.addEventListener('mouseleave', hideMenu);
-}
-
-biolinkBtn.addEventListener('click', () => {
-  if(window.innerWidth <= 500){
-    biolinkMenu.classList.toggle('show');
-  }
-});
-
-document.addEventListener('click', (e) => {
-  if(window.innerWidth <= 500){
-    if(!biolinkBtn.contains(e.target) && !biolinkMenu.contains(e.target)){
-      biolinkMenu.classList.remove('show');
-    }
-  }
-});
-</script>
+<footer>
+  <p>© 2025 Conicey • <a href="https://conicey.github.io">Return to main site</a></p>
+</footer>
 
 </body>
 </html>
