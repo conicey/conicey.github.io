@@ -126,7 +126,7 @@
   }
 
   .left-btn {
-    width: 135px; /* SAME SIZE FOR BOTH BUTTONS */
+    width: 135px;
     padding: 10px 0;
     background: #1a1a1a;
     border: 2px solid #444;
@@ -171,11 +171,7 @@
     .left-btn { width: auto; padding: 10px 20px; }
   }
 
-  /* BIOLINK */
-  .biolink-container {
-    position: relative;
-    width: 100%;
-  }
+  .biolink-container { position: relative; width: 100%; }
 
   .biolink-btn {
     display: block;
@@ -267,14 +263,15 @@
 </head>
 <body>
 
-<!-- LEFT BUTTONS UPDATED -->
 <div class="left-buttons">
   <a href="https://conicey.github.io/portfolio/" class="left-btn">portfolio</a>
   <a href="/dev" class="left-btn">badge tutorial</a>
 </div>
 
 <img src="banner.png" alt="conicey" class="logo">
-<div class="tagline">We luv Conicey</div>
+
+<!-- REMOVED TAGLINE -->
+<div class="tagline"></div>
 
 <div class="roles">
   <div class="roles-line">
@@ -289,7 +286,6 @@
   <div class="biolink-container">
     <a class="biolink-btn" id="biolinkBtn">biolink</a>
 
-    <!-- UPDATED BIOLINK LIST -->
     <div class="popout-menu" id="biolinkMenu">
       <a href="https://haunt.gg/christmas" target="_blank">haunt.gg/christmas</a>
       <a href="https://guns.lol/conicey" target="_blank">guns.lol/conicey</a>
