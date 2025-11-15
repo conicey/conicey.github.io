@@ -203,38 +203,6 @@
       line-height: 1.5;
     }
 
-    /* SCROLL INDICATOR */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.78rem;
-      opacity: 0.38;
-      letter-spacing: 0.04em;
-      user-select: none;
-      animation: float 2.4s ease-in-out infinite;
-      transition: 0.25s ease;
-      display: flex;
-      gap: 14px;
-      pointer-events: none;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(5px); }
-    }
-
-    .scroll-arrows {
-      opacity: 0.45;
-      display: flex;
-      gap: 6px;
-    }
-
-    .scroll-indicator.gone {
-      display: none !important;
-    }
-
     /* SECTION HEADER */
     .section-header {
       margin-top: 10px;
@@ -403,16 +371,8 @@
           </p>
         </aside>
 
-        <!-- SCROLL INDICATOR -->
-        <div class="scroll-indicator" id="scrollHint">
-          <div class="scroll-arrows">▼ ▼ ▼</div>
-          scroll for more
-          <div class="scroll-arrows">▼ ▼ ▼</div>
-        </div>
-
       </section>
 
-      
       <!-- SECTION HEADER -->
       <div class="section-header">
         <div class="section-title">PORTFOLIO NAVIGATION</div>
@@ -495,24 +455,6 @@
 
     </div>
   </div>
-
-  <!-- ONLY HIDE WHEN REAL SCROLL OCCURS -->
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      const hint = document.getElementById("scrollHint");
-      if (!hint) return;
-
-      function onScroll() {
-        hint.classList.add("gone");
-        window.removeEventListener("scroll", onScroll);
-        document.removeEventListener("scroll", onScroll);
-      }
-
-      // detect REAL scroll
-      window.addEventListener("scroll", onScroll, { passive: true });
-      document.addEventListener("scroll", onScroll, { passive: true });
-    });
-  </script>
 
 </body>
 </html>
