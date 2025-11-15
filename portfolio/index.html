@@ -6,95 +6,128 @@
   <title>Conicey • Portfolio</title>
 
   <style>
-    /* RESET */
-    *, *::before, *::after {
+    /* ─────────────────────────────────────────────────────────────
+       RESET
+    ───────────────────────────────────────────────────────────── */
+    *,
+    *::before,
+    *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
-    html, body {
+    html,
+    body {
       height: 100%;
-      overflow-x: hidden;
     }
 
     body {
-      font-family: "Segoe UI", system-ui, sans-serif;
-      background: linear-gradient(
-        135deg,
-        rgba(40, 15, 65, 1),
-        rgba(10, 8, 25, 1),
-        rgba(5, 5, 10, 1)
-      );
-      background-size: 200% 200%;
-      animation: bgFlow 18s ease-in-out infinite;
+      font-family: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      background: radial-gradient(circle at 0% 0%, #2f2050 0, #050509 30%, #050509 100%);
       color: #f5f5f5;
+      overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
 
-    @keyframes bgFlow {
-      0% { background-position: 0% 0%; }
-      50% { background-position: 100% 100%; }
-      100% { background-position: 0% 0%; }
+    a {
+      color: inherit;
+      text-decoration: none;
     }
 
+    /* ─────────────────────────────────────────────────────────────
+       THEME TOKENS
+    ───────────────────────────────────────────────────────────── */
     :root {
+      --bg-main: #050509;
+      --bg-elevated: rgba(11, 11, 18, 0.9);
+      --bg-elevated-softer: rgba(14, 14, 24, 0.94);
+      --accent-primary: #c86cff;
+      --accent-secondary: #4fd1ff;
+      --accent-tertiary: #6bffb5;
+      --accent-danger: #ff4d8f;
+
+      --border-subtle: rgba(255, 255, 255, 0.08);
+      --border-strong: rgba(255, 255, 255, 0.2);
+
+      --text-main: #f5f5f5;
       --text-muted: #9ca3af;
       --text-soft: #6b7280;
+
       --radius-lg: 18px;
       --radius-xl: 24px;
-      --shadow-soft: 0 18px 40px rgba(0,0,0,0.75);
+
+      --shadow-soft: 0 18px 40px rgba(0, 0, 0, 0.75);
       --blur-glass: 18px;
+
+      --transition-fast: 140ms ease-out;
+      --transition-med: 220ms ease-out;
     }
 
-    /* ─────────────────────────────────────────────
-       FLOATING STATUS BAR (ORIGINAL STYLE)
-    ───────────────────────────────────────────── */
-    .status-bar-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 26px; /* FLOATS, DOES NOT TOUCH TOP */
+    /* ─────────────────────────────────────────────────────────────
+       BACKGROUND LAYERS
+    ───────────────────────────────────────────────────────────── */
+    .bg-grid {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+      background-image: linear-gradient(
+          to right,
+          rgba(148, 163, 184, 0.12) 1px,
+          transparent 1px
+        ),
+        linear-gradient(
+          to bottom,
+          rgba(148, 163, 184, 0.12) 1px,
+          transparent 1px
+        );
+      background-size: 26px 26px;
+      mask-image: radial-gradient(circle at top, black 0, transparent 70%);
     }
 
-    .status-bar {
-      padding: 12px 22px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.17);
-      backdrop-filter: blur(16px);
-      box-shadow:
-        0 0 25px rgba(180, 110, 255, 0.25),
-        0 0 50px rgba(80, 150, 255, 0.15),
-        0 6px 20px rgba(0,0,0,0.45);
-      color: #eee;
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: min(1120px, 92%);
+    .bg-orbit {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(circle at 10% 0%, rgba(200, 108, 255, 0.22) 0, transparent 48%),
+        radial-gradient(circle at 85% 20%, rgba(79, 209, 255, 0.18) 0, transparent 45%),
+        radial-gradient(circle at 10% 100%, rgba(107, 255, 181, 0.14) 0, transparent 40%);
+      mix-blend-mode: screen;
+      opacity: 0.7;
     }
 
-    .status-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
+    /* subtle moving glow */
+    @keyframes orbitPulse {
+      0% {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 0.6;
+      }
+      50% {
+        transform: translate3d(-10px, 4px, 0) scale(1.03);
+        opacity: 0.9;
+      }
+      100% {
+        transform: translate3d(0, 0, 0) scale(1);
+        opacity: 0.6;
+      }
     }
 
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #9f66ff;
-      box-shadow: 0 0 10px #9f66ff;
+    .bg-orbit {
+      animation: orbitPulse 16s ease-in-out infinite;
     }
 
-    /* SHELL */
+    /* ─────────────────────────────────────────────────────────────
+       LAYOUT SHELL
+    ───────────────────────────────────────────────────────────── */
     .shell {
       position: relative;
       z-index: 1;
-      padding: 40px 22px;
+      min-height: 100vh;
+      padding: 28px 20px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -105,373 +138,946 @@
       max-width: 1120px;
     }
 
-    /* ─────────────────────────────────────────────
-       HERO SECTION WITH ORIGINAL TEXT + OLD OVERVIEW BOX
-    ───────────────────────────────────────────── */
+    /* ─────────────────────────────────────────────────────────────
+       TOP STRIP / STATUS BAR
+    ───────────────────────────────────────────────────────────── */
+    .status-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: linear-gradient(
+          120deg,
+          rgba(248, 250, 252, 0.06),
+          rgba(15, 23, 42, 0.7)
+        );
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.9);
+      backdrop-filter: blur(16px);
+      margin-bottom: 24px;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.82rem;
+      letter-spacing: 0.09em;
+      text-transform: uppercase;
+      color: #cbd5f5;
+    }
+
+    .status-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 30%, #bbf7d0 0, #4ade80 40%, #22c55e 100%);
+      box-shadow: 0 0 12px rgba(34, 197, 94, 0.8);
+    }
+
+    .status-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at 0% 0%, rgba(248, 250, 252, 0.18), transparent 55%);
+      font-size: 0.78rem;
+      color: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-pill span {
+      opacity: 0.9;
+    }
+
+    .status-pill-heat {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
+      color: #fecaca;
+    }
+
+    .fire-chip {
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(239, 68, 68, 0.9), rgba(234, 88, 12, 0.9));
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      box-shadow: 0 0 12px rgba(248, 113, 113, 0.8);
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       HERO
+    ───────────────────────────────────────────────────────────── */
     .hero {
-      position: relative;
-      margin-top: 50px;
       display: grid;
-      grid-template-columns: minmax(0,1.6fr) minmax(0,1.1fr);
-      gap: 40px;
-      min-height: 80vh;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+      gap: 32px;
+      margin-bottom: 36px;
       align-items: center;
     }
 
+    .hero-main-eyebrow {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--accent-secondary);
+      margin-bottom: 10px;
+    }
+
     .hero-title {
-      font-size: clamp(2.8rem, 4vw + 1rem, 3.8rem);
+      font-size: clamp(2.4rem, 3vw + 1.2rem, 3.6rem);
+      line-height: 1.04;
       font-weight: 800;
-      background: linear-gradient(100deg, #ffffff, #d4d4ff, #5ab8ff);
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+      display: inline-block;
+      background: linear-gradient(120deg, #f9fafb, #e5e7eb, #c4b5fd, #38bdf8);
       -webkit-background-clip: text;
       color: transparent;
+    }
+
+    .hero-subtitle-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 10px;
       margin-bottom: 16px;
-      line-height: 1.05;
+    }
+
+    .hero-name {
+      font-weight: 700;
+      color: #e5e7eb;
+      font-size: 1.05rem;
+    }
+
+    .hero-label {
+      font-size: 0.9rem;
+      color: var(--text-soft);
     }
 
     .hero-body {
-      font-size: 1.05rem;
+      font-size: 0.95rem;
       color: var(--text-muted);
-      max-width: 34rem;
+      max-width: 36rem;
       line-height: 1.7;
+      margin-bottom: 18px;
     }
 
-    /* OLD OVERVIEW BOX RESTORED */
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 22px;
+    }
+
+    .hero-tag {
+      padding: 5px 11px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: radial-gradient(circle at 0 0, rgba(248, 250, 252, 0.1), transparent 60%);
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #e5e7eb;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-primary {
+      padding: 10px 18px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.28);
+      background-image:
+        radial-gradient(circle at 0 0, rgba(250, 250, 250, 0.32), transparent 55%),
+        linear-gradient(120deg, #4f46e5, #a855f7, #22c55e);
+      color: #fefefe;
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 14px 35px rgba(79, 70, 229, 0.7);
+      cursor: pointer;
+      transition: transform var(--transition-med), box-shadow var(--transition-med),
+        filter var(--transition-med);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px) scale(1.02);
+      box-shadow: 0 18px 45px rgba(59, 130, 246, 0.7);
+      filter: brightness(1.05);
+    }
+
+    .btn-ghost {
+      padding: 9px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.75);
+      font-size: 0.86rem;
+      color: #e5e7eb;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      cursor: default;
+    }
+
+    .btn-ghost span {
+      opacity: 0.8;
+    }
+
+    /* Hero right block */
     .hero-panel {
       border-radius: var(--radius-xl);
-      border: 1px solid rgba(148,163,184,0.5);
-      background:
-        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.10), transparent 55%),
-        rgba(15,23,42,0.9);
-      padding: 20px 22px;
-      backdrop-filter: blur(20px);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.75);
+      border: 1px solid rgba(148, 163, 184, 0.65);
+      background: radial-gradient(circle at 0% 0%, rgba(248, 250, 252, 0.08), transparent 55%),
+        rgba(15, 23, 42, 0.93);
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 16px;
+      backdrop-filter: blur(var(--blur-glass));
       display: flex;
       flex-direction: column;
-      gap: 14px;
+      gap: 12px;
     }
 
     .hero-panel-header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
     }
 
     .hero-chip {
       padding: 4px 10px;
       border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.2);
+      border: 1px solid rgba(148, 163, 184, 0.55);
       font-size: 0.75rem;
-      letter-spacing: 0.07em;
       text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #e5e7eb;
+      background: linear-gradient(120deg, rgba(148, 163, 184, 0.18), transparent);
     }
 
     .hero-stat-row {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 12px;
+      margin-top: 8px;
+      margin-bottom: 6px;
     }
 
     .hero-stat {
-      padding: 10px 12px;
+      padding: 8px 10px;
       border-radius: 14px;
-      background: rgba(10,14,25,0.95);
-      border: 1px solid rgba(148,163,184,0.35);
-      font-size: 0.85rem;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      background: linear-gradient(
+        145deg,
+        rgba(15, 23, 42, 0.9),
+        rgba(30, 64, 175, 0.9),
+        rgba(24, 24, 27, 0.9)
+      );
+      font-size: 0.78rem;
+    }
+
+    .hero-stat span {
+      display: block;
     }
 
     .hero-stat-label {
-      font-size: 0.72rem;
       color: var(--text-soft);
+      margin-bottom: 2px;
     }
 
     .hero-stat-value {
-      font-size: 1rem;
       font-weight: 700;
-      color: #fff;
+      color: #e5e7eb;
+      font-size: 0.95rem;
     }
 
     .hero-scope {
-      font-size: 0.82rem;
+      font-size: 0.78rem;
       color: var(--text-muted);
+      margin-top: 4px;
     }
 
-    /* ─────────────────────────────────────────────
-       SCROLL INDICATOR WITH ARROWS
-    ───────────────────────────────────────────── */
-    .scroll-indicator {
-      position: absolute;
-      bottom: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 0.78rem;
-      opacity: 0.38;
-      letter-spacing: 0.04em;
-      user-select: none;
-      animation: smallFloat 2.4s ease-in-out infinite;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
-      display: flex;
-      align-items: center;
-      gap: 14px;
+    .hero-scope strong {
+      color: #e5e7eb;
+      font-weight: 600;
     }
 
-    .scroll-indicator.hidden {
-      opacity: 0;
-    }
-
-    .scroll-arrows {
-      font-size: 0.78rem;
-      opacity: 0.4;
-      display: flex;
-      gap: 6px;
-    }
-
-    @keyframes smallFloat {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(5px); }
-    }
-
-    /* SECTION HEADERS */
+    /* ─────────────────────────────────────────────────────────────
+       SECTION TITLE STRIP
+    ───────────────────────────────────────────────────────────── */
     .section-header {
-      margin-top: 20px;
-      margin-bottom: 20px;
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 10px 0 18px;
     }
 
     .section-title {
-      text-transform: uppercase;
       font-size: 0.88rem;
+      text-transform: uppercase;
       letter-spacing: 0.16em;
-      opacity: 0.6;
+      color: var(--text-soft);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
 
-    /* GRID */
+    .section-title::before {
+      content: "";
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: linear-gradient(90deg, rgba(148, 163, 184, 0.1), rgba(148, 163, 184, 0.9));
+    }
+
+    .section-legend {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: right;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       CAPABILITY GRID (6 MAIN BUTTONS)
+    ───────────────────────────────────────────────────────────── */
     .capabilities-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 22px;
-      margin-bottom: 40px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 26px;
     }
 
     .capability-card {
-      padding: 18px;
+      position: relative;
       border-radius: var(--radius-lg);
-      background: rgba(18,20,35,0.85);
-      border: 1px solid rgba(148,163,184,0.45);
-      backdrop-filter: blur(14px);
-      transition: 0.25s ease;
+      padding: 16px 15px 14px;
+      background:
+        linear-gradient(145deg, rgba(15, 23, 42, 0.96), rgba(15, 23, 42, 0.94)),
+        radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.3), transparent 52%);
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: 0 16px 32px rgba(15, 23, 42, 0.9);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--transition-med), box-shadow var(--transition-med),
+        border-color var(--transition-med), background var(--transition-med);
+    }
+
+    .capability-card::before {
+      content: "";
+      position: absolute;
+      inset: -25%;
+      background: conic-gradient(
+        from 220deg,
+        rgba(200, 108, 255, 0.12),
+        rgba(79, 209, 255, 0.12),
+        rgba(107, 255, 181, 0.12),
+        rgba(200, 108, 255, 0.12)
+      );
+      opacity: 0;
+      transition: opacity var(--transition-med);
+      pointer-events: none;
     }
 
     .capability-card:hover {
-      transform: translateY(-4px);
-      border-color: #e8e8ff;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+      transform: translateY(-4px) scale(1.01);
+      border-color: rgba(248, 250, 252, 0.72);
+      background: linear-gradient(
+          150deg,
+          rgba(15, 23, 42, 0.96),
+          rgba(2, 6, 23, 0.98)
+        );
+      box-shadow: 0 22px 50px rgba(31, 64, 104, 0.9);
+    }
+
+    .capability-card:hover::before {
+      opacity: 1;
+    }
+
+    .capability-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      position: relative;
+      z-index: 1;
     }
 
     .capability-title {
-      font-size: 1.05rem;
+      font-size: 1rem;
       font-weight: 600;
-      margin-bottom: 8px;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .capability-tag {
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .capability-body {
+      position: relative;
+      z-index: 1;
     }
 
     .capability-desc {
+      font-size: 0.82rem;
       color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 10px;
+      line-height: 1.6;
+      margin-bottom: 8px;
     }
 
     .capability-meta-row {
-      font-size: 0.78rem;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.78rem;
       color: var(--text-soft);
     }
 
-    .capability-pill {
-      padding: 3px 7px;
-      border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
+    .capability-meta-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
     }
 
-    footer {
-      text-align: center;
-      margin: 40px 0 20px;
+    .capability-pill {
+      padding: 3px 6px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 0.7rem;
+      color: #e5e7eb;
+      background: rgba(15, 23, 42, 0.95);
+    }
+
+    .capability-arrow {
+      font-size: 0.9rem;
+      opacity: 0.85;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       STRIP: SIGNAL + SNAPSHOT
+    ───────────────────────────────────────────────────────────── */
+    .bottom-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+      gap: 18px;
+      margin-bottom: 34px;
+    }
+
+    .signal-card {
+      border-radius: var(--radius-lg);
+      padding: 14px 14px 12px;
+      border: 1px solid var(--border-subtle);
+      background: linear-gradient(132deg, rgba(15, 23, 42, 0.98), rgba(10, 10, 18, 0.98));
+      box-shadow: var(--shadow-soft);
       font-size: 0.82rem;
-      opacity: 0.7;
+      color: var(--text-muted);
+    }
+
+    .signal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .signal-title {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-soft);
+    }
+
+    .signal-tag {
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      font-size: 0.72rem;
+      color: #e5e7eb;
+    }
+
+    .signal-body {
+      line-height: 1.6;
+    }
+
+    .signal-body strong {
+      color: #e5e7eb;
+    }
+
+    .signal-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .signal-cell {
+      padding: 6px 7px;
+      border-radius: 8px;
+      border: 1px dashed rgba(55, 65, 81, 0.9);
+      background: rgba(15, 23, 42, 0.9);
+    }
+
+    .signal-cell-label {
+      font-size: 0.7rem;
+      color: var(--text-soft);
+      margin-bottom: 2px;
+    }
+
+    .signal-cell-value {
+      font-size: 0.86rem;
+      color: #e5e7eb;
+    }
+
+    .snapshot-card {
+      border-radius: var(--radius-lg);
+      padding: 12px 14px 12px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: radial-gradient(circle at 0 0, rgba(148, 163, 184, 0.2), transparent 52%),
+        rgba(15, 23, 42, 0.98);
+      box-shadow: var(--shadow-soft);
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      display: grid;
+      gap: 7px;
+    }
+
+    .snapshot-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .snapshot-label {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 0.7rem;
+      color: var(--text-soft);
+    }
+
+    .snapshot-value {
+      font-size: 0.86rem;
+      color: #e5e7eb;
+      text-align: right;
+    }
+
+    .snapshot-highlight {
+      background: rgba(15, 23, 42, 0.9);
+      border-radius: 10px;
+      padding: 6px 9px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      margin-top: 4px;
+    }
+
+    .snapshot-highlight span {
+      display: block;
+      font-size: 0.86rem;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       FOOTER
+    ───────────────────────────────────────────────────────────── */
+    footer {
+      padding-top: 6px;
+      margin-top: auto;
+      text-align: center;
+      font-size: 0.82rem;
+      color: var(--text-soft);
     }
 
     footer a {
-      color: #4ea3ff;
+      color: #4ea3ff; /* normal-ish blue link */
       text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 3px;
     }
 
-    /* RESPONSIVE */
+    footer a:hover {
+      color: #93c5fd;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       RESPONSIVE
+    ───────────────────────────────────────────────────────────── */
     @media (max-width: 960px) {
       .hero {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
       }
-      .hero-panel { order: -1; }
+
+      .hero-panel {
+        order: -1;
+      }
+
+      .bottom-row {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
       .capabilities-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
     @media (max-width: 680px) {
+      .shell {
+        padding-top: 20px;
+      }
+
+      .status-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        border-radius: 16px;
+        padding: 9px 11px;
+      }
+
+      .hero {
+        margin-bottom: 24px;
+      }
+
+      .hero-title {
+        font-size: 2.1rem;
+      }
+
+      .hero-body {
+        font-size: 0.9rem;
+      }
+
       .capabilities-grid {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .bottom-row {
+        gap: 14px;
+      }
+
+      .signal-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
+    @media (max-width: 440px) {
+      .signal-grid {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
   </style>
 </head>
 
 <body>
-
-  <!-- FLOATING STATUS BAR -->
-  <div class="status-bar-wrapper">
-    <div class="status-bar">
-      <div class="status-left">
-        <div class="status-dot"></div>
-        <span>Portfolio Hub — Active</span>
-      </div>
-      <div class="status-right">
-        v2025
-      </div>
-    </div>
-  </div>
+  <!-- Background layers -->
+  <div class="bg-grid"></div>
+  <div class="bg-orbit"></div>
 
   <div class="shell">
     <div class="shell-inner">
+      <!-- Top Status Bar -->
+      <div class="status-bar">
+        <div class="status-left">
+          <div class="status-dot"></div>
+          <span>PORTFOLIO • LIVE</span>
+        </div>
+        <div class="status-pill">
+          <span>CONICEY</span>
+          <span>·</span>
+          <span>NEXT-GEN CORPORATE DEVELOPER</span>
+        </div>
+        <div class="status-pill-heat">
+          <div class="fire-chip">HIGH DEMAND</div>
+          <span>Crafting systems, visuals & communities that don’t miss.</span>
+        </div>
+      </div>
 
-      <!-- HERO -->
+      <!-- Hero -->
       <section class="hero">
-
-        <!-- LEFT -->
         <div>
-          <h1 class="hero-title">Building the future while everyone else is still loading.</h1>
+          <div class="hero-main-eyebrow">Portfolio</div>
+          <h1 class="hero-title">Building the future while everyone else catches up.</h1>
+
+          <div class="hero-subtitle-row">
+            <span class="hero-name">Conicey</span>
+            <span class="hero-label">Developer · Designer · Animator · Community Architect</span>
+          </div>
+
           <p class="hero-body">
-            Precision. Clarity. Control.<br>
-            Nothing loud — just work that stands on its own.
+            This is the central hub for my work. Every tile below leads into a focused
+            portfolio: animation, design, development, server systems, community management,
+            and everything that doesn’t fit in a neat box yet.
           </p>
+
+          <div class="hero-tags">
+            <div class="hero-tag">Full-stack mindset</div>
+            <div class="hero-tag">Roblox · Web · Automation</div>
+            <div class="hero-tag">Visual Systems & Branding</div>
+            <div class="hero-tag">High-trust Community Ops</div>
+          </div>
+
+          <div class="hero-cta-row">
+            <button class="btn-primary" type="button">
+              <span>View the portfolio stacks</span>
+              <span>↳</span>
+            </button>
+            <div class="btn-ghost">
+              <span>Curated work only · no filler</span>
+            </div>
+          </div>
         </div>
 
-        <!-- RIGHT — OLD OVERVIEW BOX RESTORED -->
         <aside class="hero-panel">
           <div class="hero-panel-header">
             <div class="hero-chip">Portfolio Overview</div>
-            <div class="hero-chip">v2025</div>
+            <div class="hero-chip">Conicey • v2025</div>
           </div>
 
           <div class="hero-stat-row">
             <div class="hero-stat">
-              <div class="hero-stat-label">Disciplines</div>
-              <div class="hero-stat-value">6</div>
+              <span class="hero-stat-label">Disciplines</span>
+              <span class="hero-stat-value">6 core</span>
+              <span class="hero-scope">Animation · Design · Dev · Community & more</span>
             </div>
             <div class="hero-stat">
-              <div class="hero-stat-label">Focus</div>
-              <div class="hero-stat-value">Next-gen</div>
+              <span class="hero-stat-label">Focus</span>
+              <span class="hero-stat-value">Next-gen</span>
+              <span class="hero-scope">Systems that look <strong>and</strong> run premium.</span>
             </div>
             <div class="hero-stat">
-              <div class="hero-stat-label">Style</div>
-              <div class="hero-stat-value">Minimal</div>
+              <span class="hero-stat-label">Style</span>
+              <span class="hero-stat-value">Sharp</span>
+              <span class="hero-scope">Clean, corporate, confident. No clutter.</span>
             </div>
           </div>
 
           <p class="hero-scope">
-            Each category opens into focused, clean, premium-level work.
+            Each category below is a dedicated environment with its own work examples,
+            experiments, and things I shipped because “good enough” is not an option.
           </p>
         </aside>
-
-        <!-- SCROLL INDICATOR -->
-        <div class="scroll-indicator" id="scrollHint">
-          <div class="scroll-arrows">▼ ▼ ▼</div>
-          scroll for more
-          <div class="scroll-arrows">▼ ▼ ▼</div>
-        </div>
-
       </section>
 
-      <!-- SECTION HEADER -->
+      <!-- Section header -->
       <div class="section-header">
         <div class="section-title">Portfolio Navigation</div>
+        <div class="section-legend">
+          6 specialised areas &mdash; pick where you want to see me flex first.
+        </div>
       </div>
 
-      <!-- GRID -->
+      <!-- Capability Grid: the 6 main buttons -->
       <section class="capabilities-grid">
-
+        <!-- Animation -->
         <a class="capability-card" href="animation/">
-          <div class="capability-title">Animation</div>
-          <div class="capability-desc">Clean motion built for digital spaces.</div>
-          <div class="capability-meta-row">
-            <span class="capability-pill">Motion</span>
-            <span>→</span>
+          <div class="capability-header">
+            <div class="capability-title">Animation</div>
+            <div class="capability-tag">Motion Systems</div>
+          </div>
+          <div class="capability-body">
+            <p class="capability-desc">
+              Loops, transitions, character movement and timing that feels intentional.
+              Expect clean motion, readable beats and pacing tuned for digital platforms.
+            </p>
+            <div class="capability-meta-row">
+              <div class="capability-meta-tags">
+                <span class="capability-pill">2D / UI Motion</span>
+                <span class="capability-pill">Micro-animations</span>
+              </div>
+              <span class="capability-arrow">Open →</span>
+            </div>
           </div>
         </a>
 
+        <!-- Design -->
         <a class="capability-card" href="design/">
-          <div class="capability-title">Design</div>
-          <div class="capability-desc">Purpose-built visual identity.</div>
-          <div class="capability-meta-row">
-            <span class="capability-pill">Identity</span>
-            <span>→</span>
+          <div class="capability-header">
+            <div class="capability-title">Design</div>
+            <div class="capability-tag">Visual Identity</div>
+          </div>
+          <div class="capability-body">
+            <p class="capability-desc">
+              Banners, layouts, role aesthetics, thumbnails and branding systems that
+              feel modern and intentional, not templated or over-decorated.
+            </p>
+            <div class="capability-meta-row">
+              <div class="capability-meta-tags">
+                <span class="capability-pill">Brand Kits</span>
+                <span class="capability-pill">UI / UX Concepts</span>
+              </div>
+              <span class="capability-arrow">Open →</span>
+            </div>
           </div>
         </a>
 
+        <!-- Development -->
         <a class="capability-card" href="development/">
-          <div class="capability-title">Development</div>
-          <div class="capability-desc">Web tools, automation, systems.</div>
-          <div class="capability-meta-row">
-            <span class="capability-pill">Systems</span>
-            <span>→</span>
+          <div class="capability-header">
+            <div class="capability-title">Development</div>
+            <div class="capability-tag">Code & Systems</div>
+          </div>
+          <div class="capability-body">
+            <p class="capability-desc">
+              Web builds, tools, scripts, FastFlags, Roblox tweaks and automation.
+              Clean structure, practical features, and readable setups for real use.
+            </p>
+            <div class="capability-meta-row">
+              <div class="capability-meta-tags">
+                <span class="capability-pill">Web · Roblox</span>
+                <span class="capability-pill">Automation</span>
+              </div>
+              <span class="capability-arrow">Open →</span>
+            </div>
           </div>
         </a>
 
+        <!-- Server Management -->
         <a class="capability-card" href="servermanager/">
-          <div class="capability-title">Server Management</div>
-          <div class="capability-desc">Premium Discord architecture.</div>
-          <div class="capability-meta-row">
-            <span class="capability-pill">Ops</span>
-            <span>→</span>
+          <div class="capability-header">
+            <div class="capability-title">Server Management</div>
+            <div class="capability-tag">Infra & Layout</div>
+          </div>
+          <div class="capability-body">
+            <p class="capability-desc">
+              Server structures, role hierarchies, channel logic and bot integrations.
+              Everything tuned so communities feel premium the second they load in.
+            </p>
+            <div class="capability-meta-row">
+              <div class="capability-meta-tags">
+                <span class="capability-pill">Discord Systems</span>
+                <span class="capability-pill">Role Architecture</span>
+              </div>
+              <span class="capability-arrow">Open →</span>
+            </div>
           </div>
         </a>
 
+        <!-- Community Management -->
         <a class="capability-card" href="communitymanager/">
-          <div class="capability-title">Community Management</div>
-          <div class="capability-desc">Engagement systems that last.</div>
-          <div class="capability-meta-row">
-            <span class="capability-pill">Engagement</span>
-            <span>→</span>
+          <div class="capability-header">
+            <div class="capability-title">Community Management</div>
+            <div class="capability-tag">People & Ops</div>
+          </div>
+          <div class="capability-body">
+            <p class="capability-desc">
+              Staff work, moderation, event setups and systems that actually keep a
+              community alive instead of just looking active from the outside.
+            </p>
+            <div class="capability-meta-row">
+              <div class="capability-meta-tags">
+                <span class="capability-pill">Team Ops</span>
+                <span class="capability-pill">Engagement Systems</span>
+              </div>
+              <span class="capability-arrow">Open →</span>
+            </div>
           </div>
         </a>
 
+        <!-- Other Work -->
         <a class="capability-card" href="other/">
-          <div class="capability-title">Other</div>
-          <div class="capability-desc">Experiments, prototypes, labs.</div>
-          <div class="capability-meta-row">
-            <span class="capability-pill">Labs</span>
-            <span>→</span>
+          <div class="capability-header">
+            <div class="capability-title">Other Work</div>
+            <div class="capability-tag">Experiments</div>
+          </div>
+          <div class="capability-body">
+            <p class="capability-desc">
+              All the extras: prototypes, one-off builds, scripts, visual tests and
+              concepts that don’t fit strictly anywhere else but still go hard.
+            </p>
+            <div class="capability-meta-row">
+              <div class="capability-meta-tags">
+                <span class="capability-pill">Labs</span>
+                <span class="capability-pill">In-progress Ideas</span>
+              </div>
+              <span class="capability-arrow">Open →</span>
+            </div>
           </div>
         </a>
-
       </section>
 
-      <footer>
-        © 2025 Conicey • <a href="https://conicey.github.io">Return to main site</a>
-      </footer>
+      <!-- Signal + Snapshot row -->
+      <section class="bottom-row">
+        <div class="signal-card">
+          <div class="signal-header">
+            <div class="signal-title">Signal</div>
+            <div class="signal-tag">How I work</div>
+          </div>
+          <div class="signal-body">
+            <p>
+              I treat every category here like a separate product line. Clean structure,
+              no noise, and everything tuned to feel
+              <strong>deliberate, confident and future-proof</strong>.
+            </p>
+          </div>
+          <div class="signal-grid">
+            <div class="signal-cell">
+              <div class="signal-cell-label">Style</div>
+              <div class="signal-cell-value">Sharp &amp; minimal</div>
+            </div>
+            <div class="signal-cell">
+              <div class="signal-cell-label">Priority</div>
+              <div class="signal-cell-value">Function first</div>
+            </div>
+            <div class="signal-cell">
+              <div class="signal-cell-label">Energy</div>
+              <div class="signal-cell-value">Next-gen only</div>
+            </div>
+          </div>
+        </div>
 
+        <div class="snapshot-card">
+          <div class="snapshot-row">
+            <div class="snapshot-label">Snapshot</div>
+            <div class="snapshot-value">
+              Conicey • Portfolio hub
+            </div>
+          </div>
+          <div class="snapshot-row">
+            <div class="snapshot-label">Disciplines</div>
+            <div class="snapshot-value">
+              Dev · Design · Animation · Community
+            </div>
+          </div>
+          <div class="snapshot-row">
+            <div class="snapshot-label">Positioning</div>
+            <div class="snapshot-value">
+              Next-gen corporate, zero cringe.
+            </div>
+          </div>
+          <div class="snapshot-highlight">
+            <span>
+              If you’re here to see what I can actually build, click into any category
+              above. Each one is built to show I’m not just talking about “being better”
+              at this — I’m already operating like it.
+            </span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Footer -->
+      <footer>
+        <p>
+          © 2025 Conicey •
+          <a href="https://conicey.github.io">Return to main site</a>
+        </p>
+      </footer>
     </div>
   </div>
-
-  <!-- SCROLL INDICATOR JS -->
-  <script>
-    const hint = document.getElementById("scrollHint");
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 40) {
-        hint.classList.add("hidden");
-      } else {
-        hint.classList.remove("hidden");
-      }
-    });
-  </script>
-
 </body>
 </html>
