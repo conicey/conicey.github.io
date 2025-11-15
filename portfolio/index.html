@@ -52,7 +52,7 @@
       width: 100%;
       display: flex;
       justify-content: center;
-      margin-top: 10px; /* even smaller */
+      margin-top: 10px;
       position: relative;
       z-index: 10;
     }
@@ -79,7 +79,6 @@
       display: flex;
       align-items: center;
       gap: 8px;
-      white-space: nowrap;
     }
 
     .status-dot {
@@ -94,7 +93,7 @@
     .shell {
       position: relative;
       z-index: 1;
-      padding: 10px 22px 24px; /* tighter at top */
+      padding: 10px 22px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -107,7 +106,7 @@
 
     /* HERO SECTION */
     .hero {
-      margin-top: 10px; /* gap between bar and title smaller again */
+      margin-top: 10px;
       display: grid;
       grid-template-columns: minmax(0,1.6fr) minmax(0,1.1fr);
       gap: 40px;
@@ -133,7 +132,7 @@
       line-height: 1.7;
     }
 
-    /* HERO PANEL (PORTFOLIO OVERVIEW STYLE) */
+    /* OVERVIEW PANEL — MATCHES YOUR SCREENSHOT */
     .hero-panel {
       border-radius: 26px;
       border: 1px solid rgba(148,163,184,0.55);
@@ -152,7 +151,6 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 6px;
     }
 
     .hero-chip {
@@ -171,7 +169,6 @@
       display: grid;
       grid-template-columns: repeat(3, minmax(0,1fr));
       gap: 16px;
-      margin-bottom: 6px;
     }
 
     .hero-stat {
@@ -180,20 +177,17 @@
       background: linear-gradient(145deg, #1b2b63, #2147a4, #2563eb);
       border: 1px solid rgba(148,163,184,0.8);
       box-shadow: 0 18px 30px rgba(0,0,0,0.7);
-      font-size: 0.9rem;
     }
 
     .hero-stat-label {
       font-size: 0.8rem;
-      color: rgba(212, 224, 255, 0.92);
-      margin-bottom: 4px;
+      color: rgba(212,224,255,0.92);
     }
 
     .hero-stat-value {
       font-size: 1.15rem;
       font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 4px;
+      margin: 4px 0;
     }
 
     .hero-stat-body {
@@ -205,8 +199,8 @@
     .hero-scope {
       font-size: 0.84rem;
       color: var(--text-muted);
-      line-height: 1.5;
       margin-top: 4px;
+      line-height: 1.5;
     }
 
     /* SCROLL INDICATOR */
@@ -219,29 +213,20 @@
       opacity: 0.38;
       letter-spacing: 0.04em;
       user-select: none;
-      animation: smallFloat 2.4s ease-in-out infinite;
-      transition: opacity 0.25s ease, visibility 0.25s ease;
+      animation: float 2.4s ease-in-out infinite;
+      transition: 0.25s ease;
       display: flex;
-      align-items: center;
       gap: 14px;
       pointer-events: none;
-      visibility: visible;
     }
 
-    .scroll-indicator.hidden {
-      opacity: 0;
-      visibility: hidden;
+    @keyframes float {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(5px); }
     }
 
     .scroll-indicator.gone {
-      opacity: 0;
-      visibility: hidden;
-      display: none;
-    }
-
-    @keyframes smallFloat {
-      0%, 100% { transform: translateX(-50%) translateY(0); }
-      50% { transform: translateX(-50%) translateY(5px); }
+      display: none !important;
     }
 
     .scroll-arrows {
@@ -263,7 +248,7 @@
       letter-spacing: 0.18em;
     }
 
-    /* PORTFOLIO GRID */
+    /* GRID */
     .capabilities-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -289,8 +274,8 @@
 
     .capability-card:hover {
       border-color: #fff;
-      background: rgba(15,18,30,0.92);
       transform: translateY(-4px);
+      background: rgba(15,18,30,0.92);
       box-shadow: 0 22px 42px rgba(0,0,0,0.7);
     }
 
@@ -303,7 +288,6 @@
     .capability-desc {
       color: var(--text-muted);
       font-size: 0.9rem;
-      max-width: 90%;
       margin-bottom: 16px;
     }
 
@@ -330,17 +314,15 @@
 
     footer a {
       color: #4ea3ff;
-      text-decoration: underline;
     }
 
-    /* RESPONSIVE */
     @media (max-width: 960px) {
       .hero {
         grid-template-columns: 1fr;
       }
       .hero-panel { order: -1; }
       .capabilities-grid {
-        grid-template-columns: repeat(2, 1fr);
+        grid-template-columns: repeat(2,1fr);
       }
     }
 
@@ -349,6 +331,7 @@
         grid-template-columns: 1fr;
       }
     }
+
   </style>
 </head>
 
@@ -359,11 +342,9 @@
     <div class="status-bar">
       <div class="status-left">
         <div class="status-dot"></div>
-        <span>Portfolio · conicey · next-gen multidisciplinary</span>
+        Portfolio · conicey · next-gen multidisciplinary
       </div>
-      <div class="status-right">
-        luv conicey
-      </div>
+      <div class="status-right">luv conicey</div>
     </div>
   </div>
 
@@ -373,7 +354,7 @@
       <!-- HERO -->
       <section class="hero">
 
-        <!-- LEFT -->
+        <!-- LEFT SIDE -->
         <div>
           <h1 class="hero-title">Building the future while everyone else catches up.</h1>
           <p class="hero-body">
@@ -383,7 +364,7 @@
           </p>
         </div>
 
-        <!-- RIGHT — PORTFOLIO OVERVIEW PANEL -->
+        <!-- RIGHT SIDE -->
         <aside class="hero-panel">
           <div class="hero-panel-header">
             <div class="hero-chip">Portfolio Overview</div>
@@ -395,7 +376,7 @@
               <div class="hero-stat-label">Disciplines</div>
               <div class="hero-stat-value">6 core</div>
               <div class="hero-stat-body">
-                Animation · Design · Dev · Community &amp; more
+                Animation · Design · Dev · Community & more
               </div>
             </div>
 
@@ -438,13 +419,10 @@
 
       <!-- GRID -->
       <section class="capabilities-grid">
-
         <a class="capability-card" href="animation/">
           <div>
             <div class="capability-title">Animation</div>
-            <div class="capability-desc">
-              Loops, transitions, character timing and intentional motion.
-            </div>
+            <div class="capability-desc">Loops, transitions, character timing and intentional motion.</div>
           </div>
           <div class="capability-meta-row">
             <span class="capability-pill">Motion Systems</span>
@@ -455,9 +433,7 @@
         <a class="capability-card" href="design/">
           <div>
             <div class="capability-title">Design</div>
-            <div class="capability-desc">
-              Banners, identity, thumbnails, systems that feel modern.
-            </div>
+            <div class="capability-desc">Banners, identity, thumbnails, systems that feel modern.</div>
           </div>
           <div class="capability-meta-row">
             <span class="capability-pill">Visual Identity</span>
@@ -468,12 +444,10 @@
         <a class="capability-card" href="development/">
           <div>
             <div class="capability-title">Development</div>
-            <div class="capability-desc">
-              Web tools, FastFlags, automation, readable systems.
-            </div>
+            <div class="capability-desc">Web tools, FastFlags, automation, readable systems.</div>
           </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Code &amp; Systems</span>
+            <span class="capability-pill">Code & Systems</span>
             <span>Open →</span>
           </div>
         </a>
@@ -481,12 +455,10 @@
         <a class="capability-card" href="servermanager/">
           <div>
             <div class="capability-title">Server Management</div>
-            <div class="capability-desc">
-              Discord role architecture, logic, integrations.
-            </div>
+            <div class="capability-desc">Discord role architecture, logic, integrations.</div>
           </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Infra &amp; Layout</span>
+            <span class="capability-pill">Infra & Layout</span>
             <span>Open →</span>
           </div>
         </a>
@@ -494,12 +466,10 @@
         <a class="capability-card" href="communitymanager/">
           <div>
             <div class="capability-title">Community Management</div>
-            <div class="capability-desc">
-              Systems that keep communities alive from the inside.
-            </div>
+            <div class="capability-desc">Systems that keep communities alive from the inside.</div>
           </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">People &amp; Ops</span>
+            <span class="capability-pill">People & Ops</span>
             <span>Open →</span>
           </div>
         </a>
@@ -507,16 +477,13 @@
         <a class="capability-card" href="other/">
           <div>
             <div class="capability-title">Other Work</div>
-            <div class="capability-desc">
-              Experiments, prototypes, labs, concepts.
-            </div>
+            <div class="capability-desc">Experiments, prototypes, labs, concepts.</div>
           </div>
           <div class="capability-meta-row">
             <span class="capability-pill">Experiments</span>
             <span>Open →</span>
           </div>
         </a>
-
       </section>
 
       <footer>
@@ -526,32 +493,30 @@
     </div>
   </div>
 
-  <!-- SCROLL INDICATOR JS -->
+  <!-- UNIVERSAL SCROLL DETECTOR FIX -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const hint = document.getElementById("scrollHint");
       if (!hint) return;
 
-      let alreadyGone = false;
+      let removed = false;
 
-      function hideHintOnce() {
-        if (alreadyGone) return;
-
-        const y =
-          window.scrollY ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop ||
-          0;
-
-        if (y > 5) {
-          alreadyGone = true;
-          hint.classList.add("gone");
-          window.removeEventListener("scroll", hideHintOnce);
-        }
+      function removeHint() {
+        if (removed) return;
+        removed = true;
+        hint.classList.add("gone");
       }
 
-      window.addEventListener("scroll", hideHintOnce, { passive: true });
-      hideHintOnce(); // in case page loads already scrolled
+      // Detect scroll ANYWHERE
+      window.addEventListener("scroll", removeHint, { passive: true });
+      document.addEventListener("scroll", removeHint, { passive: true });
+
+      // Catch all internal scrolling caused by dynamic containers
+      const observer = new MutationObserver(removeHint);
+      observer.observe(document, { subtree: true, childList: true, attributes: true });
+
+      // In case page loads already scrolled
+      removeHint();
     });
   </script>
 
