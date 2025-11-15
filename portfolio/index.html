@@ -132,7 +132,7 @@
       line-height: 1.7;
     }
 
-    /* OVERVIEW PANEL — MATCHES YOUR SCREENSHOT */
+    /* OVERVIEW PANEL */
     .hero-panel {
       border-radius: 26px;
       border: 1px solid rgba(148,163,184,0.55);
@@ -225,14 +225,14 @@
       50% { transform: translateX(-50%) translateY(5px); }
     }
 
-    .scroll-indicator.gone {
-      display: none !important;
-    }
-
     .scroll-arrows {
       opacity: 0.45;
       display: flex;
       gap: 6px;
+    }
+
+    .scroll-indicator.gone {
+      display: none !important;
     }
 
     /* SECTION HEADER */
@@ -354,7 +354,7 @@
       <!-- HERO -->
       <section class="hero">
 
-        <!-- LEFT SIDE -->
+        <!-- LEFT -->
         <div>
           <h1 class="hero-title">Building the future while everyone else catches up.</h1>
           <p class="hero-body">
@@ -364,7 +364,7 @@
           </p>
         </div>
 
-        <!-- RIGHT SIDE -->
+        <!-- RIGHT Overview Panel -->
         <aside class="hero-panel">
           <div class="hero-panel-header">
             <div class="hero-chip">Portfolio Overview</div>
@@ -412,6 +412,7 @@
 
       </section>
 
+      
       <!-- SECTION HEADER -->
       <div class="section-header">
         <div class="section-title">PORTFOLIO NAVIGATION</div>
@@ -419,6 +420,7 @@
 
       <!-- GRID -->
       <section class="capabilities-grid">
+
         <a class="capability-card" href="animation/">
           <div>
             <div class="capability-title">Animation</div>
@@ -484,6 +486,7 @@
             <span>Open →</span>
           </div>
         </a>
+
       </section>
 
       <footer>
@@ -493,30 +496,21 @@
     </div>
   </div>
 
-  <!-- UNIVERSAL SCROLL DETECTOR FIX -->
+  <!-- ONLY HIDE WHEN REAL SCROLL OCCURS -->
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const hint = document.getElementById("scrollHint");
       if (!hint) return;
 
-      let removed = false;
-
-      function removeHint() {
-        if (removed) return;
-        removed = true;
+      function onScroll() {
         hint.classList.add("gone");
+        window.removeEventListener("scroll", onScroll);
+        document.removeEventListener("scroll", onScroll);
       }
 
-      // Detect scroll ANYWHERE
-      window.addEventListener("scroll", removeHint, { passive: true });
-      document.addEventListener("scroll", removeHint, { passive: true });
-
-      // Catch all internal scrolling caused by dynamic containers
-      const observer = new MutationObserver(removeHint);
-      observer.observe(document, { subtree: true, childList: true, attributes: true });
-
-      // In case page loads already scrolled
-      removeHint();
+      // detect REAL scroll
+      window.addEventListener("scroll", onScroll, { passive: true });
+      document.addEventListener("scroll", onScroll, { passive: true });
     });
   </script>
 
