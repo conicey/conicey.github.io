@@ -31,82 +31,318 @@
     height: auto;
     margin-bottom: 20px;
     filter: grayscale(100%) contrast(120%);
+    transition: transform 0.3s ease;
   }
+  img.logo:hover { transform: scale(1.05); }
 
-  /* Left menu buttons */
-  .left-buttons {
-    position: absolute;
-    left: 20px;
-    top: 40px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .left-buttons a {
-    display: block;
-    width: 160px;
-    padding: 12px 0;
-    background: #1a1a1a;
-    color: #e0e0e0;
-    text-decoration: none;
-    text-align: center;
-    border-radius: 10px;
-    font-size: 0.9rem;
-    letter-spacing: 1px;
-    border: 2px solid #333;
-    transition: 0.2s ease;
-  }
-
-  .left-buttons a:hover {
-    background: #2a2a2a;
-    border-color: #555;
-  }
-
-  /* Biolink buttons */
-  .button-container {
-    margin-top: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    width: 100%;
-    max-width: 350px;
-  }
-
-  .button {
-    padding: 15px;
-    background: #1a1a1a;
-    color: #e0e0e0;
-    border-radius: 12px;
-    text-decoration: none;
+  .tagline {
     font-size: 1rem;
-    border: 2px solid #333;
-    transition: 0.2s;
+    text-align: center;
+    max-width: 600px;
+    color: #a0a0a0;
+    line-height: 1.5;
+    margin-bottom: 20px;
   }
 
-  .button:hover {
-    background: #2a2a2a;
-    border-color: #555;
+  .roles {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.95rem;
+    color: #c0c0c0;
+    margin-bottom: 30px;
+  }
+
+  .roles-line {
+    display: flex;
+    justify-content: center;
+    gap: 8px; 
+    flex-wrap: wrap;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 400px;
+  }
+
+  a.social {
+    position: relative;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #e0e0e0;
+    text-decoration: none;
+    border: 2px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1a1a1a;
+    text-transform: lowercase;
+    transition: all 0.3s ease-in-out;
+  }
+
+  a.social::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+  }
+  a.social:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
+
+  a.social::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(90deg, #bbb, #eee, #bbb);
+    transition: width 0.3s ease;
+  }
+  a.social:hover::after { width: 100%; }
+  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 6px rgba(255, 255, 255, 0.15); }
+
+  footer { margin-top: 40px; font-size: 0.8rem; color: #666; }
+
+  /* LEFT BUTTONS */
+  .left-buttons {
+    position: fixed;
+    top: 45%;
+    left: 6%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 1000;
+  }
+
+  .left-btn {
+    width: 135px;
+    padding: 10px 0;
+    background: #1a1a1a;
+    border: 2px solid #444;
+    border-radius: 8px;
+    color: #e0e0e0;
+    text-decoration: none;
+    font-size: 0.9rem;
+    text-transform: lowercase;
+    text-align: center;
+    position: relative;
+    transition: all 0.3s ease;
+    overflow: hidden;
+  }
+
+  .left-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -80%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+    transition: left 0.6s ease;
+  }
+  .left-btn:hover::before { left: 130%; }
+
+  .left-btn:hover {
+    border-color: #666;
+    color: #fff;
+    box-shadow: 0 0 5px rgba(255,255,255,0.12);
+  }
+
+  @media (max-width: 700px) {
+    .left-buttons {
+      left: 50%;
+      top: auto;
+      bottom: 20px;
+      transform: translateX(-50%);
+      flex-direction: row;
+    }
+    .left-btn { width: auto; padding: 10px 20px; }
+  }
+
+  .biolink-container { position: relative; width: 100%; }
+
+  .biolink-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 10px 0;
+    font-size: 1rem;
+    color: #e0e0e0;
+    text-decoration: none;
+    border: 2px solid #444;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #1a1a1a;
+    text-transform: lowercase;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .biolink-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    transform: skewX(-25deg);
+  }
+  .biolink-btn:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
+
+  .biolink-btn::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    background: linear-gradient(90deg, #bbb, #eee, #bbb);
+    transition: width 0.3s ease;
+  }
+  .biolink-btn:hover::after { width: 100%; }
+
+  .popout-menu {
+    position: absolute;
+    top: 0;
+    left: calc(100% + 4px);
+    background-color: #1a1a1a;
+    border: 2px solid #444;
+    border-radius: 8px;
+    padding: 15px;
+    min-width: 200px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    z-index: 2;
+  }
+
+  .popout-menu a {
+    color: #e0e0e0;
+    text-decoration: none;
+    margin-bottom: 4px;
+    transition: color 0.2s ease;
+  }
+  .popout-menu a:hover { color: #fff; }
+
+  @media (max-width: 500px) {
+    .popout-menu {
+      position: relative;
+      left: 0;
+      top: 0;
+      width: 100%;
+      transform: translateY(-10px);
+      opacity: 0;
+      max-height: 0;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .popout-menu.show {
+      opacity: 1;
+      max-height: 500px;
+      transform: translateY(0);
+    }
   }
 </style>
 </head>
-
 <body>
 
-<!-- LEFT SIDE BUTTONS -->
 <div class="left-buttons">
-  <a href="https://conicey.github.io/portfolio/">Portfolio</a>
-  <a href="badge/index.html">Badge Tutorial</a>
+  <a href="https://conicey.github.io/portfolio/" class="left-btn">portfolio</a>
+  <a href="/dev" class="left-btn">badge tutorial</a>
 </div>
 
-<!-- LOGO -->
-<img class="logo" src="coniceypng.png" alt="conicey logo">
+<img src="banner.png" alt="conicey" class="logo">
 
-<!-- BIOLINK BUTTONS -->
-<div class="button-container">
-  <a class="button" href="https://haunt.gg/christmas" target="_blank">haunt.gg/christmas</a>
-  <a class="button" href="https://guns.lol/conicey" target="_blank">guns.lol/conicey</a>
+<!-- REMOVED TAGLINE -->
+<div class="tagline"></div>
+
+<div class="roles">
+  <div class="roles-line">
+    <span>Developer</span>•<span>Animator</span>•<span>Whitehatter</span>•<span>Server Manager</span>
+  </div>
+  <div class="roles-line">
+    <span>Community Manager</span>•<span>Designer</span>•<span>Creator</span>
+  </div>
 </div>
+
+<div class="content">
+  <div class="biolink-container">
+    <a class="biolink-btn" id="biolinkBtn">biolink</a>
+
+    <div class="popout-menu" id="biolinkMenu">
+      <a href="https://haunt.gg/christmas" target="_blank">haunt.gg/christmas</a>
+      <a href="https://guns.lol/conicey" target="_blank">guns.lol/conicey</a>
+    </div>
+  </div>
+
+  <a href="https://discord.com/users/920912709862703115" class="social" target="_blank">discord</a>
+  <a href="https://www.roblox.com/users/3754010089/profile" class="social" target="_blank">roblox</a>
+  <a href="https://www.twitch.tv/coniceyy" class="social" target="_blank">twitch</a>
+  <a href="https://open.spotify.com/user/31pktw5i4vqzf2zmrfc355qfqlli" class="social" target="_blank">spotify</a>
+  <a href="https://www.youtube.com/@coniceyy" class="social" target="_blank">youtube</a>
+  <a href="https://x.com/conicey" class="social" target="_blank">x</a>
+  <a href="https://www.tiktok.com/@coniceyy" class="social" target="_blank">tiktok</a>
+  <a href="https://www.instagram.com/coniceyyy" class="social" target="_blank">instagram</a>
+</div>
+
+<footer>conicey™</footer>
+
+<script>
+const biolinkBtn = document.getElementById('biolinkBtn');
+const biolinkMenu = document.getElementById('biolinkMenu');
+let hideTimeout;
+
+function showMenu() {
+  clearTimeout(hideTimeout);
+  biolinkMenu.style.opacity = '1';
+  biolinkMenu.style.pointerEvents = 'auto';
+}
+
+function hideMenu() {
+  hideTimeout = setTimeout(() => {
+    biolinkMenu.style.opacity = '0';
+    biolinkMenu.style.pointerEvents = 'none';
+  }, 200);
+}
+
+if (window.innerWidth > 500) {
+  biolinkBtn.addEventListener('mouseenter', showMenu);
+  biolinkBtn.addEventListener('mouseleave', hideMenu);
+  biolinkMenu.addEventListener('mouseenter', showMenu);
+  biolinkMenu.addEventListener('mouseleave', hideMenu);
+}
+
+biolinkBtn.addEventListener('click', () => {
+  if(window.innerWidth <= 500){
+    biolinkMenu.classList.toggle('show');
+  }
+});
+
+document.addEventListener('click', (e) => {
+  if(window.innerWidth <= 500){
+    if(!biolinkBtn.contains(e.target) && !biolinkMenu.contains(e.target)){
+      biolinkMenu.classList.remove('show');
+    }
+  }
+});
+</script>
 
 </body>
 </html>
