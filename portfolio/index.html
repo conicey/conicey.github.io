@@ -38,11 +38,6 @@
       100% { background-position: 0% 0%; }
     }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
     :root {
       --text-muted: #9ca3af;
       --text-soft: #6b7280;
@@ -52,12 +47,54 @@
       --blur-glass: 18px;
     }
 
+    /* ─────────────────────────────────────────────
+       FLOATING STATUS BAR (ORIGINAL STYLE)
+    ───────────────────────────────────────────── */
+    .status-bar-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 26px; /* FLOATS, DOES NOT TOUCH TOP */
+    }
+
+    .status-bar {
+      padding: 12px 22px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.17);
+      backdrop-filter: blur(16px);
+      box-shadow:
+        0 0 25px rgba(180, 110, 255, 0.25),
+        0 0 50px rgba(80, 150, 255, 0.15),
+        0 6px 20px rgba(0,0,0,0.45);
+      color: #eee;
+      font-size: 0.78rem;
+      letter-spacing: 0.04em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: min(1120px, 92%);
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #9f66ff;
+      box-shadow: 0 0 10px #9f66ff;
+    }
+
     /* SHELL */
     .shell {
       position: relative;
       z-index: 1;
-      min-height: 100vh;
-      padding: 40px 22px 40px;
+      padding: 40px 22px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -69,170 +106,134 @@
     }
 
     /* ─────────────────────────────────────────────
-       STATUS BAR (RESTORED ORIGINAL / GLOWING)
-    ───────────────────────────────────────────── */
-    .status-bar {
-      width: 100%;
-      max-width: 1120px;
-      margin: 0 auto 40px;
-      padding: 12px 20px;
-      border-radius: 14px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      backdrop-filter: blur(14px);
-      box-shadow:
-        0 0 22px rgba(150, 80, 255, 0.18),
-        0 0 40px rgba(80, 150, 255, 0.1),
-        0 4px 20px rgba(0,0,0,0.45);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.78rem;
-      letter-spacing: 0.04em;
-      color: #e8e8e8;
-    }
-
-    .status-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      opacity: 0.92;
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #8b5cfe;
-      box-shadow: 0 0 9px #8b5cfe;
-    }
-
-    .status-right {
-      opacity: 0.8;
-    }
-
-    /* ─────────────────────────────────────────────
-       HERO SECTION
+       HERO SECTION WITH ORIGINAL TEXT + OLD OVERVIEW BOX
     ───────────────────────────────────────────── */
     .hero {
       position: relative;
+      margin-top: 50px;
       display: grid;
-      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
+      grid-template-columns: minmax(0,1.6fr) minmax(0,1.1fr);
       gap: 40px;
-      margin-bottom: 180px;
-      align-items: center;
       min-height: 80vh;
+      align-items: center;
     }
 
     .hero-title {
-      font-size: clamp(2.8rem, 4vw + 1rem, 4rem);
+      font-size: clamp(2.8rem, 4vw + 1rem, 3.8rem);
       font-weight: 800;
-      line-height: 1.05;
-      background: linear-gradient(100deg, #ffffff, #d9d9ff, #5ab8ff);
+      background: linear-gradient(100deg, #ffffff, #d4d4ff, #5ab8ff);
       -webkit-background-clip: text;
       color: transparent;
       margin-bottom: 16px;
+      line-height: 1.05;
     }
 
     .hero-body {
-      font-size: 1rem;
+      font-size: 1.05rem;
       color: var(--text-muted);
-      max-width: 32rem;
+      max-width: 34rem;
       line-height: 1.7;
-      opacity: 0.85;
     }
 
-    /* Right panel */
+    /* OLD OVERVIEW BOX RESTORED */
     .hero-panel {
       border-radius: var(--radius-xl);
-      border: 1px solid rgba(148,163,184,0.4);
-      background: rgba(18,18,30,0.82);
-      backdrop-filter: blur(18px);
-      box-shadow: var(--shadow-soft);
-      padding: 20px 22px 18px;
+      border: 1px solid rgba(148,163,184,0.5);
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,0.10), transparent 55%),
+        rgba(15,23,42,0.9);
+      padding: 20px 22px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.75);
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
     }
 
     .hero-panel-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 10px;
     }
 
     .hero-chip {
       padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.45);
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.2);
       font-size: 0.75rem;
-      text-transform: uppercase;
       letter-spacing: 0.07em;
-      color: #e5e7eb;
-      background: rgba(255,255,255,0.05);
+      text-transform: uppercase;
     }
 
     .hero-stat-row {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
     }
 
     .hero-stat {
       padding: 10px 12px;
       border-radius: 14px;
+      background: rgba(10,14,25,0.95);
       border: 1px solid rgba(148,163,184,0.35);
-      background: rgba(12, 12, 24, 0.95);
-      font-size: 0.8rem;
+      font-size: 0.85rem;
     }
 
     .hero-stat-label {
+      font-size: 0.72rem;
       color: var(--text-soft);
-      margin-bottom: 2px;
-      display: block;
-      font-size: 0.7rem;
     }
 
     .hero-stat-value {
+      font-size: 1rem;
       font-weight: 700;
-      color: #e5e7eb;
-      font-size: 0.96rem;
+      color: #fff;
     }
 
     .hero-scope {
-      font-size: 0.8rem;
+      font-size: 0.82rem;
       color: var(--text-muted);
-      line-height: 1.5;
     }
 
     /* ─────────────────────────────────────────────
-       SCROLL INDICATOR (MOVED UP + RENAMED)
+       SCROLL INDICATOR WITH ARROWS
     ───────────────────────────────────────────── */
     .scroll-indicator {
       position: absolute;
-      bottom: 28px; /* moved up slightly */
+      bottom: 28px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 0.85rem;
-      opacity: 0.35;
-      letter-spacing: 0.03em;
+      font-size: 0.78rem;
+      opacity: 0.38;
+      letter-spacing: 0.04em;
       user-select: none;
-      transition: opacity 0.35s ease;
-      animation: tinyFloat 2.6s ease-in-out infinite;
+      animation: smallFloat 2.4s ease-in-out infinite;
+      transition: opacity 0.3s ease;
       pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
 
     .scroll-indicator.hidden {
       opacity: 0;
     }
 
-    @keyframes tinyFloat {
-      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.22; }
-      50% { transform: translateX(-50%) translateY(5px); opacity: 0.38; }
+    .scroll-arrows {
+      font-size: 0.78rem;
+      opacity: 0.4;
+      display: flex;
+      gap: 6px;
     }
 
-    /* SECTION HEADER */
+    @keyframes smallFloat {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(5px); }
+    }
+
+    /* SECTION HEADERS */
     .section-header {
+      margin-top: 20px;
       margin-bottom: 20px;
     }
 
@@ -240,89 +241,83 @@
       text-transform: uppercase;
       font-size: 0.88rem;
       letter-spacing: 0.16em;
-      opacity: 0.55;
+      opacity: 0.6;
     }
 
     /* GRID */
     .capabilities-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 22px;
       margin-bottom: 40px;
     }
 
     .capability-card {
-      padding: 18px 17px 16px;
+      padding: 18px;
       border-radius: var(--radius-lg);
-      background: rgba(18,20,35,0.82);
-      border: 1px solid rgba(148,163,184,0.4);
+      background: rgba(18,20,35,0.85);
+      border: 1px solid rgba(148,163,184,0.45);
       backdrop-filter: blur(14px);
-      box-shadow: 0 14px 34px rgba(0,0,0,0.6);
-      transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
+      transition: 0.25s ease;
     }
 
     .capability-card:hover {
-      transform: translateY(-4px) scale(1.015);
-      border-color: rgba(230,240,255,0.8);
-      box-shadow: 0 20px 40px rgba(0,0,0,0.75);
+      transform: translateY(-4px);
+      border-color: #e8e8ff;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
     }
 
     .capability-title {
-      font-size: 1rem;
+      font-size: 1.05rem;
       font-weight: 600;
       margin-bottom: 8px;
     }
 
     .capability-desc {
-      font-size: 0.84rem;
       color: var(--text-muted);
-      line-height: 1.55;
-      margin-bottom: 8px;
+      font-size: 0.85rem;
+      margin-bottom: 10px;
     }
 
     .capability-meta-row {
+      font-size: 0.78rem;
       display: flex;
       justify-content: space-between;
-      font-size: 0.78rem;
       color: var(--text-soft);
     }
 
     .capability-pill {
-      padding: 2px 6px;
+      padding: 3px 7px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.45);
-      font-size: 0.68rem;
+      border: 1px solid rgba(148,163,184,0.5);
     }
 
     footer {
-      padding: 40px 0 20px;
       text-align: center;
+      margin: 40px 0 20px;
       font-size: 0.82rem;
-      opacity: 0.6;
+      opacity: 0.7;
     }
 
     footer a {
       color: #4ea3ff;
       text-decoration: underline;
-      text-underline-offset: 3px;
     }
 
     /* RESPONSIVE */
     @media (max-width: 960px) {
       .hero {
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: 1fr;
       }
-      .hero-panel {
-        order: -1;
-      }
+      .hero-panel { order: -1; }
       .capabilities-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns: repeat(2, 1fr);
       }
     }
 
     @media (max-width: 680px) {
       .capabilities-grid {
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns: 1fr;
       }
     }
 
@@ -331,23 +326,26 @@
 
 <body>
 
-  <!-- STATUS BAR -->
-  <div class="status-bar">
-    <div class="status-left">
-      <div class="status-dot"></div>
-      <span>Portfolio Hub — Active</span>
+  <!-- FLOATING STATUS BAR -->
+  <div class="status-bar-wrapper">
+    <div class="status-bar">
+      <div class="status-left">
+        <div class="status-dot"></div>
+        <span>Portfolio Hub — Active</span>
+      </div>
+      <div class="status-right">
+        v2025
+      </div>
     </div>
-    <div class="status-right">v2025</div>
   </div>
 
-  <!-- WRAPPER -->
   <div class="shell">
     <div class="shell-inner">
 
       <!-- HERO -->
       <section class="hero">
 
-        <!-- LEFT SIDE -->
+        <!-- LEFT -->
         <div>
           <h1 class="hero-title">Building the future while everyone else is still loading.</h1>
           <p class="hero-body">
@@ -356,41 +354,43 @@
           </p>
         </div>
 
-        <!-- RIGHT PANEL -->
+        <!-- RIGHT — OLD OVERVIEW BOX RESTORED -->
         <aside class="hero-panel">
           <div class="hero-panel-header">
-            <div class="hero-chip">Overview</div>
+            <div class="hero-chip">Portfolio Overview</div>
             <div class="hero-chip">v2025</div>
           </div>
 
           <div class="hero-stat-row">
             <div class="hero-stat">
-              <span class="hero-stat-label">Areas</span>
-              <span class="hero-stat-value">6</span>
+              <div class="hero-stat-label">Disciplines</div>
+              <div class="hero-stat-value">6</div>
             </div>
-
             <div class="hero-stat">
-              <span class="hero-stat-label">Approach</span>
-              <span class="hero-stat-value">Direct</span>
+              <div class="hero-stat-label">Focus</div>
+              <div class="hero-stat-value">Next-gen</div>
             </div>
-
             <div class="hero-stat">
-              <span class="hero-stat-label">Style</span>
-              <span class="hero-stat-value">Minimal</span>
+              <div class="hero-stat-label">Style</div>
+              <div class="hero-stat-value">Minimal</div>
             </div>
           </div>
 
           <p class="hero-scope">
-            Each section below opens into focused, distraction-free work.
+            Each category opens into focused, clean, premium-level work.
           </p>
         </aside>
 
         <!-- SCROLL INDICATOR -->
-        <div class="scroll-indicator" id="scrollHint">scroll for more ⌄</div>
+        <div class="scroll-indicator" id="scrollHint">
+          <div class="scroll-arrows">▼ ▼ ▼</div>
+          scroll for more
+          <div class="scroll-arrows">▼ ▼ ▼</div>
+        </div>
 
       </section>
 
-      <!-- SECTION TITLE -->
+      <!-- SECTION HEADER -->
       <div class="section-header">
         <div class="section-title">Portfolio Navigation</div>
       </div>
@@ -400,55 +400,55 @@
 
         <a class="capability-card" href="animation/">
           <div class="capability-title">Animation</div>
-          <p class="capability-desc">Clean motion built for digital spaces.</p>
+          <div class="capability-desc">Clean motion built for digital spaces.</div>
           <div class="capability-meta-row">
             <span class="capability-pill">Motion</span>
-            <span class="capability-arrow">→</span>
+            <span>→</span>
           </div>
         </a>
 
         <a class="capability-card" href="design/">
           <div class="capability-title">Design</div>
-          <p class="capability-desc">Purpose-built visual identity.</p>
+          <div class="capability-desc">Purpose-built visual identity.</div>
           <div class="capability-meta-row">
             <span class="capability-pill">Identity</span>
-            <span class="capability-arrow">→</span>
+            <span>→</span>
           </div>
         </a>
 
         <a class="capability-card" href="development/">
           <div class="capability-title">Development</div>
-          <p class="capability-desc">Web tools, automation, systems.</p>
+          <div class="capability-desc">Web tools, automation, systems.</div>
           <div class="capability-meta-row">
             <span class="capability-pill">Systems</span>
-            <span class="capability-arrow">→</span>
+            <span>→</span>
           </div>
         </a>
 
         <a class="capability-card" href="servermanager/">
           <div class="capability-title">Server Management</div>
-          <p class="capability-desc">Premium Discord architecture.</p>
+          <div class="capability-desc">Premium Discord architecture.</div>
           <div class="capability-meta-row">
             <span class="capability-pill">Ops</span>
-            <span class="capability-arrow">→</span>
+            <span>→</span>
           </div>
         </a>
 
         <a class="capability-card" href="communitymanager/">
           <div class="capability-title">Community Management</div>
-          <p class="capability-desc">Engagement systems that last.</p>
+          <div class="capability-desc">Engagement systems that last.</div>
           <div class="capability-meta-row">
             <span class="capability-pill">Engagement</span>
-            <span class="capability-arrow">→</span>
+            <span>→</span>
           </div>
         </a>
 
         <a class="capability-card" href="other/">
           <div class="capability-title">Other</div>
-          <p class="capability-desc">Experiments, prototypes, labs.</p>
+          <div class="capability-desc">Experiments, prototypes, labs.</div>
           <div class="capability-meta-row">
             <span class="capability-pill">Labs</span>
-            <span class="capability-arrow">→</span>
+            <span>→</span>
           </div>
         </a>
 
@@ -461,7 +461,7 @@
     </div>
   </div>
 
-  <!-- JS for scroll indicator -->
+  <!-- SCROLL INDICATOR JS -->
   <script>
     const hint = document.getElementById("scrollHint");
     window.addEventListener("scroll", () => {
