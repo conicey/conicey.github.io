@@ -3,152 +3,110 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Conicey • Portfolio Hub</title>
+<title>conicey luv</title>
+
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
 
 <style>
-/* ——— Reset ——— */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ——— Base ——— */
-body {
-  font-family: "Segoe UI", sans-serif;
-  background: #0d0d0d;        /* matches main site */
-  color: #e0e0e0;
-  overflow-x: hidden;
-  padding: 40px 20px;
-}
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    background: #0d0d0d;
+    font-family: 'Arial Black', Gadget, sans-serif;
+    color: #e0e0e0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-height: 100vh;
+    position: relative;
+  }
 
-/* ——— Header ——— */
-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
+  img.logo {
+    width: 350px;
+    max-width: 90%;
+    height: auto;
+    margin-bottom: 20px;
+    filter: grayscale(100%) contrast(120%);
+  }
 
-h1 {
-  font-size: 3rem;
-  letter-spacing: 1px;
-  font-weight: 700;
-  color: #fff;
-  text-shadow: none;          /* remove glow */
-}
+  /* Left menu buttons */
+  .left-buttons {
+    position: absolute;
+    left: 20px;
+    top: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
 
-.subtitle {
-  margin-top: 8px;
-  font-size: 1rem;
-  color: #9a9a9a;             /* soft dull gray */
-  letter-spacing: 0.5px;
-}
+  .left-buttons a {
+    display: block;
+    width: 160px;
+    padding: 12px 0;
+    background: #1a1a1a;
+    color: #e0e0e0;
+    text-decoration: none;
+    text-align: center;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    border: 2px solid #333;
+    transition: 0.2s ease;
+  }
 
-/* ——— Category Grid ——— */
-.grid {
-  max-width: 1100px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 25px;
-}
+  .left-buttons a:hover {
+    background: #2a2a2a;
+    border-color: #555;
+  }
 
-/* ——— Category Cards ——— */
-.card {
-  background: #141414;        /* flat, dull dark */
-  padding: 25px;
-  border-radius: 12px;
-  border: 1px solid #2a2a2a;  /* thin neutral border */
-  box-shadow: none;           /* remove glow shadow */
-  transition: 0.15s;
-  cursor: pointer;
-  position: relative;
-}
+  /* Biolink buttons */
+  .button-container {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 100%;
+    max-width: 350px;
+  }
 
-.card:hover {
-  transform: translateY(-3px);
-  background: #181818;        /* slight lift effect */
-  border-color: #3a3a3a;
-}
+  .button {
+    padding: 15px;
+    background: #1a1a1a;
+    color: #e0e0e0;
+    border-radius: 12px;
+    text-decoration: none;
+    font-size: 1rem;
+    border: 2px solid #333;
+    transition: 0.2s;
+  }
 
-/* REMOVE gradient-glow edge completely */
-.card::before {
-  content: none;
-}
-
-/* ——— Card text ——— */
-.card h2 {
-  font-size: 1.3rem;
-  margin-bottom: 8px;
-  font-weight: 600;
-  color: #f2f2f2;
-}
-
-.card p {
-  color: #bdbdbd;
-  font-size: 0.9rem;
-  line-height: 1.4;
-}
-
-/* ——— Footer ——— */
-footer {
-  text-align: center;
-  margin-top: 60px;
-  font-size: 0.85rem;
-  color: #777;
-}
-
-footer a {
-  color: #aaa;                /* dull neutral link */
-  text-decoration: none;
-}
-
-footer a:hover {
-  color: #ccc;
-}
+  .button:hover {
+    background: #2a2a2a;
+    border-color: #555;
+  }
 </style>
-
 </head>
+
 <body>
 
-<header>
-  <h1>Conicey's Portfolio</h1>
-  <p class="subtitle">Developer • Animator • Designer • Community Manager • Creator</p>
-</header>
-
-<!-- ——— Category Grid ——— -->
-<div class="grid">
-
-  <div class="card" onclick="location.href='animation/'">
-    <h2>Animation</h2>
-    <p>Your full animation portfolio — smooth loops, character movements, effects, and showreels.</p>
-  </div>
-
-  <div class="card" onclick="location.href='design/'">
-    <h2>Design</h2>
-    <p>Branding, banners, website layouts, UI/UX concepts, thumbnails, and visual identity.</p>
-  </div>
-
-  <div class="card" onclick="location.href='development/'">
-    <h2>Development</h2>
-    <p>Websites, scripts, tools, automation, FastFlags, Roblox tweaks, and personal projects.</p>
-  </div>
-
-  <div class="card" onclick="location.href='servermanager/'">
-    <h2>Server Management</h2>
-    <p>Discord server building, roles, systems, moderation tools, and UI setups.</p>
-  </div>
-
-  <div class="card" onclick="location.href='communitymanager/'">
-    <h2>Community Management</h2>
-    <p>Staff work, event hosting, moderation, community structure, and engagement systems.</p>
-  </div>
-
-  <div class="card" onclick="location.href='other/'">
-    <h2>Other Work</h2>
-    <p>Side projects, scripts, experiments, branding pieces, and anything extra.</p>
-  </div>
-
+<!-- LEFT SIDE BUTTONS -->
+<div class="left-buttons">
+  <a href="https://conicey.github.io/portfolio/">Portfolio</a>
+  <a href="badge/index.html">Badge Tutorial</a>
 </div>
 
-<footer>
-  <p>© 2025 Conicey • <a href="https://conicey.github.io">Return to main site</a></p>
-</footer>
+<!-- LOGO -->
+<img class="logo" src="coniceypng.png" alt="conicey logo">
+
+<!-- BIOLINK BUTTONS -->
+<div class="button-container">
+  <a class="button" href="https://haunt.gg/christmas" target="_blank">haunt.gg/christmas</a>
+  <a class="button" href="https://guns.lol/conicey" target="_blank">guns.lol/conicey</a>
+</div>
 
 </body>
 </html>
