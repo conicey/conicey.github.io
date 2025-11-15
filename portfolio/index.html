@@ -52,12 +52,12 @@
       --blur-glass: 18px;
     }
 
-    /* WRAPPER */
+    /* layout wrapper */
     .shell {
       position: relative;
       z-index: 1;
       min-height: 100vh;
-      padding: 60px 22px 40px;
+      padding: 40px 22px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -69,32 +69,66 @@
     }
 
     /* ─────────────────────────────────────────────────────────────
-       HERO — CLEAN, MINIMAL, NEXT GEN
+       STATUS BAR — ADDED BACK (CLEAN & MINIMAL)
+    ───────────────────────────────────────────────────────────── */
+    .status-bar {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto 40px;
+      padding: 10px 18px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(15,15,25,0.55);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 8px 26px rgba(0,0,0,0.35);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      opacity: 0.8;
+      letter-spacing: 0.04em;
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.85;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #47ff9c;
+      box-shadow: 0 0 6px #47ff9c;
+    }
+
+    .status-right {
+      opacity: 0.7;
+    }
+
+    /* ─────────────────────────────────────────────────────────────
+       HERO SECTION
     ───────────────────────────────────────────────────────────── */
     .hero {
+      position: relative;
       display: grid;
       grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.1fr);
       gap: 40px;
-      margin-bottom: 120px;
+      margin-bottom: 180px;
       align-items: center;
-      min-height: 78vh;
-    }
-
-    /* LEFT SIDE */
-    .hero-label {
-      font-size: 0.95rem;
-      opacity: 0.75;
-      margin-bottom: 10px;
+      min-height: 80vh;
     }
 
     .hero-title {
       font-size: clamp(2.8rem, 4vw + 1rem, 4rem);
       font-weight: 800;
-      line-height: 1.06;
-      background: linear-gradient(100deg, #ffffff, #d7d7ff, #5ab8ff);
+      line-height: 1.05;
+      background: linear-gradient(100deg, #ffffff, #d9d9ff, #5ab8ff);
       -webkit-background-clip: text;
       color: transparent;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
     }
 
     .hero-body {
@@ -105,7 +139,7 @@
       opacity: 0.85;
     }
 
-    /* RIGHT PANEL — PORTFOLIO OVERVIEW */
+    /* Right overview panel */
     .hero-panel {
       border-radius: var(--radius-xl);
       border: 1px solid rgba(148,163,184,0.4);
@@ -168,27 +202,34 @@
       line-height: 1.5;
     }
 
-    /* SUBTLE SCROLL INDICATOR */
+    /* ─────────────────────────────────────────────────────────────
+       SCROLL INDICATOR — disappears on scroll
+    ───────────────────────────────────────────────────────────── */
     .scroll-indicator {
       position: absolute;
-      bottom: 22px;
+      bottom: 0px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 1.3rem;
+      font-size: 0.85rem;
       opacity: 0.35;
-      animation: scrollFade 2.5s ease-in-out infinite;
       user-select: none;
+      transition: opacity 0.35s ease;
+      animation: tinyFloat 2.6s ease-in-out infinite;
+      pointer-events: none;
     }
 
-    @keyframes scrollFade {
-      0%, 100% { opacity: 0.22; transform: translateX(-50%) translateY(0); }
-      50% { opacity: 0.42; transform: translateX(-50%) translateY(6px); }
+    .scroll-indicator.hidden {
+      opacity: 0;
+    }
+
+    @keyframes tinyFloat {
+      0%, 100% { transform: translateX(-50%) translateY(0); opacity: 0.22; }
+      50% { transform: translateX(-50%) translateY(5px); opacity: 0.38; }
     }
 
     /* SECTION HEADER */
     .section-header {
       margin-bottom: 20px;
-      margin-top: 20px;
     }
 
     .section-title {
@@ -198,7 +239,7 @@
       opacity: 0.55;
     }
 
-    /* 6 BUTTON GRID */
+    /* CATEGORY GRID */
     .capabilities-grid {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -214,7 +255,6 @@
       backdrop-filter: blur(14px);
       box-shadow: 0 14px 34px rgba(0,0,0,0.6);
       transition: transform 220ms ease, box-shadow 220ms ease, border-color 220ms ease;
-      cursor: pointer;
     }
 
     .capability-card:hover {
@@ -241,7 +281,6 @@
       justify-content: space-between;
       font-size: 0.78rem;
       color: var(--text-soft);
-      margin-top: 4px;
     }
 
     .capability-pill {
@@ -251,11 +290,6 @@
       font-size: 0.68rem;
     }
 
-    .capability-arrow {
-      opacity: 0.75;
-    }
-
-    /* FOOTER */
     footer {
       padding: 40px 0 20px;
       text-align: center;
@@ -269,22 +303,15 @@
       text-underline-offset: 3px;
     }
 
-    /* RESPONSIVE */
+    /* responsive */
     @media (max-width: 960px) {
-      .hero {
-        grid-template-columns: minmax(0, 1fr);
-        text-align: left;
-      }
+      .hero { grid-template-columns: minmax(0, 1fr); }
       .hero-panel { order: -1; }
-      .capabilities-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+      .capabilities-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
 
     @media (max-width: 680px) {
-      .capabilities-grid {
-        grid-template-columns: minmax(0, 1fr);
-      }
+      .capabilities-grid { grid-template-columns: minmax(0, 1fr); }
     }
 
   </style>
@@ -292,26 +319,32 @@
 
 <body>
 
-  <!-- MAIN WRAPPER -->
+  <!-- STATUS BAR -->
+  <div class="status-bar">
+    <div class="status-left">
+      <div class="status-dot"></div>
+      <span>Portfolio Hub — Active</span>
+    </div>
+    <div class="status-right">v2025</div>
+  </div>
+
+  <!-- WRAPPER -->
   <div class="shell">
     <div class="shell-inner">
 
       <!-- HERO -->
       <section class="hero">
+
+        <!-- left -->
         <div>
-          <div class="hero-label">Conicey — Portfolio</div>
-
-          <h1 class="hero-title">
-            Building the future while everyone else is still loading.
-          </h1>
-
+          <h1 class="hero-title">Building the future while everyone else is still loading.</h1>
           <p class="hero-body">
-            Precision, clarity, and control.  
-            Nothing noisy. Nothing decorative. Just work that speaks for itself.
+            Precision. Clarity. Control.  
+            Nothing loud — just work that holds up on its own.
           </p>
         </div>
 
-        <!-- RIGHT PANEL -->
+        <!-- right -->
         <aside class="hero-panel">
           <div class="hero-panel-header">
             <div class="hero-chip">Overview</div>
@@ -336,35 +369,34 @@
           </div>
 
           <p class="hero-scope">
-            Everything here leads into focused work.  
-            Clean layouts. No distractions.
+            Each section below opens into focused, distraction-free work.
           </p>
         </aside>
+
+        <!-- scroll indicator -->
+        <div class="scroll-indicator" id="scrollHint">scroll to continue ⌄</div>
       </section>
 
-      <!-- Subtle scroll cue -->
-      <div class="scroll-indicator">⌄</div>
-
-      <!-- SECTION HEADER -->
+      <!-- SECTION TITLE -->
       <div class="section-header">
         <div class="section-title">Portfolio Navigation</div>
       </div>
 
-      <!-- 6 CATEGORY BUTTONS -->
+      <!-- GRID -->
       <section class="capabilities-grid">
 
         <a class="capability-card" href="animation/">
           <div class="capability-title">Animation</div>
-          <p class="capability-desc">Clean motion built for digital environments.</p>
+          <p class="capability-desc">Clean motion built for digital spaces.</p>
           <div class="capability-meta-row">
-            <span class="capability-pill">Micro-motion</span>
+            <span class="capability-pill">Motion</span>
             <span class="capability-arrow">→</span>
           </div>
         </a>
 
         <a class="capability-card" href="design/">
           <div class="capability-title">Design</div>
-          <p class="capability-desc">Brand visuals with clarity and structure.</p>
+          <p class="capability-desc">Visual identity structured with purpose.</p>
           <div class="capability-meta-row">
             <span class="capability-pill">Identity</span>
             <span class="capability-arrow">→</span>
@@ -373,7 +405,7 @@
 
         <a class="capability-card" href="development/">
           <div class="capability-title">Development</div>
-          <p class="capability-desc">Web tools, automation, Roblox systems.</p>
+          <p class="capability-desc">Web tools, automation, systems.</p>
           <div class="capability-meta-row">
             <span class="capability-pill">Systems</span>
             <span class="capability-arrow">→</span>
@@ -382,7 +414,7 @@
 
         <a class="capability-card" href="servermanager/">
           <div class="capability-title">Server Management</div>
-          <p class="capability-desc">Premium Discord architecture & flow.</p>
+          <p class="capability-desc">Premium Discord architecture.</p>
           <div class="capability-meta-row">
             <span class="capability-pill">Ops</span>
             <span class="capability-arrow">→</span>
@@ -391,7 +423,7 @@
 
         <a class="capability-card" href="communitymanager/">
           <div class="capability-title">Community Management</div>
-          <p class="capability-desc">Systems that actually keep people engaged.</p>
+          <p class="capability-desc">Engagement systems that last.</p>
           <div class="capability-meta-row">
             <span class="capability-pill">Engagement</span>
             <span class="capability-arrow">→</span>
@@ -400,7 +432,7 @@
 
         <a class="capability-card" href="other/">
           <div class="capability-title">Other</div>
-          <p class="capability-desc">Experiments and builds outside the usual scope.</p>
+          <p class="capability-desc">Experiments, tests, side builds.</p>
           <div class="capability-meta-row">
             <span class="capability-pill">Labs</span>
             <span class="capability-arrow">→</span>
@@ -415,6 +447,18 @@
 
     </div>
   </div>
+
+  <!-- JS for scroll indicator -->
+  <script>
+    const hint = document.getElementById("scrollHint");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 40) {
+        hint.classList.add("hidden");
+      } else {
+        hint.classList.remove("hidden");
+      }
+    });
+  </script>
 
 </body>
 </html>
