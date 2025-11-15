@@ -233,6 +233,12 @@
       visibility: hidden;
     }
 
+    .scroll-indicator.gone {
+      opacity: 0;
+      visibility: hidden;
+      display: none;
+    }
+
     @keyframes smallFloat {
       0%, 100% { transform: translateX(-50%) translateY(0); }
       50% { transform: translateX(-50%) translateY(5px); }
@@ -522,21 +528,31 @@
 
   <!-- SCROLL INDICATOR JS -->
   <script>
-    const hint = document.getElementById("scrollHint");
-
-    function updateScrollHint() {
+    document.addEventListener("DOMContentLoaded", () => {
+      const hint = document.getElementById("scrollHint");
       if (!hint) return;
-      const y = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
-      if (y > 5) {
-        hint.classList.add("hidden");
-      } else {
-        hint.classList.remove("hidden");
-      }
-    }
 
-    window.addEventListener("scroll", updateScrollHint);
-    // run once in case page opens already scrolled
-    updateScrollHint();
+      let alreadyGone = false;
+
+      function hideHintOnce() {
+        if (alreadyGone) return;
+
+        const y =
+          window.scrollY ||
+          document.documentElement.scrollTop ||
+          document.body.scrollTop ||
+          0;
+
+        if (y > 5) {
+          alreadyGone = true;
+          hint.classList.add("gone");
+          window.removeEventListener("scroll", hideHintOnce);
+        }
+      }
+
+      window.addEventListener("scroll", hideHintOnce, { passive: true });
+      hideHintOnce(); // in case page loads already scrolled
+    });
   </script>
 
 </body>
