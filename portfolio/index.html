@@ -47,14 +47,12 @@
       --blur-glass: 18px;
     }
 
-    /* ─────────────────────────────────────────────
-       FLOATING STATUS BAR (OLD STYLE RESTORED)
-    ───────────────────────────────────────────── */
+    /* FLOATING STATUS BAR */
     .status-bar-wrapper {
       width: 100%;
       display: flex;
       justify-content: center;
-      margin-top: 26px;
+      margin-top: 18px; /* reduced height */
       position: relative;
       z-index: 10;
     }
@@ -71,7 +69,6 @@
         0 6px 20px rgba(0,0,0,0.45);
       color: #eee;
       font-size: 0.78rem;
-      letter-spacing: 0.04em;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -97,7 +94,7 @@
     .shell {
       position: relative;
       z-index: 1;
-      padding: 40px 22px;
+      padding: 20px 22px; /* reduced gap by ~50% */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -108,17 +105,15 @@
       max-width: 1120px;
     }
 
-    /* ─────────────────────────────────────────────
-       HERO SECTION WITH ORIGINAL TEXT + RESTORED OVERVIEW
-    ───────────────────────────────────────────── */
+    /* HERO SECTION */
     .hero {
-      position: relative;
-      margin-top: 50px;
+      margin-top: 20px; /* smaller gap */
       display: grid;
       grid-template-columns: minmax(0,1.6fr) minmax(0,1.1fr);
       gap: 40px;
       min-height: 80vh;
       align-items: center;
+      position: relative;
     }
 
     .hero-title {
@@ -138,7 +133,7 @@
       line-height: 1.7;
     }
 
-    /* OLD OVERVIEW BOX RESTORED */
+    /* HERO PANEL */
     .hero-panel {
       border-radius: var(--radius-xl);
       border: 1px solid rgba(148,163,184,0.5);
@@ -153,54 +148,7 @@
       gap: 14px;
     }
 
-    .hero-panel-header {
-      display: flex;
-      justify-content: space-between;
-    }
-
-    .hero-chip {
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.2);
-      font-size: 0.75rem;
-      letter-spacing: 0.07em;
-      text-transform: uppercase;
-    }
-
-    .hero-stat-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-
-    .hero-stat {
-      padding: 10px 12px;
-      border-radius: 14px;
-      background: rgba(10,14,25,0.95);
-      border: 1px solid rgba(148,163,184,0.35);
-      font-size: 0.85rem;
-    }
-
-    .hero-stat-label {
-      font-size: 0.72rem;
-      color: var(--text-soft);
-    }
-
-    .hero-stat-value {
-      font-size: 1rem;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .hero-scope {
-      font-size: 0.82rem;
-      color: var(--text-muted);
-    }
-
-    /* ─────────────────────────────────────────────
-       SCROLL INDICATOR WITH ARROWS
-    ───────────────────────────────────────────── */
+    /* SCROLL INDICATOR */
     .scroll-indicator {
       position: absolute;
       bottom: 28px;
@@ -211,22 +159,18 @@
       letter-spacing: 0.04em;
       user-select: none;
       animation: smallFloat 2.4s ease-in-out infinite;
-      transition: opacity 0.3s ease;
-      pointer-events: none;
+      transition: opacity 0.25s ease, visibility 0.25s ease;
       display: flex;
       align-items: center;
       gap: 14px;
+      pointer-events: none;
+      visibility: visible;
     }
 
+    /* fully hidden instantly */
     .scroll-indicator.hidden {
       opacity: 0;
-    }
-
-    .scroll-arrows {
-      font-size: 0.78rem;
-      opacity: 0.4;
-      display: flex;
-      gap: 6px;
+      visibility: hidden;
     }
 
     @keyframes smallFloat {
@@ -234,64 +178,81 @@
       50% { transform: translateX(-50%) translateY(5px); }
     }
 
+    .scroll-arrows {
+      opacity: 0.45;
+      display: flex;
+      gap: 6px;
+    }
+
+    /* SECTION HEADER */
     .section-header {
-      margin-top: 20px;
-      margin-bottom: 20px;
+      margin-top: 10px;
+      margin-bottom: 22px;
     }
 
     .section-title {
       text-transform: uppercase;
-      font-size: 0.88rem;
-      letter-spacing: 0.16em;
-      opacity: 0.6;
+      font-size: 0.92rem;
+      opacity: 0.55;
+      letter-spacing: 0.18em;
     }
 
-    /* GRID */
+    /* PORTFOLIO GRID — MATCHES YOUR SCREENSHOT */
     .capabilities-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 22px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
       margin-bottom: 40px;
     }
 
     .capability-card {
-      padding: 18px;
-      border-radius: var(--radius-lg);
-      background: rgba(18,20,35,0.85);
-      border: 1px solid rgba(148,163,184,0.45);
-      backdrop-filter: blur(14px);
+      display: block;
+      padding: 26px 22px;
+      border-radius: 22px;
+      background: rgba(12, 14, 22, 0.72);
+      border: 1px solid rgba(140, 150, 175, 0.35);
+      backdrop-filter: blur(22px);
       transition: 0.25s ease;
+      text-decoration: none;
+      color: #fff;
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
     }
 
     .capability-card:hover {
+      border-color: #fff;
+      background: rgba(15,18,30,0.92);
       transform: translateY(-4px);
-      border-color: #e8e8ff;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.7);
+      box-shadow: 0 22px 42px rgba(0,0,0,0.7);
     }
 
     .capability-title {
-      font-size: 1.05rem;
-      font-weight: 600;
-      margin-bottom: 8px;
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 10px;
     }
 
     .capability-desc {
       color: var(--text-muted);
-      font-size: 0.85rem;
-      margin-bottom: 10px;
+      font-size: 0.9rem;
+      max-width: 90%;
+      margin-bottom: 16px;
     }
 
     .capability-meta-row {
-      font-size: 0.78rem;
       display: flex;
       justify-content: space-between;
+      align-items: center;
+      font-size: 0.83rem;
       color: var(--text-soft);
     }
 
     .capability-pill {
-      padding: 3px 7px;
+      padding: 5px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.5);
+      border: 1px solid rgba(140,150,175,0.45);
     }
 
     footer {
@@ -322,7 +283,6 @@
         grid-template-columns: 1fr;
       }
     }
-
   </style>
 </head>
 
@@ -357,7 +317,7 @@
           </p>
         </div>
 
-        <!-- RIGHT — OLD RESTORED PANEL -->
+        <!-- RIGHT -->
         <aside class="hero-panel">
           <div class="hero-panel-header">
             <div class="hero-chip">Portfolio Overview</div>
@@ -395,63 +355,87 @@
 
       <!-- SECTION HEADER -->
       <div class="section-header">
-        <div class="section-title">Portfolio Navigation</div>
+        <div class="section-title">PORTFOLIO NAVIGATION</div>
       </div>
 
-      <!-- GRID -->
+      <!-- GRID — UPDATED LOOK -->
       <section class="capabilities-grid">
 
         <a class="capability-card" href="animation/">
-          <div class="capability-title">Animation</div>
-          <div class="capability-desc">Clean motion built for digital spaces.</div>
+          <div>
+            <div class="capability-title">Animation</div>
+            <div class="capability-desc">
+              Loops, transitions, character timing and intentional motion.
+            </div>
+          </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Motion</span>
-            <span>→</span>
+            <span class="capability-pill">Motion Systems</span>
+            <span>Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="design/">
-          <div class="capability-title">Design</div>
-          <div class="capability-desc">Purpose-built visual identity.</div>
+          <div>
+            <div class="capability-title">Design</div>
+            <div class="capability-desc">
+              Banners, identity, thumbnails, systems that feel modern.
+            </div>
+          </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Identity</span>
-            <span>→</span>
+            <span class="capability-pill">Visual Identity</span>
+            <span>Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="development/">
-          <div class="capability-title">Development</div>
-          <div class="capability-desc">Web tools, automation, systems.</div>
+          <div>
+            <div class="capability-title">Development</div>
+            <div class="capability-desc">
+              Web tools, FastFlags, automation, readable systems.
+            </div>
+          </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Systems</span>
-            <span>→</span>
+            <span class="capability-pill">Code & Systems</span>
+            <span>Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="servermanager/">
-          <div class="capability-title">Server Management</div>
-          <div class="capability-desc">Premium Discord architecture.</div>
+          <div>
+            <div class="capability-title">Server Management</div>
+            <div class="capability-desc">
+              Discord role architecture, logic, integrations.
+            </div>
+          </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Ops</span>
-            <span>→</span>
+            <span class="capability-pill">Infra & Layout</span>
+            <span>Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="communitymanager/">
-          <div class="capability-title">Community Management</div>
-          <div class="capability-desc">Engagement systems that last.</div>
+          <div>
+            <div class="capability-title">Community Management</div>
+            <div class="capability-desc">
+              Systems that keep communities alive from the inside.
+            </div>
+          </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Engagement</span>
-            <span>→</span>
+            <span class="capability-pill">People & Ops</span>
+            <span>Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="other/">
-          <div class="capability-title">Other</div>
-          <div class="capability-desc">Experiments, prototypes, labs.</div>
+          <div>
+            <div class="capability-title">Other Work</div>
+            <div class="capability-desc">
+              Experiments, prototypes, labs, concepts.
+            </div>
+          </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Labs</span>
-            <span>→</span>
+            <span class="capability-pill">Experiments</span>
+            <span>Open →</span>
           </div>
         </a>
 
@@ -464,11 +448,10 @@
     </div>
   </div>
 
-  <!-- SCROLL INDICATOR JS -->
   <script>
     const hint = document.getElementById("scrollHint");
     window.addEventListener("scroll", () => {
-      if (window.scrollY > 40) {
+      if (window.scrollY > 15) {
         hint.classList.add("hidden");
       } else {
         hint.classList.remove("hidden");
