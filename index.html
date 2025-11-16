@@ -14,7 +14,19 @@
   body {
     margin: 0;
     padding: 40px 20px;
-    background: #0d0d0d;
+
+    /* ============================
+       SEBI-LIKE BACKGROUND (ADDED)
+       ============================ */
+    --bg: #252525;
+    background-color: var(--bg);
+
+    background-image: radial-gradient(
+      rgba(255, 255, 255, 0.045) 1px,
+      transparent 1px
+    );
+    background-size: 26px 26px; /* more spaced dots */
+
     font-family: 'Arial Black', Gadget, sans-serif;
     color: #e0e0e0;
     display: flex;
@@ -93,7 +105,11 @@
     left: -75%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(120deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.4) 50%,
+      rgba(255,255,255,0) 100%
+    );
     transform: skewX(-25deg);
   }
   a.social:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
@@ -109,7 +125,7 @@
     transition: width 0.3s ease;
   }
   a.social:hover::after { width: 100%; }
-  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 6px rgba(255, 255, 255, 0.15); }
+  a.social:hover { color: #fff; border-color: #777; box-shadow: 0 0 6px rgba(255,255,255,0.15); }
 
   footer { margin-top: 40px; font-size: 0.8rem; color: #666; }
 
@@ -148,7 +164,11 @@
     left: -80%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.25) 50%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(120deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.25) 50%,
+      rgba(255,255,255,0) 100%
+    );
     transform: skewX(-25deg);
     transition: left 0.6s ease;
   }
@@ -198,7 +218,11 @@
     left: -75%;
     width: 50%;
     height: 100%;
-    background: linear-gradient(120deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+    background: linear-gradient(120deg,
+      rgba(255,255,255,0) 0%,
+      rgba(255,255,255,0.4) 50%,
+      rgba(255,255,255,0) 100%
+    );
     transform: skewX(-25deg);
   }
   .biolink-btn:hover::before { left: 125%; transition: left 0.7s ease-in-out; }
@@ -270,7 +294,6 @@
 
 <img src="banner.png" alt="conicey" class="logo">
 
-<!-- REMOVED TAGLINE -->
 <div class="tagline"></div>
 
 <div class="roles">
