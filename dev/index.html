@@ -4,89 +4,116 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Active Developer Badge</title>
+
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    font-family: "Segoe UI", "Courier New", monospace;
-    background-color: #121212;
-    color: #e0e0e0;
-    padding: 40px 20px;
-    line-height: 1.6;
-  }
+/* ——— RESET ——— */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-  header {
-    text-align: center;
-    margin-bottom: 40px;
-  }
-  header h1 {
-    font-size: 2.5rem;
-    color: #f5f5f5;
-    margin-bottom: 10px;
-  }
-  header p {
-    font-size: 1rem;
-    color: #a0a0a0;
-  }
+/* ——— SEBI-STYLE BACKGROUND ——— */
+body {
+  font-family: "Segoe UI", "Courier New", monospace;
+  background: #d9d9df;
+  color: #1a1a1f;
+  padding: 40px 20px;
+  line-height: 1.6;
 
-  .instruction-box {
-    background-color: #1e1e1e;
-    border: 1px solid #333;
-    border-radius: 10px;
-    color: #d0d0d0;
-    padding: 25px;
-    height: 480px;
-    overflow-y: auto;
-    font-size: 0.95rem;
-    line-height: 1.6;
-  }
+  /* dotted texture */
+  background-image:
+      radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px),
+      radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
+  background-size: 22px 22px, 22px 22px;
+  background-position: 0 0, 11px 11px;
+}
 
-  .instruction-box a {
-    color: #5ea7ff;
-    text-decoration: none;
-  }
-  .instruction-box a:hover {
-    text-decoration: underline;
-  }
+/* ——— HEADER ——— */
+header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+header h1 {
+  font-size: 2.7rem;
+  color: #111;
+  letter-spacing: -0.5px;
+  font-weight: 800;
+}
+header p {
+  font-size: 1rem;
+  color: #555;
+  margin-top: 5px;
+}
 
-  ol {
-    margin-left: 1.2em;
-  }
+/* ——— INSTRUCTION BOX (glass monotone + subtle chrome) ——— */
+.instruction-box {
+  background: rgba(255,255,255,0.55);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(40,40,50,0.25);
+  box-shadow: 0 2px 15px rgba(0,0,0,0.06);
 
-  li {
-    margin-bottom: 12px;
-  }
+  border-radius: 14px;
+  color: #1a1a1f;
+  padding: 25px;
+  height: 480px;
+  overflow-y: auto;
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
 
-  ul {
-    margin-top: 6px;
-    margin-left: 1.5em;
-    list-style-type: disc;
-  }
+/* links */
+.instruction-box a {
+  color: #2d4f9d;
+  font-weight: 600;
+  text-decoration: none;
+}
+.instruction-box a:hover {
+  text-decoration: underline;
+}
 
-  .note {
-    color: #ffdf7f;
-    font-style: italic;
-    margin-top: 10px;
-  }
+/* lists */
+ol {
+  margin-left: 1.2em;
+}
+li {
+  margin-bottom: 14px;
+}
+ul {
+  margin-top: 6px;
+  margin-left: 1.5em;
+  list-style-type: disc;
+  color: #333;
+}
 
-  footer {
-    text-align: center;
-    margin-top: 50px;
-    font-size: 0.85rem;
-    color: #777;
-  }
+/* notes */
+.note {
+  color: #7a5a00;
+  background: rgba(255,224,150,0.25);
+  padding: 10px 14px;
+  border-radius: 8px;
+  margin-top: 15px;
+  border: 1px solid rgba(120,90,0,0.2);
+  font-style: italic;
+}
 
-  .replit-button {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 5px;
-  }
-  .replit-button img {
-    height: 28px;
-    border: none;
-    vertical-align: middle;
-  }
+/* footer */
+footer {
+  text-align: center;
+  margin-top: 50px;
+  font-size: 0.85rem;
+  color: #555;
+}
+
+/* replit badge */
+.replit-button img {
+  height: 28px;
+  border: none;
+  vertical-align: middle;
+}
 </style>
 </head>
+
 <body>
 
 <header>
