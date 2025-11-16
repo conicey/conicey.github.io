@@ -66,24 +66,29 @@
     }
 
     .hero-topline {
-      font-size: 1rem;              /* medium text */
+      font-size: 1.18rem; /* slightly bigger */
       font-weight: 500;
       color: var(--text-soft);
-      margin-bottom: 6px;
+      margin-bottom: 10px;
       letter-spacing: 0.01em;
     }
 
     .hero-body {
-      font-size: 1.02rem;
-      line-height: 1.8;
+      font-size: 3.1rem; /* 3x bigger */
+      line-height: 1.28;
       color: var(--text-muted);
-      max-width: 42rem;
+      max-width: 100%;
     }
 
     .hero-body strong {
       font-weight: 700;
-      font-size: 1.05em;            /* slightly larger + bold */
       color: var(--text-main);
+    }
+
+    @media (max-width: 700px) {
+      .hero-body {
+        font-size: 2.1rem; /* mobile-friendly scaling */
+      }
     }
 
     /* SECTION LABEL */
@@ -115,7 +120,7 @@
       }
     }
 
-    /* CARD – flat + minimal */
+    /* CARD */
     .capability-card {
       display: block;
       padding: var(--space-md);
@@ -175,12 +180,12 @@
 
     /* FOOTER */
     footer {
-      margin-top: var(--space-lg);
-      font-size: 0.78rem;
+      margin-top: 70px; /* ~4cm gap */
+      font-size: 0.82rem;
       color: var(--text-soft);
-      text-align: left;
-      border-top: 1px solid var(--border-subtle);
-      padding-top: var(--space-sm);
+      text-align: center; /* centered */
+      padding-top: 0; /* removed line */
+      border-top: none !important; /* no separator line */
     }
 
     footer a {
