@@ -6,114 +6,125 @@
 <title>Active Developer Badge</title>
 
 <style>
-/* ——— RESET ——— */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+  /* RESET */
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
 
-/* ——— SEBI-STYLE BACKGROUND ——— */
-body {
-  font-family: "Segoe UI", "Courier New", monospace;
-  background: #d9d9df;
-  color: #1a1a1f;
-  padding: 40px 20px;
-  line-height: 1.6;
+  /* DARK SEBI-STYLE BACKGROUND (LIKE MAIN SITE) */
+  body {
+    font-family: "Segoe UI", "Courier New", monospace;
+    background-color: #0d0d0f;
+    color: #e0e0e0;
+    padding: 40px 20px;
+    line-height: 1.6;
 
-  /* dotted texture */
-  background-image:
-      radial-gradient(rgba(0,0,0,0.08) 1px, transparent 1px),
-      radial-gradient(rgba(255,255,255,0.15) 1px, transparent 1px);
-  background-size: 22px 22px, 22px 22px;
-  background-position: 0 0, 11px 11px;
-}
+    /* dotted grid */
+    background-image:
+      radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
+      radial-gradient(rgba(0,0,0,0.35) 1px, transparent 1px);
+    background-size: 22px 22px, 22px 22px;
+    background-position: 0 0, 11px 11px;
+  }
 
-/* ——— HEADER ——— */
-header {
-  text-align: center;
-  margin-bottom: 40px;
-}
-header h1 {
-  font-size: 2.7rem;
-  color: #111;
-  letter-spacing: -0.5px;
-  font-weight: 800;
-}
-header p {
-  font-size: 1rem;
-  color: #555;
-  margin-top: 5px;
-}
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
 
-/* ——— INSTRUCTION BOX (glass monotone + subtle chrome) ——— */
-.instruction-box {
-  background: rgba(255,255,255,0.55);
-  backdrop-filter: blur(6px);
-  border: 1px solid rgba(40,40,50,0.25);
-  box-shadow: 0 2px 15px rgba(0,0,0,0.06);
+  header h1 {
+    font-size: 2.7rem;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    font-weight: 800;
+    text-shadow: 0 0 18px rgba(0,0,0,0.8);
+  }
 
-  border-radius: 14px;
-  color: #1a1a1f;
-  padding: 25px;
-  height: 480px;
-  overflow-y: auto;
-  font-size: 0.98rem;
-  line-height: 1.7;
-}
+  header p {
+    font-size: 1rem;
+    color: #b5b5b5;
+    margin-top: 6px;
+  }
 
-/* links */
-.instruction-box a {
-  color: #2d4f9d;
-  font-weight: 600;
-  text-decoration: none;
-}
-.instruction-box a:hover {
-  text-decoration: underline;
-}
+  /* INSTRUCTION BOX - DARK CARD LIKE YOUR BUTTONS */
+  .instruction-box {
+    background-color: #141417;
+    border-radius: 14px;
+    border: 1px solid #2d2d33;
+    box-shadow:
+      0 14px 40px rgba(0,0,0,0.75),
+      inset 0 0 0 1px rgba(255,255,255,0.02);
+    color: #e2e2e5;
+    padding: 25px;
+    height: 480px;
+    overflow-y: auto;
+    font-size: 0.98rem;
+    line-height: 1.7;
+  }
 
-/* lists */
-ol {
-  margin-left: 1.2em;
-}
-li {
-  margin-bottom: 14px;
-}
-ul {
-  margin-top: 6px;
-  margin-left: 1.5em;
-  list-style-type: disc;
-  color: #333;
-}
+  /* LINKS */
+  .instruction-box a {
+    color: #77b5ff;
+    font-weight: 600;
+    text-decoration: none;
+  }
 
-/* notes */
-.note {
-  color: #7a5a00;
-  background: rgba(255,224,150,0.25);
-  padding: 10px 14px;
-  border-radius: 8px;
-  margin-top: 15px;
-  border: 1px solid rgba(120,90,0,0.2);
-  font-style: italic;
-}
+  .instruction-box a:hover {
+    text-decoration: underline;
+  }
 
-/* footer */
-footer {
-  text-align: center;
-  margin-top: 50px;
-  font-size: 0.85rem;
-  color: #555;
-}
+  /* LISTS */
+  ol {
+    margin-left: 1.2em;
+  }
 
-/* replit badge */
-.replit-button img {
-  height: 28px;
-  border: none;
-  vertical-align: middle;
-}
+  li {
+    margin-bottom: 14px;
+  }
+
+  ul {
+    margin-top: 6px;
+    margin-left: 1.5em;
+    list-style-type: disc;
+    color: #cfcfd4;
+  }
+
+  /* NOTE */
+  .note {
+    color: #ffdf7f;
+    background: rgba(255, 207, 120, 0.09);
+    padding: 10px 14px;
+    border-radius: 8px;
+    margin-top: 15px;
+    border: 1px solid rgba(255, 207, 120, 0.35);
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    margin-top: 50px;
+    font-size: 0.85rem;
+    color: #888;
+  }
+
+  /* REPLIT BADGE */
+  .replit-button {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 5px;
+  }
+
+  .replit-button img {
+    height: 28px;
+    border: none;
+    vertical-align: middle;
+  }
 </style>
 </head>
-
 <body>
 
 <header>
