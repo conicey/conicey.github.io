@@ -42,7 +42,7 @@
         rgba(255, 255, 255, 0.045) 1px,
         transparent 1px
       );
-      background-size: 26px 26px; /* dots more separated */
+      background-size: 26px 26px;
       color: var(--text-main);
       -webkit-font-smoothing: antialiased;
     }
@@ -65,6 +65,14 @@
       margin-bottom: var(--space-xl);
     }
 
+    .hero-topline {
+      font-size: 1.05rem;
+      font-weight: 500;
+      color: var(--text-soft);
+      margin-bottom: 6px;
+      letter-spacing: 0.01em;
+    }
+
     .hero-title {
       font-size: clamp(2.3rem, 3.4vw, 3rem);
       font-weight: 700;
@@ -78,7 +86,7 @@
       font-size: 0.98rem;
       line-height: 1.8;
       color: var(--text-muted);
-      max-width: 40rem;
+      max-width: 42rem;
     }
 
     /* SECTION LABEL */
@@ -110,7 +118,7 @@
       }
     }
 
-    /* CARD – flat + minimal */
+    /* CARD */
     .capability-card {
       display: block;
       padding: var(--space-md);
@@ -196,7 +204,14 @@
     <div class="shell-inner">
 
       <section class="hero">
+
+        <!-- NEW TOPLINE -->
+        <div class="hero-topline">conicey – next gen multidisciplinary</div>
+
+        <!-- BOLD TITLE -->
         <h1 class="hero-title">Building the future while everyone else catches up.</h1>
+
+        <!-- SAME PARAGRAPH AFTER THE BOLD LINE -->
         <p class="hero-body">
           This is the central hub for my work. Every tile below leads into a focused portfolio:
           animation, design, development, server systems, community management, and everything
