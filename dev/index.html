@@ -7,26 +7,26 @@
 
 <style>
   /* RESET */
-  * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* DARK SEBI-STYLE BACKGROUND (LIKE MAIN SITE) */
+  /* ========= MATCH MAIN SITE BACKGROUND EXACTLY ========= */
   body {
-    font-family: "Segoe UI", "Courier New", monospace;
-    background-color: #0d0d0f;
-    color: #e0e0e0;
+    margin: 0;
     padding: 40px 20px;
-    line-height: 1.6;
 
-    /* dotted grid */
-    background-image:
-      radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-      radial-gradient(rgba(0,0,0,0.35) 1px, transparent 1px);
-    background-size: 22px 22px, 22px 22px;
-    background-position: 0 0, 11px 11px;
+    --bg: #252525;
+    background-color: var(--bg);
+
+    /* SAME DOT PATTERN AS MAIN SITE */
+    background-image: radial-gradient(
+      rgba(255,255,255,0.045) 1px,
+      transparent 1px
+    );
+    background-size: 26px 26px;
+
+    font-family: "Segoe UI", "Courier New", monospace;
+    color: #e0e0e0;
+    line-height: 1.6;
   }
 
   /* HEADER */
@@ -37,10 +37,10 @@
 
   header h1 {
     font-size: 2.7rem;
+    font-weight: 800;
     color: #ffffff;
     letter-spacing: -0.5px;
-    font-weight: 800;
-    text-shadow: 0 0 18px rgba(0,0,0,0.8);
+    text-shadow: 0 0 12px rgba(0,0,0,0.7);
   }
 
   header p {
@@ -49,41 +49,33 @@
     margin-top: 6px;
   }
 
-  /* INSTRUCTION BOX - DARK CARD LIKE YOUR BUTTONS */
+  /* INSTRUCTION BOX MATCHES DARK CARD AESTHETIC */
   .instruction-box {
-    background-color: #141417;
-    border-radius: 14px;
-    border: 1px solid #2d2d33;
-    box-shadow:
-      0 14px 40px rgba(0,0,0,0.75),
-      inset 0 0 0 1px rgba(255,255,255,0.02);
-    color: #e2e2e5;
+    background: #1a1a1a;
+    border: 2px solid #444;
+    border-radius: 10px;
     padding: 25px;
     height: 480px;
     overflow-y: auto;
-    font-size: 0.98rem;
-    line-height: 1.7;
+    color: #e4e4e4;
+
+    box-shadow:
+      0 14px 40px rgba(0,0,0,0.75),
+      inset 0 0 0 1px rgba(255,255,255,0.03);
   }
 
-  /* LINKS */
   .instruction-box a {
-    color: #77b5ff;
-    font-weight: 600;
+    color: #76b2ff;
     text-decoration: none;
+    font-weight: 600;
   }
 
   .instruction-box a:hover {
     text-decoration: underline;
   }
 
-  /* LISTS */
-  ol {
-    margin-left: 1.2em;
-  }
-
-  li {
-    margin-bottom: 14px;
-  }
+  ol { margin-left: 1.2em; }
+  li { margin-bottom: 14px; }
 
   ul {
     margin-top: 6px;
@@ -92,18 +84,17 @@
     color: #cfcfd4;
   }
 
-  /* NOTE */
+  /* NOTE STYLING */
   .note {
+    background: rgba(255,207,120,0.1);
+    border: 1px solid rgba(255,207,120,0.45);
     color: #ffdf7f;
-    background: rgba(255, 207, 120, 0.09);
     padding: 10px 14px;
-    border-radius: 8px;
     margin-top: 15px;
-    border: 1px solid rgba(255, 207, 120, 0.35);
+    border-radius: 8px;
     font-style: italic;
   }
 
-  /* FOOTER */
   footer {
     text-align: center;
     margin-top: 50px;
@@ -111,20 +102,14 @@
     color: #888;
   }
 
-  /* REPLIT BADGE */
-  .replit-button {
-    display: inline-block;
-    vertical-align: middle;
-    margin-left: 5px;
-  }
-
   .replit-button img {
     height: 28px;
-    border: none;
     vertical-align: middle;
+    border: none;
   }
 </style>
 </head>
+
 <body>
 
 <header>
@@ -154,42 +139,42 @@
 
       <li>Wait for the repo template to fully load.</li>
 
-      <li>Click the green <b>"Run .replit run command"</b> button at the top.</li>
+      <li>Click the green <b>"Run .replit run command"</b> button.</li>
 
       <li>Paste the token you previously copied into the console next to where it asks for the application token.</li>
 
       <li>Press the <b>Enter</b> key.</li>
 
-      <li>Wait for it to print <b>'DONE | Application/Bot is up and running.'</b> in the console.
+      <li>Wait for it to print <b>'DONE | Application/Bot is up and running.'</b>.
         <ul>
-          <li><b>Do not close this tab</b> unless you're finished using the bot; it will go offline.</li>
-          <li><b>Don't stop the program or close the tab</b> yet or Discord will consider your bot unresponsive.</li>
+          <li><b>Don’t close the tab</b> while it's running.</li>
+          <li><b>Don’t stop the program</b> or Discord will think the bot is offline.</li>
         </ul>
       </li>
 
-      <li>Go back to Discord’s application page, go to the <b>General Information</b> tab, scroll down, and copy your application ID.</li>
+      <li>Go to Discord’s application page → <b>General Information</b> → copy your application ID.</li>
 
       <li>Create a new Discord server (you can delete it later).</li>
 
-      <li>Enable Community on the server (only needed if you don’t already own a community-enabled server).</li>
+      <li>Enable Community on the server.</li>
 
-      <li>Return back to <a href="https://discord.com/developers/applications" target="_blank">https://discord.com/developers/applications</a>.</li>
+      <li>Return to <a href="https://discord.com/developers/applications" target="_blank">Discord Applications</a>.</li>
 
-      <li>Copy the application ID again (just to be sure you have it ready).</li>
+      <li>Copy the application ID again.</li>
 
-      <li>Use this invite link to add the bot to the server (replace <code>{applicationid}</code> with what you copied):<br>
+      <li>Invite the bot using:<br>
         <code>https://discord.com/oauth2/authorize?client_id={applicationid}&scope=bot%20applications.commands&permissions=105227086912</code>
       </li>
 
-      <li>In the server, go to a channel and use the <b>/ping</b> command on the bot.</li>
+      <li>Use <b>/ping</b> in your server.</li>
 
-      <li>Go to the <a href="https://discord.com/developers/active-developer" target="_blank">Active Developer page</a> and register everything. You may need to wait up to 24 hours.</li>
+      <li>Go to the <a href="https://discord.com/developers/active-developer" target="_blank">Active Developer page</a> and register. (May take up to 24 hours.)</li>
 
-      <li>Congrats on that shiny new badge!</li>
+      <li>Congrats on your new badge!</li>
     </ol>
 
     <div class="note">
-      <b>NOTE:</b> Make sure you have the “Use data to improve Discord” setting enabled under User Settings → Privacy & Safety, otherwise you won’t be eligible.
+      <b>NOTE:</b> Ensure “Use data to improve Discord” is enabled in User Settings → Privacy & Safety.
     </div>
   </div>
 </main>
