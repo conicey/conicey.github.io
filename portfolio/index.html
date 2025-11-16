@@ -74,8 +74,8 @@
     }
 
     .hero-body {
-      font-size: 3.1rem; /* 3x bigger */
-      line-height: 1.28;
+      font-size: 1.65rem; /* reduced from 3.1rem */
+      line-height: 1.45;
       color: var(--text-muted);
       max-width: 100%;
     }
@@ -87,7 +87,7 @@
 
     @media (max-width: 700px) {
       .hero-body {
-        font-size: 2.1rem; /* mobile-friendly scaling */
+        font-size: 1.3rem; /* mobile scale */
       }
     }
 
@@ -184,8 +184,8 @@
       font-size: 0.82rem;
       color: var(--text-soft);
       text-align: center; /* centered */
-      padding-top: 0; /* removed line */
-      border-top: none !important; /* no separator line */
+      padding-top: 0;
+      border-top: none !important; /* remove line */
     }
 
     footer a {
@@ -248,8 +248,10 @@
         <a class="capability-card" href="development/">
           <div>
             <div class="capability-title">Development</div>
-            <div class="capability-desc">
-              Bot development, clean scripting, reliable automation.
+            <div>
+              <div class="capability-desc">
+                Bot development, clean scripting, reliable automation.
+              </div>
             </div>
           </div>
           <div class="capability-meta-row">
