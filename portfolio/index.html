@@ -5,167 +5,517 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Conicey • Portfolio</title>
 
-<style>
-/* RESET */
-* { margin: 0; padding: 0; box-sizing: border-box; }
+  <style>
+    /* RESET */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-html, body {
-  height: 100%;
-  font-family: "Segoe UI", sans-serif;
-  background: #0f0f11;
-  overflow-x: hidden;
-  color: #cfcfd4;
-}
+    html, body {
+      height: 100%;
+      overflow-x: hidden;
+    }
 
-/* Dotted subtle background (Sebi style) */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  background:
-    radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px) 0 0 / 18px 18px;
-  opacity: 0.16;
-  z-index: 0;
-}
+    /* === THEME VARIABLES (Monotone + Futuristic) === */
+    :root {
+      --monotone-light: #d7d7df;
+      --monotone-mid: #8a8a96;
+      --monotone-dark: #24242b;
+      --monotone-darker: #16161b;
+      --monotone-border: rgba(180,180,200,0.14);
 
-/* Watermark anime art on the right */
-.watermark {
-  position: fixed;
-  right: 0;
-  bottom: 0;
-  width: 480px;
-  max-width: 55%;
-  opacity: 0.08;
-  pointer-events: none;
-  user-select: none;
-  z-index: 1;
-}
+      --card-bg: rgba(22, 22, 28, 0.70);
+      --card-hover: rgba(28, 28, 34, 0.92);
 
-/* Page container */
-.wrapper {
-  position: relative;
-  z-index: 5;
-  padding: 80px 40px;
-  max-width: 880px;
-}
+      --radius-lg: 18px;
+      --radius-xl: 24px;
+      --shadow-soft: 0 18px 40px rgba(0,0,0,0.6);
+      --blur-glass: 18px;
+    }
 
-/* Title */
-h1 {
-  font-size: 2.8rem;
-  font-weight: 700;
-  margin-bottom: 18px;
-  color: #ffffff;
-}
+    body {
+      font-family: "Segoe UI", system-ui, sans-serif;
 
-/* Subtitle paragraph */
-.intro {
-  font-size: 1rem;
-  line-height: 1.65;
-  max-width: 600px;
-  color: #b4b4ba;
-  margin-bottom: 48px;
-}
+      /* Clean monotone gradient */
+      background: linear-gradient(
+        135deg,
+        #0f0f13,
+        #111117,
+        #0c0c10
+      );
+      background-size: 200% 200%;
+      animation: bgFlow 22s ease-in-out infinite;
 
-/* Section label */
-.section-title {
-  font-size: 0.78rem;
-  letter-spacing: 0.16em;
-  opacity: 0.55;
-  margin-bottom: 16px;
-  text-transform: uppercase;
-}
+      color: var(--monotone-light);
+      -webkit-font-smoothing: antialiased;
 
-/* Navigation list */
-.nav-list {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-}
+      /* GRID OVERLAY */
+      position: relative;
+    }
 
-.nav-item {
-  text-decoration: none;
-  color: #ffffff;
-  font-size: 1.25rem;
-  font-weight: 600;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding-right: 4px;
-}
+    /* Faint grid: subtle, futuristic, non-distracting */
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background:
+        repeating-linear-gradient(
+          to right,
+          rgba(255,255,255,0.035) 0px,
+          rgba(255,255,255,0.02) 1px,
+          transparent 1px,
+          transparent 80px
+        ),
+        repeating-linear-gradient(
+          to bottom,
+          rgba(255,255,255,0.035) 0px,
+          rgba(255,255,255,0.02) 1px,
+          transparent 1px,
+          transparent 80px
+        );
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.18;
+    }
 
-.nav-item span {
-  color: #8f8f95;
-  font-size: 0.95rem;
-}
+    @keyframes bgFlow {
+      0% { background-position: 0% 0%; }
+      50% { background-position: 100% 100%; }
+      100% { background-position: 0% 0%; }
+    }
 
-.nav-item:hover {
-  color: #d4d4ff;
-}
+    /* FLOATING STATUS BAR */
+    .status-bar-wrapper {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+      position: relative;
+      z-index: 10;
+    }
 
-/* Footer */
-footer {
-  margin-top: 60px;
-  font-size: 0.8rem;
-  opacity: 0.5;
-}
-footer a {
-  color: #d4d4ff;
-  text-decoration: none;
-}
-</style>
+    .status-bar {
+      padding: 12px 22px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow-soft);
+
+      color: var(--monotone-light);
+      font-size: 0.78rem;
+
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: min(1120px, 92%);
+    }
+
+    .status-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--monotone-mid);
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--monotone-mid);
+      box-shadow: 0 0 6px var(--monotone-mid);
+      opacity: 0.7;
+    }
+
+    /* SHELL */
+    .shell {
+      position: relative;
+      z-index: 1;
+      padding: 10px 22px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .shell-inner {
+      width: 100%;
+      max-width: 1120px;
+    }
+
+    /* HERO SECTION */
+    .hero {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: minmax(0,1.6fr) minmax(0,1.1fr);
+      gap: 40px;
+      min-height: 80vh;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Title: monotone metallic fade */
+    .hero-title {
+      font-size: clamp(2.8rem, 4vw + 1rem, 3.8rem);
+      font-weight: 800;
+
+      background: linear-gradient(100deg,
+        #ffffff,
+        #c7c7cf,
+        #8a8a96
+      );
+      -webkit-background-clip: text;
+      color: transparent;
+
+      margin-bottom: 16px;
+      line-height: 1.05;
+    }
+
+    .hero-body {
+      font-size: 1.05rem;
+      color: var(--monotone-mid);
+      max-width: 36rem;
+      line-height: 1.7;
+    }
+
+    /* OVERVIEW PANEL */
+    .hero-panel {
+      border-radius: 26px;
+      border: 1px solid var(--monotone-border);
+
+      background: rgba(18,18,22,0.85);
+      padding: 20px 22px 22px;
+
+      backdrop-filter: blur(22px);
+      box-shadow: var(--shadow-soft);
+
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .hero-panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .hero-chip {
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(30,30,36,0.85);
+      font-size: 0.78rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--monotone-light);
+      white-space: nowrap;
+    }
+
+    .hero-stat-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 16px;
+    }
+
+    .hero-stat {
+      padding: 16px 14px;
+      border-radius: 20px;
+
+      /* Monotone inner gradient */
+      background: linear-gradient(145deg,
+        #1a1a22,
+        #22222c
+      );
+
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: 0 18px 30px rgba(0,0,0,0.45);
+    }
+
+    .hero-stat-label {
+      font-size: 0.8rem;
+      color: var(--monotone-mid);
+    }
+
+    .hero-stat-value {
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin: 4px 0;
+      color: var(--monotone-light);
+    }
+
+    .hero-stat-body {
+      font-size: 0.84rem;
+      color: var(--monotone-mid);
+      line-height: 1.4;
+    }
+
+    .hero-scope {
+      font-size: 0.84rem;
+      color: var(--monotone-mid);
+      margin-top: 4px;
+      line-height: 1.5;
+    }
+
+    /* SECTION HEADER */
+    .section-header {
+      margin-top: 10px;
+      margin-bottom: 22px;
+    }
+
+    .section-title {
+      text-transform: uppercase;
+      font-size: 0.92rem;
+      opacity: 0.55;
+      letter-spacing: 0.18em;
+      color: var(--monotone-mid);
+    }
+
+    /* GRID */
+    .capabilities-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+      margin-bottom: 40px;
+    }
+
+    .capability-card {
+      display: block;
+      padding: 26px 22px;
+      border-radius: 22px;
+
+      background: var(--card-bg);
+      border: 1px solid var(--monotone-border);
+      backdrop-filter: blur(22px);
+
+      transition: 0.25s ease;
+      text-decoration: none;
+      color: var(--monotone-light);
+
+      min-height: 190px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .capability-card:hover {
+      border-color: rgba(255,255,255,0.35);
+      transform: translateY(-4px);
+      background: var(--card-hover);
+      box-shadow: 0 22px 42px rgba(0,0,0,0.7);
+    }
+
+    .capability-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .capability-desc {
+      color: var(--monotone-mid);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    .capability-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.83rem;
+      color: var(--monotone-mid);
+    }
+
+    .capability-pill {
+      padding: 5px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+    }
+
+    footer {
+      text-align: center;
+      margin: 40px 0 20px;
+      font-size: 0.82rem;
+      opacity: 0.55;
+      color: var(--monotone-mid);
+    }
+
+    footer a {
+      color: var(--monotone-light);
+      text-decoration: underline;
+    }
+
+    @media (max-width: 960px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+      .hero-panel { order: -1; }
+      .capabilities-grid {
+        grid-template-columns: repeat(2,1fr);
+      }
+    }
+
+    @media (max-width: 680px) {
+      .capabilities-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+  </style>
 </head>
 
 <body>
 
-<!-- Watermark image (replace with your own PNG) -->
-<img class="watermark" src="https://i.imgur.com/ZKT9dZF.png">
-
-<div class="wrapper">
-
-  <h1>Building the future while everyone else catches up.</h1>
-
-  <p class="intro">
-    This is the central hub for my work. Every link below opens a focused
-    portfolio environment — animation, design, development, systems,
-    community management, and everything that doesn’t fit in a neat box.
-  </p>
-
-  <div class="section-title">Portfolio Navigation</div>
-
-  <div class="nav-list">
-
-    <a class="nav-item" href="animation/">
-      Animation <span>→</span>
-    </a>
-
-    <a class="nav-item" href="design/">
-      Design <span>→</span>
-    </a>
-
-    <a class="nav-item" href="development/">
-      Development <span>→</span>
-    </a>
-
-    <a class="nav-item" href="servermanager/">
-      Server Management <span>→</span>
-    </a>
-
-    <a class="nav-item" href="communitymanager/">
-      Community Management <span>→</span>
-    </a>
-
-    <a class="nav-item" href="other/">
-      Other Work <span>→</span>
-    </a>
-
+  <!-- FLOATING STATUS BAR -->
+  <div class="status-bar-wrapper">
+    <div class="status-bar">
+      <div class="status-left">
+        <div class="status-dot"></div>
+        Portfolio · conicey · next-gen multidisciplinary
+      </div>
+      <div class="status-right">luv conicey</div>
+    </div>
   </div>
 
-  <footer>
-    © 2025 Conicey • <a href="https://conicey.github.io">Main Site</a>
-  </footer>
+  <div class="shell">
+    <div class="shell-inner">
 
-</div>
+      <!-- HERO -->
+      <section class="hero">
+
+        <!-- LEFT -->
+        <div>
+          <h1 class="hero-title">Building the future while everyone else catches up.</h1>
+          <p class="hero-body">
+            This is the central hub for my work. Every tile below leads into a focused portfolio:
+            animation, design, development, server systems, community management, and everything
+            that doesn’t fit in a neat box yet.
+          </p>
+        </div>
+
+        <!-- RIGHT Overview Panel -->
+        <aside class="hero-panel">
+          <div class="hero-panel-header">
+            <div class="hero-chip">Portfolio Overview</div>
+            <div class="hero-chip">Conicey • V2025</div>
+          </div>
+
+          <div class="hero-stat-row">
+            <div class="hero-stat">
+              <div class="hero-stat-label">Disciplines</div>
+              <div class="hero-stat-value">6 core</div>
+              <div class="hero-stat-body">
+                Animation · Design · Dev · Community & more
+              </div>
+            </div>
+
+            <div class="hero-stat">
+              <div class="hero-stat-label">Focus</div>
+              <div class="hero-stat-value">Next-gen</div>
+              <div class="hero-stat-body">
+                Systems that look and run premium.
+              </div>
+            </div>
+
+            <div class="hero-stat">
+              <div class="hero-stat-label">Style</div>
+              <div class="hero-stat-value">Sharp</div>
+              <div class="hero-stat-body">
+                Clean, corporate, confident. No clutter.
+              </div>
+            </div>
+          </div>
+
+          <p class="hero-scope">
+            Each category below is a dedicated environment with its own work examples, experiments,
+            and things I shipped because “good enough” is not an option.
+          </p>
+        </aside>
+
+      </section>
+
+      <!-- SECTION HEADER -->
+      <div class="section-header">
+        <div class="section-title">PORTFOLIO NAVIGATION</div>
+      </div>
+
+      <!-- GRID -->
+      <section class="capabilities-grid">
+
+        <a class="capability-card" href="animation/">
+          <div>
+            <div class="capability-title">Animation</div>
+            <div class="capability-desc">Character emotion, smooth timing, expressive movement.</div>
+          </div>
+          <div class="capability-meta-row">
+            <span class="capability-pill">Motion Systems</span>
+            <span>Open →</span>
+          </div>
+        </a>
+
+        <a class="capability-card" href="design/">
+          <div>
+            <div class="capability-title">Design</div>
+            <div class="capability-desc">Banners, thumbnails, clean visuals, personalised detail.</div>
+          </div>
+          <div class="capability-meta-row">
+            <span class="capability-pill">Visual Identity</span>
+            <span>Open →</span>
+          </div>
+        </a>
+
+        <a class="capability-card" href="development/">
+          <div>
+            <div class="capability-title">Development</div>
+            <div class="capability-desc">Bot development, clean scripting, reliable automation.</div>
+          </div>
+          <div class="capability-meta-row">
+            <span class="capability-pill">Code & Systems</span>
+            <span>Open →</span>
+          </div>
+        </a>
+
+        <a class="capability-card" href="servermanager/">
+          <div>
+            <div class="capability-title">Server Management</div>
+            <div class="capability-desc">Full server setup, bot systems, optimized structure.</div>
+          </div>
+          <div class="capability-meta-row">
+            <span class="capability-pill">Infra & Layout</span>
+            <span>Open →</span>
+          </div>
+        </a>
+
+        <a class="capability-card" href="communitymanager/">
+          <div>
+            <div class="capability-title">Community Management</div>
+            <div class="capability-desc">Community growth, member engagement, effective management.</div>
+          </div>
+          <div class="capability-meta-row">
+            <span class="capability-pill">People & Ops</span>
+            <span>Open →</span>
+          </div>
+        </a>
+
+        <a class="capability-card" href="other/">
+          <div>
+            <div class="capability-title">Other Work</div>
+            <div class="capability-desc">Prototypes, concepts, experiments.</div>
+          </div>
+          <div class="capability-meta-row">
+            <span class="capability-pill">Experiments</span>
+            <span>Open →</span>
+          </div>
+        </a>
+
+      </section>
+
+      <footer>
+        © 2025 Conicey • <a href="https://conicey.github.io">Return to main site</a>
+      </footer>
+
+    </div>
+  </div>
 
 </body>
 </html>
