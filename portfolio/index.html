@@ -19,30 +19,37 @@
     }
 
     :root {
-      --text-light: #e3e3e3;
-      --text-mid: #9a9a9a;
-      --card-bg: rgba(22,22,22,0.65);
-      --card-border: rgba(255,255,255,0.08);
-      --card-hover-bg: rgba(32,32,32,0.85);
-      --card-hover-border: rgba(255,255,255,0.22);
-      --shadow-soft: 0 12px 32px rgba(0,0,0,0.45);
+      --bg: #252525;
+      --bg-elevated: #2b2b2b;
+      --border-subtle: rgba(255, 255, 255, 0.06);
+      --border-strong: rgba(255, 255, 255, 0.16);
+      --text-main: #f2f2f2;
+      --text-muted: #a4a4a4;
+      --text-soft: #8a8a8a;
+      --accent: #ffffff;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --space-xl: 48px;
+      --space-lg: 32px;
+      --space-md: 20px;
+      --space-sm: 12px;
     }
 
     body {
-      font-family: "Segoe UI", system-ui, sans-serif;
-
-      /* MATCHED BACKGROUND */
-      background-color: #1f1f1f;
-      background-image:
-        radial-gradient(rgba(255,255,255,0.055) 1px, transparent 1px);
-      background-size: 18px 18px;
-
-      color: var(--text-light);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background-color: var(--bg);
+      background-image: radial-gradient(
+        rgba(255, 255, 255, 0.045) 1px,
+        transparent 1px
+      );
+      background-size: 26px 26px; /* dots more separated */
+      color: var(--text-main);
       -webkit-font-smoothing: antialiased;
     }
 
+    /* LAYOUT */
     .shell {
-      padding: 40px 22px 24px;
+      padding: 40px 20px 40px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -50,137 +57,141 @@
 
     .shell-inner {
       width: 100%;
-      max-width: 1120px;
+      max-width: 980px;
     }
 
     /* HERO */
+    .hero {
+      margin-bottom: var(--space-xl);
+    }
+
     .hero-title {
-      font-size: clamp(2.6rem, 4vw + 1rem, 3.6rem);
-      font-weight: 800;
-
-      background: linear-gradient(100deg,
-        #ffffff,
-        #cfcfcf,
-        #a8a8a8
-      );
-      -webkit-background-clip: text;
-      color: transparent;
-
-      margin-bottom: 16px;
-      line-height: 1.05;
-      text-shadow: 0 0 18px rgba(255,255,255,0.08);
+      font-size: clamp(2.3rem, 3.4vw, 3rem);
+      font-weight: 700;
+      letter-spacing: 0.01em;
+      line-height: 1.15;
+      color: var(--text-main);
+      margin-bottom: var(--space-sm);
     }
 
     .hero-body {
-      font-size: 1.05rem;
-      color: var(--text-mid);
+      font-size: 0.98rem;
+      line-height: 1.8;
+      color: var(--text-muted);
       max-width: 40rem;
-      line-height: 1.75;
-      margin-bottom: 40px;
     }
 
-    /* SECTION TITLE */
-    .section-title {
+    /* SECTION LABEL */
+    .section-label {
+      font-size: 0.75rem;
       text-transform: uppercase;
-      font-size: 0.88rem;
-      opacity: 0.55;
       letter-spacing: 0.18em;
-      color: var(--text-mid);
-      margin-bottom: 26px;
+      color: var(--text-soft);
+      margin-bottom: var(--space-md);
     }
 
     /* GRID */
     .capabilities-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 26px;
-      margin-bottom: 60px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--space-md);
+      margin-bottom: var(--space-xl);
     }
 
-    /* MATCHED BUTTON STYLE */
-    .capability-card {
-      display: block;
-      padding: 30px 24px;
-      border-radius: 18px;
-
-      background: var(--card-bg);
-      border: 1px solid var(--card-border);
-      backdrop-filter: blur(14px);
-      box-shadow: inset 0 0 18px rgba(255,255,255,0.03),
-                  inset 0 0 4px rgba(255,255,255,0.05);
-
-      transition: 0.25s ease;
-      text-decoration: none;
-      color: var(--text-light);
-
-      min-height: 180px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-    }
-
-    .capability-card:hover {
-      background: var(--card-hover-bg);
-      border-color: var(--card-hover-border);
-      transform: translateY(-4px);
-      box-shadow: 0 14px 34px rgba(0,0,0,0.65),
-                  inset 0 0 18px rgba(255,255,255,0.05);
-    }
-
-    .capability-title {
-      font-size: 1.32rem;
-      font-weight: 700;
-      margin-bottom: 10px;
-      color: #f0f0f0;
-      text-shadow: 0 0 12px rgba(255,255,255,0.05);
-    }
-
-    .capability-desc {
-      color: var(--text-mid);
-      font-size: 0.92rem;
-      margin-bottom: 16px;
-    }
-
-    .capability-meta-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 0.83rem;
-      color: var(--text-mid);
-    }
-
-    .capability-pill {
-      padding: 5px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(255,255,255,0.03);
-    }
-
-    footer {
-      text-align: center;
-      margin: 40px 0 20px;
-      font-size: 0.82rem;
-      opacity: 0.55;
-      color: var(--text-mid);
-    }
-
-    @media (max-width: 960px) {
+    @media (max-width: 900px) {
       .capabilities-grid {
-        grid-template-columns: repeat(2,1fr);
+        grid-template-columns: repeat(2, minmax(0, 1fr));
       }
     }
 
-    @media (max-width: 680px) {
+    @media (max-width: 640px) {
       .capabilities-grid {
         grid-template-columns: 1fr;
       }
     }
 
+    /* CARD – flat + minimal */
+    .capability-card {
+      display: block;
+      padding: var(--space-md);
+      border-radius: var(--radius-lg);
+      background-color: var(--bg-elevated);
+      border: 1px solid var(--border-subtle);
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.18s ease, background-color 0.18s ease;
+      min-height: 160px;
+
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: var(--space-sm);
+    }
+
+    .capability-card:hover {
+      border-color: var(--border-strong);
+      background-color: #303030;
+    }
+
+    .capability-title {
+      font-size: 1.08rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+      color: var(--text-main);
+    }
+
+    .capability-desc {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    .capability-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      font-size: 0.82rem;
+      color: var(--text-soft);
+      margin-top: 4px;
+    }
+
+    .capability-pill {
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      font-size: 0.78rem;
+      color: var(--text-soft);
+    }
+
+    .capability-arrow {
+      font-size: 0.8rem;
+      color: var(--text-soft);
+    }
+
+    /* FOOTER */
+    footer {
+      margin-top: var(--space-lg);
+      font-size: 0.78rem;
+      color: var(--text-soft);
+      text-align: left;
+      border-top: 1px solid var(--border-subtle);
+      padding-top: var(--space-sm);
+    }
+
+    footer a {
+      color: var(--text-muted);
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 2px;
+    }
+
+    footer a:hover {
+      color: var(--text-main);
+    }
   </style>
 </head>
 
 <body>
-
   <div class="shell">
     <div class="shell-inner">
 
@@ -193,73 +204,85 @@
         </p>
       </section>
 
-      <div class="section-title">PORTFOLIO NAVIGATION</div>
+      <div class="section-label">Portfolio navigation</div>
 
       <section class="capabilities-grid">
 
         <a class="capability-card" href="animation/">
           <div>
             <div class="capability-title">Animation</div>
-            <div class="capability-desc">Character emotion, smooth timing, expressive movement.</div>
+            <div class="capability-desc">
+              Character emotion, smooth timing, expressive movement.
+            </div>
           </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Motion Systems</span>
-            <span>Open →</span>
+            <span class="capability-pill">Motion systems</span>
+            <span class="capability-arrow">Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="design/">
           <div>
             <div class="capability-title">Design</div>
-            <div class="capability-desc">Banners, thumbnails, clean visuals, personalised detail.</div>
+            <div class="capability-desc">
+              Banners, thumbnails, clean visuals, personalised detail.
+            </div>
           </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Visual Identity</span>
-            <span>Open →</span>
+            <span class="capability-pill">Visual identity</span>
+            <span class="capability-arrow">Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="development/">
           <div>
             <div class="capability-title">Development</div>
-            <div class="capability-desc">Bot development, clean scripting, reliable automation.</div>
+            <div class="capability-desc">
+              Bot development, clean scripting, reliable automation.
+            </div>
           </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Code & Systems</span>
-            <span>Open →</span>
+            <span class="capability-pill">Code & systems</span>
+            <span class="capability-arrow">Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="servermanager/">
           <div>
             <div class="capability-title">Server Management</div>
-            <div class="capability-desc">Full server setup, bot systems, optimized structure.</div>
+            <div class="capability-desc">
+              Full server setup, bot systems, optimized structure.
+            </div>
           </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">Infra & Layout</span>
-            <span>Open →</span>
+            <span class="capability-pill">Infra & layout</span>
+            <span class="capability-arrow">Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="communitymanager/">
           <div>
             <div class="capability-title">Community Management</div>
-            <div class="capability-desc">Community growth, member engagement, effective management.</div>
+            <div class="capability-desc">
+              Community growth, member engagement, effective management.
+            </div>
           </div>
           <div class="capability-meta-row">
-            <span class="capability-pill">People & Ops</span>
-            <span>Open →</span>
+            <span class="capability-pill">People & ops</span>
+            <span class="capability-arrow">Open →</span>
           </div>
         </a>
 
         <a class="capability-card" href="other/">
           <div>
             <div class="capability-title">Other Work</div>
-            <div class="capability-desc">Prototypes, concepts, experiments.</div>
+            <div class="capability-desc">
+              Prototypes, concepts, experiments.
+            </div>
           </div>
           <div class="capability-meta-row">
             <span class="capability-pill">Experiments</span>
-            <span>Open →</span>
+            <span class="capability-arrow">Open →</span>
           </div>
         </a>
 
@@ -271,6 +294,5 @@
 
     </div>
   </div>
-
 </body>
 </html>
