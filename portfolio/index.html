@@ -18,7 +18,6 @@
       overflow-x: hidden;
     }
 
-    /* === THEME VARIABLES (Monotone + Futuristic) === */
     :root {
       --monotone-light: #d7d7df;
       --monotone-mid: #8a8a96;
@@ -38,53 +37,17 @@
     body {
       font-family: "Segoe UI", system-ui, sans-serif;
 
-      /* Clean monotone gradient */
-      background: linear-gradient(
-        135deg,
-        #0f0f13,
-        #111117,
-        #0c0c10
-      );
-      background-size: 200% 200%;
-      animation: bgFlow 22s ease-in-out infinite;
+      /* NEW BACKGROUND — matches your image */
+      background-color: #1f1f1f;
+      background-image:
+        radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+      background-size: 18px 18px;
 
       color: var(--monotone-light);
       -webkit-font-smoothing: antialiased;
-
-      /* GRID OVERLAY */
       position: relative;
     }
 
-    /* Faint grid: subtle, futuristic, non-distracting */
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      background:
-        repeating-linear-gradient(
-          to right,
-          rgba(255,255,255,0.035) 0px,
-          rgba(255,255,255,0.02) 1px,
-          transparent 1px,
-          transparent 80px
-        ),
-        repeating-linear-gradient(
-          to bottom,
-          rgba(255,255,255,0.035) 0px,
-          rgba(255,255,255,0.02) 1px,
-          transparent 1px,
-          transparent 80px
-        );
-      pointer-events: none;
-      z-index: 0;
-      opacity: 0.18;
-    }
-
-    @keyframes bgFlow {
-      0% { background-position: 0% 0%; }
-      50% { background-position: 100% 100%; }
-      100% { background-position: 0% 0%; }
-    }
 
     /* FLOATING STATUS BAR */
     .status-bar-wrapper {
@@ -144,18 +107,16 @@
       max-width: 1120px;
     }
 
-    /* HERO SECTION */
+    /* HERO: LEFT ONLY NOW */
     .hero {
       margin-top: 10px;
       display: grid;
-      grid-template-columns: minmax(0,1.6fr) minmax(0,1.1fr);
+      grid-template-columns: 1fr;
       gap: 40px;
-      min-height: 80vh;
-      align-items: center;
+      min-height: 40vh;
       position: relative;
     }
 
-    /* Title: monotone metallic fade */
     .hero-title {
       font-size: clamp(2.8rem, 4vw + 1rem, 3.8rem);
       font-weight: 800;
@@ -177,85 +138,6 @@
       color: var(--monotone-mid);
       max-width: 36rem;
       line-height: 1.7;
-    }
-
-    /* OVERVIEW PANEL */
-    .hero-panel {
-      border-radius: 26px;
-      border: 1px solid var(--monotone-border);
-
-      background: rgba(18,18,22,0.85);
-      padding: 20px 22px 22px;
-
-      backdrop-filter: blur(22px);
-      box-shadow: var(--shadow-soft);
-
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .hero-panel-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .hero-chip {
-      padding: 6px 14px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: rgba(30,30,36,0.85);
-      font-size: 0.78rem;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--monotone-light);
-      white-space: nowrap;
-    }
-
-    .hero-stat-row {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 16px;
-    }
-
-    .hero-stat {
-      padding: 16px 14px;
-      border-radius: 20px;
-
-      /* Monotone inner gradient */
-      background: linear-gradient(145deg,
-        #1a1a22,
-        #22222c
-      );
-
-      border: 1px solid rgba(255,255,255,0.10);
-      box-shadow: 0 18px 30px rgba(0,0,0,0.45);
-    }
-
-    .hero-stat-label {
-      font-size: 0.8rem;
-      color: var(--monotone-mid);
-    }
-
-    .hero-stat-value {
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin: 4px 0;
-      color: var(--monotone-light);
-    }
-
-    .hero-stat-body {
-      font-size: 0.84rem;
-      color: var(--monotone-mid);
-      line-height: 1.4;
-    }
-
-    .hero-scope {
-      font-size: 0.84rem;
-      color: var(--monotone-mid);
-      margin-top: 4px;
-      line-height: 1.5;
     }
 
     /* SECTION HEADER */
@@ -346,10 +228,6 @@
     }
 
     @media (max-width: 960px) {
-      .hero {
-        grid-template-columns: 1fr;
-      }
-      .hero-panel { order: -1; }
       .capabilities-grid {
         grid-template-columns: repeat(2,1fr);
       }
@@ -366,7 +244,6 @@
 
 <body>
 
-  <!-- FLOATING STATUS BAR -->
   <div class="status-bar-wrapper">
     <div class="status-bar">
       <div class="status-left">
@@ -380,10 +257,7 @@
   <div class="shell">
     <div class="shell-inner">
 
-      <!-- HERO -->
       <section class="hero">
-
-        <!-- LEFT -->
         <div>
           <h1 class="hero-title">Building the future while everyone else catches up.</h1>
           <p class="hero-body">
@@ -392,54 +266,12 @@
             that doesn’t fit in a neat box yet.
           </p>
         </div>
-
-        <!-- RIGHT Overview Panel -->
-        <aside class="hero-panel">
-          <div class="hero-panel-header">
-            <div class="hero-chip">Portfolio Overview</div>
-            <div class="hero-chip">Conicey • V2025</div>
-          </div>
-
-          <div class="hero-stat-row">
-            <div class="hero-stat">
-              <div class="hero-stat-label">Disciplines</div>
-              <div class="hero-stat-value">6 core</div>
-              <div class="hero-stat-body">
-                Animation · Design · Dev · Community & more
-              </div>
-            </div>
-
-            <div class="hero-stat">
-              <div class="hero-stat-label">Focus</div>
-              <div class="hero-stat-value">Next-gen</div>
-              <div class="hero-stat-body">
-                Systems that look and run premium.
-              </div>
-            </div>
-
-            <div class="hero-stat">
-              <div class="hero-stat-label">Style</div>
-              <div class="hero-stat-value">Sharp</div>
-              <div class="hero-stat-body">
-                Clean, corporate, confident. No clutter.
-              </div>
-            </div>
-          </div>
-
-          <p class="hero-scope">
-            Each category below is a dedicated environment with its own work examples, experiments,
-            and things I shipped because “good enough” is not an option.
-          </p>
-        </aside>
-
       </section>
 
-      <!-- SECTION HEADER -->
       <div class="section-header">
         <div class="section-title">PORTFOLIO NAVIGATION</div>
       </div>
 
-      <!-- GRID -->
       <section class="capabilities-grid">
 
         <a class="capability-card" href="animation/">
@@ -489,7 +321,7 @@
         <a class="capability-card" href="communitymanager/">
           <div>
             <div class="capability-title">Community Management</div>
-            <div class="capability-desc">Community growth, member engagement, effective management.</div>
+            <div class="capability-desc">Community growth, member engagement, management.</div>
           </div>
           <div class="capability-meta-row">
             <span class="capability-pill">People & Ops</span>
