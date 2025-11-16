@@ -19,84 +19,30 @@
     }
 
     :root {
-      --monotone-light: #d7d7df;
-      --monotone-mid: #8a8a96;
-      --monotone-dark: #24242b;
-      --monotone-darker: #16161b;
-      --monotone-border: rgba(180,180,200,0.14);
-
-      --card-bg: rgba(22, 22, 28, 0.70);
-      --card-hover: rgba(28, 28, 34, 0.92);
-
-      --radius-lg: 18px;
-      --radius-xl: 24px;
-      --shadow-soft: 0 18px 40px rgba(0,0,0,0.6);
-      --blur-glass: 18px;
+      --text-light: #e3e3e3;
+      --text-mid: #9a9a9a;
+      --card-bg: rgba(22,22,22,0.65);
+      --card-border: rgba(255,255,255,0.08);
+      --card-hover-bg: rgba(32,32,32,0.85);
+      --card-hover-border: rgba(255,255,255,0.22);
+      --shadow-soft: 0 12px 32px rgba(0,0,0,0.45);
     }
 
     body {
       font-family: "Segoe UI", system-ui, sans-serif;
 
-      /* NEW BACKGROUND — matches your image */
+      /* MATCHED BACKGROUND */
       background-color: #1f1f1f;
       background-image:
-        radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px);
+        radial-gradient(rgba(255,255,255,0.055) 1px, transparent 1px);
       background-size: 18px 18px;
 
-      color: var(--monotone-light);
+      color: var(--text-light);
       -webkit-font-smoothing: antialiased;
-      position: relative;
     }
 
-
-    /* FLOATING STATUS BAR */
-    .status-bar-wrapper {
-      width: 100%;
-      display: flex;
-      justify-content: center;
-      margin-top: 10px;
-      position: relative;
-      z-index: 10;
-    }
-
-    .status-bar {
-      padding: 12px 22px;
-      border-radius: 18px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.12);
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow-soft);
-
-      color: var(--monotone-light);
-      font-size: 0.78rem;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      width: min(1120px, 92%);
-    }
-
-    .status-left {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      color: var(--monotone-mid);
-    }
-
-    .status-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--monotone-mid);
-      box-shadow: 0 0 6px var(--monotone-mid);
-      opacity: 0.7;
-    }
-
-    /* SHELL */
     .shell {
-      position: relative;
-      z-index: 1;
-      padding: 10px 22px 24px;
+      padding: 40px 22px 24px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -107,51 +53,40 @@
       max-width: 1120px;
     }
 
-    /* HERO: LEFT ONLY NOW */
-    .hero {
-      margin-top: 10px;
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 40px;
-      min-height: 40vh;
-      position: relative;
-    }
-
+    /* HERO */
     .hero-title {
-      font-size: clamp(2.8rem, 4vw + 1rem, 3.8rem);
+      font-size: clamp(2.6rem, 4vw + 1rem, 3.6rem);
       font-weight: 800;
 
       background: linear-gradient(100deg,
         #ffffff,
-        #c7c7cf,
-        #8a8a96
+        #cfcfcf,
+        #a8a8a8
       );
       -webkit-background-clip: text;
       color: transparent;
 
       margin-bottom: 16px;
       line-height: 1.05;
+      text-shadow: 0 0 18px rgba(255,255,255,0.08);
     }
 
     .hero-body {
       font-size: 1.05rem;
-      color: var(--monotone-mid);
-      max-width: 36rem;
-      line-height: 1.7;
+      color: var(--text-mid);
+      max-width: 40rem;
+      line-height: 1.75;
+      margin-bottom: 40px;
     }
 
-    /* SECTION HEADER */
-    .section-header {
-      margin-top: 10px;
-      margin-bottom: 22px;
-    }
-
+    /* SECTION TITLE */
     .section-title {
       text-transform: uppercase;
-      font-size: 0.92rem;
+      font-size: 0.88rem;
       opacity: 0.55;
       letter-spacing: 0.18em;
-      color: var(--monotone-mid);
+      color: var(--text-mid);
+      margin-bottom: 26px;
     }
 
     /* GRID */
@@ -159,44 +94,50 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 26px;
-      margin-bottom: 40px;
+      margin-bottom: 60px;
     }
 
+    /* MATCHED BUTTON STYLE */
     .capability-card {
       display: block;
-      padding: 26px 22px;
-      border-radius: 22px;
+      padding: 30px 24px;
+      border-radius: 18px;
 
       background: var(--card-bg);
-      border: 1px solid var(--monotone-border);
-      backdrop-filter: blur(22px);
+      border: 1px solid var(--card-border);
+      backdrop-filter: blur(14px);
+      box-shadow: inset 0 0 18px rgba(255,255,255,0.03),
+                  inset 0 0 4px rgba(255,255,255,0.05);
 
       transition: 0.25s ease;
       text-decoration: none;
-      color: var(--monotone-light);
+      color: var(--text-light);
 
-      min-height: 190px;
+      min-height: 180px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
     }
 
     .capability-card:hover {
-      border-color: rgba(255,255,255,0.35);
+      background: var(--card-hover-bg);
+      border-color: var(--card-hover-border);
       transform: translateY(-4px);
-      background: var(--card-hover);
-      box-shadow: 0 22px 42px rgba(0,0,0,0.7);
+      box-shadow: 0 14px 34px rgba(0,0,0,0.65),
+                  inset 0 0 18px rgba(255,255,255,0.05);
     }
 
     .capability-title {
-      font-size: 1.35rem;
+      font-size: 1.32rem;
       font-weight: 700;
       margin-bottom: 10px;
+      color: #f0f0f0;
+      text-shadow: 0 0 12px rgba(255,255,255,0.05);
     }
 
     .capability-desc {
-      color: var(--monotone-mid);
-      font-size: 0.9rem;
+      color: var(--text-mid);
+      font-size: 0.92rem;
       margin-bottom: 16px;
     }
 
@@ -205,13 +146,14 @@
       justify-content: space-between;
       align-items: center;
       font-size: 0.83rem;
-      color: var(--monotone-mid);
+      color: var(--text-mid);
     }
 
     .capability-pill {
       padding: 5px 10px;
       border-radius: 999px;
       border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.03);
     }
 
     footer {
@@ -219,12 +161,7 @@
       margin: 40px 0 20px;
       font-size: 0.82rem;
       opacity: 0.55;
-      color: var(--monotone-mid);
-    }
-
-    footer a {
-      color: var(--monotone-light);
-      text-decoration: underline;
+      color: var(--text-mid);
     }
 
     @media (max-width: 960px) {
@@ -244,33 +181,19 @@
 
 <body>
 
-  <div class="status-bar-wrapper">
-    <div class="status-bar">
-      <div class="status-left">
-        <div class="status-dot"></div>
-        Portfolio · conicey · next-gen multidisciplinary
-      </div>
-      <div class="status-right">luv conicey</div>
-    </div>
-  </div>
-
   <div class="shell">
     <div class="shell-inner">
 
       <section class="hero">
-        <div>
-          <h1 class="hero-title">Building the future while everyone else catches up.</h1>
-          <p class="hero-body">
-            This is the central hub for my work. Every tile below leads into a focused portfolio:
-            animation, design, development, server systems, community management, and everything
-            that doesn’t fit in a neat box yet.
-          </p>
-        </div>
+        <h1 class="hero-title">Building the future while everyone else catches up.</h1>
+        <p class="hero-body">
+          This is the central hub for my work. Every tile below leads into a focused portfolio:
+          animation, design, development, server systems, community management, and everything
+          that doesn’t fit in a neat box yet.
+        </p>
       </section>
 
-      <div class="section-header">
-        <div class="section-title">PORTFOLIO NAVIGATION</div>
-      </div>
+      <div class="section-title">PORTFOLIO NAVIGATION</div>
 
       <section class="capabilities-grid">
 
@@ -321,7 +244,7 @@
         <a class="capability-card" href="communitymanager/">
           <div>
             <div class="capability-title">Community Management</div>
-            <div class="capability-desc">Community growth, member engagement, management.</div>
+            <div class="capability-desc">Community growth, member engagement, effective management.</div>
           </div>
           <div class="capability-meta-row">
             <span class="capability-pill">People & Ops</span>
