@@ -9,23 +9,23 @@
   /* RESET */
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
-  /* ========= MATCH MAIN SITE BACKGROUND EXACTLY ========= */
+  /* ========= MATCH MAIN SITE LIGHT BACKGROUND EXACTLY ========= */
   body {
     margin: 0;
     padding: 40px 20px;
 
-    --bg: #252525;
+    --bg: #e5e5e5; /* LIGHT grey */
     background-color: var(--bg);
 
-    /* SAME DOT PATTERN AS MAIN SITE */
+    /* SAME DOT PATTERN AS NEW MAIN SITE */
     background-image: radial-gradient(
-      rgba(255,255,255,0.045) 1px,
+      rgba(0, 0, 0, 0.12) 1px,
       transparent 1px
     );
     background-size: 26px 26px;
 
     font-family: "Segoe UI", "Courier New", monospace;
-    color: #e0e0e0;
+    color: #111;
     line-height: 1.6;
   }
 
@@ -38,34 +38,34 @@
   header h1 {
     font-size: 2.7rem;
     font-weight: 800;
-    color: #ffffff;
+    color: #000;
     letter-spacing: -0.5px;
-    text-shadow: 0 0 12px rgba(0,0,0,0.7);
+    text-shadow: none;
   }
 
   header p {
     font-size: 1rem;
-    color: #b5b5b5;
+    color: #555;
     margin-top: 6px;
   }
 
-  /* INSTRUCTION BOX MATCHES DARK CARD AESTHETIC */
+  /* INSTRUCTION BOX — converted to LIGHT MODE */
   .instruction-box {
-    background: #1a1a1a;
-    border: 2px solid #444;
+    background: #fafafa;
+    border: 2px solid #ccc;
     border-radius: 10px;
     padding: 25px;
     height: 480px;
     overflow-y: auto;
-    color: #e4e4e4;
+    color: #222;
 
     box-shadow:
-      0 14px 40px rgba(0,0,0,0.75),
-      inset 0 0 0 1px rgba(255,255,255,0.03);
+      0 14px 40px rgba(0,0,0,0.15),
+      inset 0 0 0 1px rgba(255,255,255,0.4);
   }
 
   .instruction-box a {
-    color: #76b2ff;
+    color: #0066ff;
     text-decoration: none;
     font-weight: 600;
   }
@@ -75,20 +75,20 @@
   }
 
   ol { margin-left: 1.2em; }
-  li { margin-bottom: 14px; }
+  li { margin-bottom: 14px; color: #222; }
 
   ul {
     margin-top: 6px;
     margin-left: 1.5em;
     list-style-type: disc;
-    color: #cfcfd4;
+    color: #444;
   }
 
   /* NOTE STYLING */
   .note {
-    background: rgba(255,207,120,0.1);
-    border: 1px solid rgba(255,207,120,0.45);
-    color: #ffdf7f;
+    background: rgba(255,207,120,0.26);
+    border: 1px solid rgba(255,207,120,0.7);
+    color: #6b4b00;
     padding: 10px 14px;
     margin-top: 15px;
     border-radius: 8px;
@@ -99,7 +99,7 @@
     text-align: center;
     margin-top: 50px;
     font-size: 0.85rem;
-    color: #888;
+    color: #555;
   }
 
   .replit-button img {
@@ -152,7 +152,7 @@
         </ul>
       </li>
 
-      <li>Go to Discord’s application page → <b>General Information</b> → copy your application ID.</li>
+      <li>Go back to Discord’s application page → <b>General Information</b> → copy your application ID.</li>
 
       <li>Create a new Discord server (you can delete it later).</li>
 
