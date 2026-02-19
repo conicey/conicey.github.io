@@ -10,15 +10,9 @@
 
   body {
     padding: 40px 20px;
-
-    /* ——— SEBI STYLE FROM MAIN SITE ——— */
     --bg: #252525;
     background-color: var(--bg);
-
-    background-image: radial-gradient(
-      rgba(255,255,255,0.045) 1px,
-      transparent 1px
-    );
+    background-image: radial-gradient(rgba(255,255,255,0.045) 1px, transparent 1px);
     background-size: 26px 26px;
 
     font-family: "Segoe UI", sans-serif;
@@ -30,65 +24,111 @@
     text-align: center;
     font-size: 2.8rem;
     font-weight: 800;
-    letter-spacing: -1px;
     color: #ffffff;
+    letter-spacing: -1px;
     text-shadow: 0 0 12px rgba(0,0,0,0.7);
     margin-bottom: 10px;
   }
 
   p.sub {
     text-align: center;
-    color: #b5b5b5;
-    margin-bottom: 30px;
     font-size: 1.05rem;
+    color: #b5b5b5;
+    margin-bottom: 35px;
   }
 
-  .content {
+  .wrapper {
     max-width: 900px;
     margin: 0 auto;
-    line-height: 1.7;
-    color: #d8d8d8;
-    font-size: 1.05rem;
-    background: rgba(0,0,0,0.25);
-    padding: 25px 30px;
-    border-radius: 12px;
-    border: 1px solid rgba(255,255,255,0.05);
-    box-shadow: 0 0 25px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .box {
+    background: rgba(0,0,0,0.28);
+    padding: 22px 24px;
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,0.06);
+    box-shadow: 0 0 22px rgba(0,0,0,0.35);
+    line-height: 1.6;
+    font-size: 1.02rem;
+  }
+
+  .box h2 {
+    font-size: 1.35rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    color: #ffffff;
+  }
+
+  ul {
+    margin-left: 18px;
+  }
+
+  li {
+    margin-bottom: 7px;
   }
 
   .footer {
     text-align: center;
     margin-top: 50px;
-    color: #777;
     font-size: 0.85rem;
+    color: #777;
   }
 </style>
 </head>
 <body>
 
 <h1>Animation</h1>
-<p class="sub">Character animation • Smooth timing • Motion tests • Expressive loops</p>
+<p class="sub">Character Animation • Motion Tests • Expressive Loops • Timing & Weight</p>
 
-<div class="content">
-  <p>
-    I focus on clean, expressive character movement — from Roblox animation to motion tests, FX,
-    and polished loops. My work aims to create animation with weight, emotion, and clarity, using
-    smooth, readable timing. I specialize in bringing characters to life through intentional movement:
-    reactions, turns, idles, and subtle emotional cues.
-  </p>
+<div class="wrapper">
 
-  <p style="margin-top:15px;">
-    I create animation cycles, short-form character moments, expressive poses, and seamless
-    transitions. My style leans toward <b>emotion-driven animation</b>, where personality comes through
-    in the details — speed variation, anticipation, follow-through, squash and stretch, and
-    controlled exaggeration. Every piece I create is designed to feel clean, satisfying,
-    and loop-friendly.
-  </p>
+  <!-- EXPERIENCE -->
+  <div class="box">
+    <h2>Experience</h2>
+    <p>
+      Self-taught animator with a strong focus on expressive character motion, timing, and polish. 
+      I create animation that prioritises readability, personality, and impact rather than stiff or 
+      generic movement. My work focuses on smooth transitions, believable weight, and clear emotional 
+      communication through motion.
+    </p>
 
-  <p style="margin-top:15px;">
-    This page serves as my dedicated space for showcasing animation clips, tests, experiments,
-    and final reels — all presented within my refined Sebi-inspired site aesthetic.
-  </p>
+    <p style="margin-top:12px;"><b>Certifications & Achievements</b></p>
+    <ul>
+      <li>Completed independent animation training through structured motion studies and frame-by-frame practice.</li>
+      <li>Winner of multiple small animation challenge events and community motion contests.</li>
+      <li>Recognised by peers for expressive Roblox animation loops and character timing tests.</li>
+      <li>Created animation clips used in live projects and community showcases.</li>
+      <li>Built a personal animation workflow pipeline for rapid iteration and clean exports.</li>
+    </ul>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="box">
+    <h2>Tech Stack</h2>
+    <ul>
+      <li><b>Software:</b> Roblox Studio Animation Editor, Blender (rig testing), Adobe After Effects (post)</li>
+      <li><b>Techniques:</b> Keyframe animation, easing curves, anticipation & follow-through, squash & stretch</li>
+      <li><b>Workflow:</b> Loop-friendly motion design, modular animation clips, rig-based character systems</li>
+      <li><b>Formats:</b> Game-ready loops, short-form motion clips, test reels, experimental motion studies</li>
+      <li><b>Tools:</b> Timeline editors, curve editors, frame-by-frame refinement, preview pipelines</li>
+    </ul>
+  </div>
+
+  <!-- PROJECTS -->
+  <div class="box">
+    <h2>Projects</h2>
+    <ul>
+      <li>Expressive character idle, walk, and reaction animation loops.</li>
+      <li>Emotion-driven motion tests focused on timing and personality.</li>
+      <li>Short-form animation clips for showcase and portfolio reels.</li>
+      <li>Experimental motion studies testing weight, momentum, and exaggeration.</li>
+      <li>Custom animation sets built for game environments and character systems.</li>
+    </ul>
+  </div>
+
 </div>
 
 <div class="footer">
