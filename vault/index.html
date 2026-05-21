@@ -1,1232 +1,333 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VAULT — Secure Archive</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --bg: #090909;
-    --bg2: #0f0f0f;
-    --bg3: #141414;
-    --bg4: #1a1a1a;
-    --border: rgba(255,255,255,0.06);
-    --border2: rgba(255,255,255,0.12);
-    --text: #e8e8e8;
-    --text2: #888;
-    --text3: #555;
-    --accent: #c8ff57;
-    --accent2: rgba(200,255,87,0.08);
-    --accent3: rgba(200,255,87,0.15);
-    --red: #ff4444;
-    --amber: #ffaa00;
-    --blue: #4488ff;
-    --mono: 'JetBrains Mono', monospace;
-    --sans: 'Space Grotesk', sans-serif;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html, body { width: 100%; height: 100%; background: var(--bg); color: var(--text); font-family: var(--sans); overflow: hidden; }
-
-  /* ── SCREENS ── */
-  .screen { position: absolute; inset: 0; display: flex; transition: opacity 0.4s, transform 0.4s; }
-  .screen.hidden { opacity: 0; pointer-events: none; transform: scale(0.98); }
-
-  /* ── LOGIN SCREEN ── */
-  #login-screen {
-    align-items: center;
-    justify-content: center;
-    background: var(--bg);
-  }
-  .login-bg {
-    position: absolute; inset: 0; overflow: hidden; pointer-events: none;
-  }
-  .login-bg::before {
-    content: '';
-    position: absolute;
-    width: 600px; height: 600px;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(200,255,87,0.03) 0%, transparent 70%);
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    animation: pulse 4s ease-in-out infinite;
-  }
-  @keyframes pulse { 0%,100%{transform:translate(-50%,-50%) scale(1);opacity:0.5} 50%{transform:translate(-50%,-50%) scale(1.2);opacity:1} }
-
-  .grid-lines {
-    position: absolute; inset: 0;
-    background-image:
-      linear-gradient(rgba(255,255,255,0.015) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.015) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-
-  .login-box {
-    position: relative;
-    width: 420px;
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    padding: 48px 40px 40px;
-    border-radius: 2px;
-    animation: fadeUp 0.6s ease both;
-  }
-  @keyframes fadeUp { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
-
-  .vault-logo {
-    display: flex; align-items: center; gap: 10px;
-    margin-bottom: 36px;
-  }
-  .vault-icon {
-    width: 32px; height: 32px;
-    border: 1.5px solid var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 2px;
-  }
-  .vault-icon svg { width: 16px; height: 16px; stroke: var(--accent); fill: none; stroke-width: 1.5; }
-  .vault-name {
-    font-family: var(--mono);
-    font-size: 13px;
-    letter-spacing: 0.18em;
-    color: var(--accent);
-    font-weight: 500;
-    text-transform: uppercase;
-  }
-
-  .login-title {
-    font-size: 22px;
-    font-weight: 500;
-    color: var(--text);
-    letter-spacing: -0.02em;
-    margin-bottom: 6px;
-  }
-  .login-sub {
-    font-size: 13px;
-    color: var(--text3);
-    font-family: var(--mono);
-    margin-bottom: 32px;
-  }
-
-  /* Steps */
-  .step { display: none; }
-  .step.active { display: block; animation: fadeUp 0.3s ease; }
-
-  .step-label {
-    font-family: var(--mono);
-    font-size: 10px;
-    letter-spacing: 0.15em;
-    color: var(--text3);
-    text-transform: uppercase;
-    margin-bottom: 16px;
-  }
-
-  .btn-primary {
-    width: 100%;
-    background: var(--accent);
-    color: #0a0f00;
-    border: none;
-    padding: 13px 20px;
-    font-family: var(--mono);
-    font-size: 12px;
-    font-weight: 600;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: opacity 0.15s, transform 0.1s;
-  }
-  .btn-primary:hover { opacity: 0.9; }
-  .btn-primary:active { transform: scale(0.99); }
-  .btn-primary:disabled { opacity: 0.35; cursor: not-allowed; }
-
-  .btn-ghost {
-    background: transparent;
-    color: var(--text2);
-    border: 1px solid var(--border2);
-    padding: 11px 20px;
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.1em;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: border-color 0.15s, color 0.15s;
-  }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-  .info-box {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    border-left: 2px solid var(--accent);
-    padding: 12px 14px;
-    border-radius: 0 2px 2px 0;
-    margin-bottom: 20px;
-  }
-  .info-box p {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text2);
-    line-height: 1.6;
-  }
-  .info-box .token-example {
-    font-size: 12px;
-    color: var(--accent);
-    margin-top: 8px;
-    letter-spacing: 0.05em;
-  }
-
-  .paste-field {
-    width: 100%;
-    background: var(--bg3);
-    border: 1px solid var(--border2);
-    border-radius: 2px;
-    padding: 14px 16px;
-    font-family: var(--mono);
-    font-size: 12px;
-    color: var(--accent);
-    letter-spacing: 0.08em;
-    outline: none;
-    margin-bottom: 12px;
-    transition: border-color 0.2s;
-    text-align: center;
-  }
-  .paste-field:focus { border-color: var(--accent); }
-  .paste-field::placeholder { color: var(--text3); letter-spacing: 0.05em; }
-
-  .status-row {
-    display: flex; align-items: center; gap: 8px;
-    margin-bottom: 20px;
-  }
-  .status-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--amber);
-    animation: blink 1.5s ease infinite;
-  }
-  .status-dot.ready { background: var(--accent); animation: none; }
-  .status-dot.error { background: var(--red); animation: none; }
-  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
-  .status-text { font-family: var(--mono); font-size: 11px; color: var(--text2); }
-
-  .countdown {
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--text3);
-    text-align: right;
-    margin-bottom: 16px;
-  }
-  .countdown span { color: var(--accent); }
-
-  .back-btn {
-    background: none; border: none; color: var(--text3);
-    font-family: var(--mono); font-size: 11px; cursor: pointer;
-    display: flex; align-items: center; gap: 6px;
-    margin-top: 16px; padding: 0; letter-spacing: 0.05em;
-    transition: color 0.15s;
-  }
-  .back-btn:hover { color: var(--text); }
-
-  .security-strip {
-    display: flex; align-items: center; gap: 8px;
-    margin-top: 28px;
-    padding-top: 16px;
-    border-top: 1px solid var(--border);
-  }
-  .security-strip span { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.1em; }
-
-  /* ── VAULT SCREEN ── */
-  #vault-screen {
-    flex-direction: column;
-    background: var(--bg);
-  }
-
-  /* Top bar */
-  .topbar {
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 0 16px 0 0;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg2);
-    flex-shrink: 0;
-  }
-  .topbar-left {
-    display: flex; align-items: center; height: 100%;
-  }
-  .topbar-logo {
-    display: flex; align-items: center; gap: 8px;
-    padding: 0 16px;
-    height: 100%;
-    border-right: 1px solid var(--border);
-    text-decoration: none;
-  }
-  .topbar-logo .tl-icon {
-    width: 20px; height: 20px;
-    border: 1px solid var(--accent);
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 1px;
-  }
-  .topbar-logo .tl-icon svg { width: 10px; height: 10px; stroke: var(--accent); fill: none; stroke-width: 2; }
-  .topbar-logo span {
-    font-family: var(--mono); font-size: 11px;
-    letter-spacing: 0.2em; color: var(--accent); font-weight: 500; text-transform: uppercase;
-  }
-
-  .breadcrumb {
-    display: flex; align-items: center; gap: 4px;
-    padding: 0 16px;
-    font-family: var(--mono); font-size: 11px; color: var(--text3);
-  }
-  .breadcrumb .crumb { cursor: pointer; transition: color 0.15s; }
-  .breadcrumb .crumb:hover { color: var(--text); }
-  .breadcrumb .crumb.active { color: var(--text); }
-  .breadcrumb .sep { color: var(--text3); }
-
-  .topbar-right {
-    display: flex; align-items: center; gap: 4px;
-  }
-  .tb-btn {
-    background: none; border: 1px solid transparent; color: var(--text2);
-    padding: 5px 10px; border-radius: 2px; cursor: pointer;
-    font-family: var(--mono); font-size: 10px; letter-spacing: 0.08em;
-    display: flex; align-items: center; gap: 5px;
-    transition: border-color 0.15s, color 0.15s, background 0.15s;
-  }
-  .tb-btn:hover { border-color: var(--border2); color: var(--text); background: var(--bg3); }
-  .tb-btn svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5; }
-  .tb-btn.danger:hover { border-color: rgba(255,68,68,0.3); color: var(--red); }
-  .tb-btn.accent-btn {
-    background: var(--accent2); border-color: rgba(200,255,87,0.2);
-    color: var(--accent);
-  }
-  .tb-btn.accent-btn:hover { background: var(--accent3); border-color: rgba(200,255,87,0.4); }
-
-  .tb-divider { width: 1px; height: 20px; background: var(--border); margin: 0 4px; }
-
-  /* Main layout */
-  .vault-body {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-  }
-
-  /* Sidebar */
-  .sidebar {
-    width: 220px;
-    flex-shrink: 0;
-    border-right: 1px solid var(--border);
-    background: var(--bg2);
-    display: flex; flex-direction: column;
-    overflow: hidden;
-  }
-  .sidebar-section-label {
-    font-family: var(--mono); font-size: 9px;
-    letter-spacing: 0.18em; color: var(--text3);
-    text-transform: uppercase;
-    padding: 14px 14px 6px;
-  }
-  .folder-tree {
-    flex: 1; overflow-y: auto; padding: 0 0 8px;
-  }
-  .folder-tree::-webkit-scrollbar { width: 2px; }
-  .folder-tree::-webkit-scrollbar-track { background: transparent; }
-  .folder-tree::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 1px; }
-
-  .tree-item {
-    display: flex; align-items: center; gap: 6px;
-    padding: 5px 14px 5px;
-    cursor: pointer; font-size: 12.5px; color: var(--text2);
-    transition: background 0.1s, color 0.1s;
-    user-select: none;
-    position: relative;
-  }
-  .tree-item:hover { background: var(--bg3); color: var(--text); }
-  .tree-item.active { background: var(--accent2); color: var(--accent); }
-  .tree-item.active::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-    width: 2px; background: var(--accent);
-  }
-  .tree-item svg { width: 13px; height: 13px; stroke: currentColor; fill: none; stroke-width: 1.5; flex-shrink: 0; }
-  .tree-item.indent1 { padding-left: 28px; }
-  .tree-item.indent2 { padding-left: 42px; }
-  .tree-item .count {
-    margin-left: auto;
-    font-family: var(--mono); font-size: 9px;
-    color: var(--text3); background: var(--bg3);
-    padding: 1px 5px; border-radius: 1px;
-  }
-
-  .sidebar-footer {
-    padding: 12px 14px;
-    border-top: 1px solid var(--border);
-  }
-  .storage-bar {
-    width: 100%; height: 2px; background: var(--bg4); border-radius: 1px; margin: 6px 0;
-  }
-  .storage-fill {
-    height: 100%; width: 34%; background: var(--accent); border-radius: 1px;
-  }
-  .storage-label { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: 0.08em; }
-
-  /* Main panel */
-  .main-panel {
-    flex: 1; overflow: hidden;
-    display: flex; flex-direction: column;
-    background: var(--bg);
-  }
-
-  /* Action bar */
-  .action-bar {
-    display: flex; align-items: center; gap: 8px;
-    padding: 10px 16px;
-    border-bottom: 1px solid var(--border);
-    background: var(--bg2);
-    flex-shrink: 0;
-  }
-  .action-btn {
-    display: flex; align-items: center; gap: 5px;
-    background: var(--bg3); border: 1px solid var(--border);
-    color: var(--text2); padding: 5px 10px; border-radius: 2px;
-    cursor: pointer; font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    transition: all 0.15s; white-space: nowrap;
-  }
-  .action-btn:hover { border-color: var(--border2); color: var(--text); background: var(--bg4); }
-  .action-btn.primary-action {
-    background: var(--accent2); border-color: rgba(200,255,87,0.25);
-    color: var(--accent);
-  }
-  .action-btn.primary-action:hover { background: var(--accent3); border-color: rgba(200,255,87,0.5); }
-  .action-btn svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.5; }
-
-  .search-input {
-    margin-left: auto;
-    background: var(--bg3); border: 1px solid var(--border);
-    color: var(--text); padding: 5px 10px 5px 30px;
-    border-radius: 2px; font-family: var(--mono); font-size: 11px;
-    outline: none; width: 180px; transition: border-color 0.15s, width 0.2s;
-    position: relative;
-  }
-  .search-input:focus { border-color: var(--accent); width: 240px; }
-  .search-wrap { position: relative; }
-  .search-wrap svg {
-    position: absolute; left: 8px; top: 50%; transform: translateY(-50%);
-    width: 12px; height: 12px; stroke: var(--text3); fill: none; stroke-width: 1.5; pointer-events: none;
-  }
-
-  /* File grid */
-  .file-area {
-    flex: 1; overflow-y: auto;
-    padding: 16px;
-  }
-  .file-area::-webkit-scrollbar { width: 4px; }
-  .file-area::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
-
-  .section-header {
-    font-family: var(--mono); font-size: 9px;
-    letter-spacing: 0.18em; color: var(--text3);
-    text-transform: uppercase;
-    padding: 0 0 8px;
-    margin-bottom: 2px;
-  }
-
-  .file-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-    gap: 8px;
-    margin-bottom: 24px;
-  }
-
-  .file-card {
-    background: var(--bg2);
-    border: 1px solid var(--border);
-    border-radius: 2px;
-    padding: 14px 12px;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-    position: relative;
-    overflow: hidden;
-    user-select: none;
-  }
-  .file-card:hover { border-color: var(--border2); background: var(--bg3); }
-  .file-card.selected { border-color: rgba(200,255,87,0.4); background: var(--accent2); }
-  .file-card::after {
-    content: ''; position: absolute; inset: 0;
-    background: var(--accent2); opacity: 0;
-    transition: opacity 0.15s;
-  }
-  .file-card:hover::after { opacity: 1; }
-
-  .fc-icon {
-    width: 32px; height: 32px; margin-bottom: 10px;
-    display: flex; align-items: center; justify-content: center;
-    border-radius: 2px;
-  }
-  .fc-icon.folder { background: rgba(255,170,0,0.08); }
-  .fc-icon.note { background: rgba(68,136,255,0.08); }
-  .fc-icon.code { background: rgba(200,255,87,0.08); }
-  .fc-icon.image { background: rgba(255,68,68,0.08); }
-  .fc-icon.file { background: rgba(136,136,136,0.08); }
-  .fc-icon svg { width: 18px; height: 18px; stroke-width: 1.3; fill: none; }
-  .fc-icon.folder svg { stroke: var(--amber); }
-  .fc-icon.note svg { stroke: var(--blue); }
-  .fc-icon.code svg { stroke: var(--accent); }
-  .fc-icon.image svg { stroke: var(--red); }
-  .fc-icon.file svg { stroke: var(--text3); }
-
-  .fc-name {
-    font-size: 12px; font-weight: 500;
-    color: var(--text); margin-bottom: 3px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .fc-meta {
-    font-family: var(--mono); font-size: 9px;
-    color: var(--text3); letter-spacing: 0.05em;
-  }
-  .fc-type-badge {
-    position: absolute; top: 8px; right: 8px;
-    font-family: var(--mono); font-size: 8px;
-    letter-spacing: 0.1em; text-transform: uppercase;
-    padding: 2px 5px; border-radius: 1px;
-    background: var(--bg4); color: var(--text3);
-  }
-
-  /* Detail panel */
-  .detail-panel {
-    width: 260px; flex-shrink: 0;
-    border-left: 1px solid var(--border);
-    background: var(--bg2);
-    display: flex; flex-direction: column;
-    overflow: hidden;
-  }
-  .detail-header {
-    padding: 14px 14px 10px;
-    border-bottom: 1px solid var(--border);
-  }
-  .detail-title { font-size: 12px; font-weight: 500; color: var(--text); margin-bottom: 2px; }
-  .detail-type { font-family: var(--mono); font-size: 9px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; }
-
-  .detail-preview {
-    margin: 14px; flex-shrink: 0;
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 2px; height: 140px;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .detail-preview svg { width: 40px; height: 40px; stroke: var(--text3); fill: none; stroke-width: 1; }
-
-  .detail-meta {
-    padding: 0 14px;
-  }
-  .meta-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 7px 0;
-    border-bottom: 1px solid var(--border);
-  }
-  .meta-row:last-child { border-bottom: none; }
-  .meta-key { font-family: var(--mono); font-size: 10px; color: var(--text3); letter-spacing: 0.06em; }
-  .meta-val { font-family: var(--mono); font-size: 10px; color: var(--text2); text-align: right; }
-
-  .detail-actions {
-    padding: 12px 14px;
-    border-top: 1px solid var(--border);
-    margin-top: auto;
-    display: flex; flex-direction: column; gap: 6px;
-  }
-  .detail-action-btn {
-    width: 100%; background: var(--bg3); border: 1px solid var(--border);
-    color: var(--text2); padding: 7px 10px; border-radius: 2px;
-    cursor: pointer; font-family: var(--mono); font-size: 10px;
-    letter-spacing: 0.08em; text-transform: uppercase;
-    display: flex; align-items: center; gap: 6px;
-    transition: all 0.15s;
-  }
-  .detail-action-btn:hover { border-color: var(--border2); color: var(--text); }
-  .detail-action-btn.del:hover { border-color: rgba(255,68,68,0.3); color: var(--red); }
-  .detail-action-btn svg { width: 11px; height: 11px; stroke: currentColor; fill: none; stroke-width: 1.5; }
-
-  /* Empty state */
-  .empty-state {
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    height: 200px; gap: 10px;
-  }
-  .empty-state svg { width: 32px; height: 32px; stroke: var(--text3); fill: none; stroke-width: 1; }
-  .empty-state p { font-family: var(--mono); font-size: 11px; color: var(--text3); letter-spacing: 0.08em; }
-
-  /* Modal overlay */
-  .modal-overlay {
-    position: absolute; inset: 0;
-    background: rgba(0,0,0,0.7);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 100;
-    opacity: 0; pointer-events: none; transition: opacity 0.2s;
-  }
-  .modal-overlay.open { opacity: 1; pointer-events: all; }
-  .modal {
-    background: var(--bg2);
-    border: 1px solid var(--border2);
-    border-radius: 2px;
-    padding: 28px 28px 24px;
-    width: 360px;
-    animation: fadeUp 0.2s ease;
-  }
-  .modal-title {
-    font-size: 14px; font-weight: 500; color: var(--text);
-    margin-bottom: 6px; letter-spacing: -0.01em;
-  }
-  .modal-sub { font-family: var(--mono); font-size: 10px; color: var(--text3); margin-bottom: 20px; letter-spacing: 0.05em; }
-  .modal-input {
-    width: 100%; background: var(--bg3);
-    border: 1px solid var(--border2); border-radius: 2px;
-    padding: 10px 12px; font-family: var(--mono); font-size: 12px;
-    color: var(--text); outline: none; margin-bottom: 16px;
-    transition: border-color 0.15s;
-  }
-  .modal-input:focus { border-color: var(--accent); }
-  .modal-row { display: flex; gap: 8px; }
-
-  /* Code viewer */
-  .code-viewer {
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 2px; padding: 14px;
-    font-family: var(--mono); font-size: 11px;
-    color: var(--accent); line-height: 1.7;
-    overflow-x: auto; margin: 12px 14px;
-  }
-
-  /* Note viewer */
-  .note-viewer {
-    background: var(--bg3); border: 1px solid var(--border);
-    border-radius: 2px; padding: 14px;
-    font-size: 12.5px; color: var(--text2); line-height: 1.8;
-    margin: 12px 14px; overflow-y: auto; max-height: 200px;
-  }
-
-  /* Tag */
-  .tag {
-    font-family: var(--mono); font-size: 9px;
-    padding: 2px 6px; border-radius: 1px;
-    letter-spacing: 0.08em; text-transform: uppercase;
-  }
-  .tag-green { background: rgba(200,255,87,0.08); color: var(--accent); border: 1px solid rgba(200,255,87,0.15); }
-  .tag-blue { background: rgba(68,136,255,0.08); color: var(--blue); border: 1px solid rgba(68,136,255,0.15); }
-  .tag-amber { background: rgba(255,170,0,0.08); color: var(--amber); border: 1px solid rgba(255,170,0,0.15); }
-  .tag-red { background: rgba(255,68,68,0.08); color: var(--red); border: 1px solid rgba(255,68,68,0.15); }
-
-  /* Notification toast */
-  .toast {
-    position: absolute; bottom: 20px; right: 20px;
-    background: var(--bg3); border: 1px solid var(--border2);
-    border-left: 2px solid var(--accent);
-    padding: 10px 14px; border-radius: 0 2px 2px 0;
-    font-family: var(--mono); font-size: 11px; color: var(--text2);
-    z-index: 200; opacity: 0;
-    transition: opacity 0.3s, transform 0.3s;
-    transform: translateY(8px);
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .toast.error { border-left-color: var(--red); }
-
-  /* Context menu */
-  .ctx-menu {
-    position: absolute; background: var(--bg2);
-    border: 1px solid var(--border2); border-radius: 2px;
-    padding: 4px 0; min-width: 160px;
-    z-index: 300;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.5);
-    opacity: 0; pointer-events: none; transition: opacity 0.1s;
-  }
-  .ctx-menu.open { opacity: 1; pointer-events: all; }
-  .ctx-item {
-    padding: 7px 12px; font-family: var(--mono); font-size: 11px;
-    color: var(--text2); cursor: pointer; display: flex; align-items: center; gap: 8px;
-    transition: background 0.1s, color 0.1s;
-  }
-  .ctx-item:hover { background: var(--bg3); color: var(--text); }
-  .ctx-item.danger:hover { color: var(--red); }
-  .ctx-item svg { width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 1.5; }
-  .ctx-sep { height: 1px; background: var(--border); margin: 3px 0; }
-
-  /* Scrollbar everywhere */
-  * { scrollbar-width: thin; scrollbar-color: var(--border2) transparent; }
-
-  /* Session badge */
-  .session-badge {
-    display: flex; align-items: center; gap: 6px;
-    padding: 4px 10px; background: var(--accent2);
-    border: 1px solid rgba(200,255,87,0.15); border-radius: 1px;
-  }
-  .session-badge .s-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-  .session-badge span { font-family: var(--mono); font-size: 9px; color: var(--accent); letter-spacing: 0.1em; text-transform: uppercase; }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vault</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════ LOGIN SCREEN ═══════════════════════════════════════ -->
-<div id="login-screen" class="screen">
-  <div class="login-bg">
-    <div class="grid-lines"></div>
+  <!-- ═══════════════════════════════════════════════════════
+       LOGIN SCREEN
+       Auth is handled entirely by Supabase Edge Functions.
+       This screen collects the token and forwards it to the
+       backend via api.js (future). All fake auth is removed.
+  ════════════════════════════════════════════════════════ -->
+  <div id="screen-login" class="screen" role="main" aria-label="Login">
+
+    <div class="login-bg" aria-hidden="true">
+      <div class="grid-lines"></div>
+    </div>
+
+    <div class="login-box">
+
+      <div class="vault-logo" aria-label="Vault">
+        <div class="vault-icon" aria-hidden="true">
+          <!-- Lock icon -->
+          <svg viewBox="0 0 16 16" aria-hidden="true">
+            <rect x="2" y="6" width="12" height="9" rx="1"/>
+            <path d="M5 6V4a3 3 0 0 1 6 0v2"/>
+            <circle cx="8" cy="10.5" r="1.2"/>
+            <line x1="8" y1="11.7" x2="8" y2="13"/>
+          </svg>
+        </div>
+        <span class="vault-name">Vault</span>
+      </div>
+
+      <h1 class="login-title">Secure Access</h1>
+      <p class="login-sub">// token-based authentication</p>
+
+      <!-- Step 1: Request token -->
+      <div id="login-step-1" class="login-step active">
+        <p class="step-label">Step 01 — Request Access</p>
+        <div class="info-box">
+          <p>A one-time access token will be dispatched to your authorized address. Tokens expire in 5 minutes and are single-use.</p>
+        </div>
+        <!-- TODO(backend): clicking this calls POST /functions/v1/request-token via api.js -->
+        <button id="btn-request-token" class="btn-primary" type="button">
+          Request Access Token
+        </button>
+        <div class="security-note" aria-label="Security properties">
+          Single-use &middot; Hash-only storage &middot; 5 min expiry &middot; Rate-limited
+        </div>
+      </div>
+
+      <!-- Step 2: Paste token -->
+      <div id="login-step-2" class="login-step" aria-hidden="true">
+        <p class="step-label">Step 02 — Paste Token</p>
+        <div class="status-row" id="login-status-row">
+          <span class="status-dot" id="login-status-dot" aria-hidden="true"></span>
+          <span class="status-text" id="login-status-text">Waiting…</span>
+        </div>
+        <div class="info-box">
+          <p>Copy the token from your email and paste it below. Do not type it manually.</p>
+        </div>
+        <div class="countdown-row">
+          <span class="countdown-label">Token expires in:</span>
+          <span id="login-countdown" class="countdown-value">5:00</span>
+        </div>
+        <!-- TODO(backend): on submit, POST /functions/v1/validate-token via api.js -->
+        <input
+          id="token-input"
+          type="text"
+          class="paste-field"
+          placeholder="Paste access token here"
+          autocomplete="off"
+          spellcheck="false"
+          aria-label="Access token"
+        />
+        <button id="btn-unlock" class="btn-primary" type="button" disabled>
+          Unlock Vault
+        </button>
+        <button id="btn-back" class="btn-back" type="button">
+          ← Request new token
+        </button>
+      </div>
+
+    </div>
   </div>
-  <div class="login-box">
-    <div class="vault-logo">
-      <div class="vault-icon">
-        <svg viewBox="0 0 16 16"><rect x="2" y="6" width="12" height="9" rx="1"/><path d="M5 6V4a3 3 0 0 1 6 0v2"/><circle cx="8" cy="10.5" r="1.2"/><line x1="8" y1="11.7" x2="8" y2="13"/></svg>
-      </div>
-      <span class="vault-name">Vault</span>
-    </div>
-    <div class="login-title">Secure Access</div>
-    <div class="login-sub">// ephemeral token authentication</div>
 
-    <!-- Step 1: Request Token -->
-    <div class="step active" id="step-1">
-      <div class="step-label">Step 01 — Request Access</div>
-      <div class="info-box">
-        <p>A one-time access token will be generated and dispatched to your authorized address. Tokens expire in 5 minutes.</p>
-        <div class="token-example">leyton555@icloud.com</div>
-      </div>
-      <button class="btn-primary" id="req-token-btn" onclick="requestToken()">Request Access Token</button>
-      <div class="security-strip">
-        <span style="color:var(--text3)">⬡</span>
-        <span>Single-use · Hash-only storage · 5min expiry · Rate-limited</span>
-      </div>
-    </div>
+  <!-- ═══════════════════════════════════════════════════════
+       VAULT SCREEN
+       Shown after successful auth. All data is loaded from
+       Supabase via api.js (future). Local state mirrors
+       the server state; see state.js.
+  ════════════════════════════════════════════════════════ -->
+  <div id="screen-vault" class="screen hidden" role="main" aria-label="Vault explorer">
 
-    <!-- Step 2: Paste Token -->
-    <div class="step" id="step-2">
-      <div class="step-label">Step 02 — Paste Token</div>
-      <div class="status-row">
-        <div class="status-dot ready" id="email-status"></div>
-        <span class="status-text" id="email-status-text">Token dispatched to authorized address</span>
+    <!-- Top bar -->
+    <header class="topbar" role="banner">
+      <div class="topbar-left">
+        <div class="topbar-logo" aria-label="Vault home">
+          <div class="tl-icon" aria-hidden="true">
+            <svg viewBox="0 0 10 10">
+              <rect x="1" y="3" width="8" height="6" rx="0.5"/>
+              <path d="M3 3V2a2 2 0 0 1 4 0v1"/>
+              <circle cx="5" cy="6.5" r="0.8"/>
+            </svg>
+          </div>
+          <span>Vault</span>
+        </div>
+        <nav class="breadcrumb" id="breadcrumb" aria-label="Current location">
+          <span class="crumb active">/ root</span>
+        </nav>
       </div>
-      <div class="info-box">
-        <p>Copy the token from your email and paste below. Do not type — paste only.</p>
-        <div class="token-example">vX91-Km3P-q8ZL-2nQw-Rt55-A9cP-7mXk-Lp02</div>
+
+      <div class="topbar-right">
+        <div class="session-badge" aria-label="Session active">
+          <span class="session-dot" aria-hidden="true"></span>
+          <!-- TODO(backend): show real session expiry from Supabase JWT -->
+          <span>Session Active</span>
+        </div>
+        <div class="tb-divider" aria-hidden="true"></div>
+        <!-- TODO(backend): open session management panel — list/revoke sessions via Supabase -->
+        <button class="tb-btn" id="btn-sessions" type="button" aria-label="Manage sessions">
+          <svg viewBox="0 0 14 14" aria-hidden="true">
+            <rect x="1" y="1" width="12" height="12" rx="1.5"/>
+            <line x1="4" y1="7" x2="10" y2="7"/>
+            <line x1="7" y1="4" x2="7" y2="10"/>
+          </svg>
+          Sessions
+        </button>
+        <!-- TODO(backend): call POST /functions/v1/revoke-session to lock out -->
+        <button class="tb-btn tb-btn--danger" id="btn-lock" type="button" aria-label="Lock vault">
+          <svg viewBox="0 0 14 14" aria-hidden="true">
+            <rect x="2" y="6" width="10" height="7" rx="1"/>
+            <path d="M4 6V4a3 3 0 0 1 6 0v2"/>
+          </svg>
+          Lock
+        </button>
       </div>
-      <div class="countdown">Token expires in: <span id="countdown">5:00</span></div>
-      <input type="text" class="paste-field" id="token-input"
-        placeholder="Paste access token here"
-        autocomplete="off" spellcheck="false"
-        onpaste="handlePaste(event)"
-        oninput="handleInput(this)">
-      <button class="btn-primary" id="unlock-btn" onclick="unlockVault()" disabled>Unlock Vault</button>
-      <button class="back-btn" onclick="goBack()">
-        <svg viewBox="0 0 12 12" style="width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:1.5"><path d="M7 2L3 6l4 4"/></svg>
-        Request new token
+    </header>
+
+    <!-- Body: sidebar + main panel + detail panel -->
+    <div class="vault-body">
+
+      <!-- Left sidebar: folder tree -->
+      <aside class="sidebar" id="sidebar" aria-label="Folder tree">
+        <div class="sidebar-section-label">Folders</div>
+        <!-- TODO(backend): folder tree is populated dynamically by explorer.js
+             after fetching from Supabase `folders` table -->
+        <nav class="folder-tree" id="folder-tree" role="tree" aria-label="Folder navigation">
+          <!-- Rendered by explorer.js -->
+        </nav>
+        <div class="sidebar-footer">
+          <!-- TODO(backend): storage usage from Supabase storage API -->
+          <div class="storage-label" id="storage-label">Storage</div>
+          <div class="storage-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Storage used">
+            <div class="storage-fill" id="storage-fill"></div>
+          </div>
+        </div>
+      </aside>
+
+      <!-- Main file explorer panel -->
+      <main class="main-panel" id="main-panel">
+
+        <!-- Action bar -->
+        <div class="action-bar" role="toolbar" aria-label="File actions">
+          <!-- TODO(backend): each create action calls Supabase INSERT via api.js -->
+          <button class="action-btn action-btn--accent" id="btn-new-folder" type="button">
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <path d="M1 2.5A1 1 0 0 1 2 1.5h3L6.5 3H10a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/>
+              <line x1="5.5" y1="6" x2="8.5" y2="6"/>
+              <line x1="7" y1="4.5" x2="7" y2="7.5"/>
+            </svg>
+            New Folder
+          </button>
+          <!-- TODO(backend): file upload via Supabase Storage SDK -->
+          <button class="action-btn" id="btn-upload" type="button">
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <path d="M6 9V3M3 5.5L6 3l3 2.5"/>
+              <path d="M2 9.5h8"/>
+            </svg>
+            Upload File
+          </button>
+          <button class="action-btn" id="btn-new-note" type="button">
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <rect x="1.5" y="1.5" width="9" height="9" rx="1"/>
+              <line x1="3.5" y1="4" x2="8.5" y2="4"/>
+              <line x1="3.5" y1="6" x2="8.5" y2="6"/>
+              <line x1="3.5" y1="8" x2="6" y2="8"/>
+            </svg>
+            New Note
+          </button>
+          <button class="action-btn" id="btn-new-code" type="button">
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <polyline points="3,3.5 1,6 3,8.5"/>
+              <polyline points="9,3.5 11,6 9,8.5"/>
+              <line x1="7" y1="2" x2="5" y2="10"/>
+            </svg>
+            Code Snippet
+          </button>
+
+          <div class="search-wrap">
+            <svg viewBox="0 0 12 12" aria-hidden="true">
+              <circle cx="5" cy="5" r="3.5"/>
+              <line x1="7.5" y1="7.5" x2="10" y2="10"/>
+            </svg>
+            <!-- TODO(backend): global search via Supabase full-text search -->
+            <input
+              id="search-input"
+              type="search"
+              class="search-input"
+              placeholder="Search vault…"
+              aria-label="Search files and folders"
+            />
+          </div>
+        </div>
+
+        <!-- File grid area -->
+        <div class="file-area" id="file-area">
+          <!-- Empty state shown before data loads -->
+          <div class="empty-state" id="empty-state">
+            <svg viewBox="0 0 32 32" aria-hidden="true">
+              <path d="M4 6a2 2 0 0 1 2-2h8l3 4h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
+            </svg>
+            <p>No files yet</p>
+            <p class="empty-sub">Connect to Supabase to load your vault</p>
+          </div>
+          <!-- File sections rendered by explorer.js -->
+          <div id="section-folders" class="file-section hidden">
+            <div class="section-header">Folders</div>
+            <div class="file-grid" id="grid-folders"></div>
+          </div>
+          <div id="section-files" class="file-section hidden">
+            <div class="section-header">Files</div>
+            <div class="file-grid" id="grid-files"></div>
+          </div>
+        </div>
+      </main>
+
+      <!-- Right detail panel -->
+      <aside class="detail-panel" id="detail-panel" aria-label="File details">
+        <div class="detail-empty" id="detail-empty">
+          <svg viewBox="0 0 32 32" aria-hidden="true">
+            <rect x="4" y="4" width="24" height="24" rx="2"/>
+            <line x1="9" y1="11" x2="23" y2="11"/>
+            <line x1="9" y1="16" x2="23" y2="16"/>
+            <line x1="9" y1="21" x2="17" y2="21"/>
+          </svg>
+          <p>Select a file to inspect</p>
+        </div>
+        <!-- Detail content shown when a file is selected — rendered by explorer.js -->
+        <div id="detail-content" class="hidden">
+          <div class="detail-header">
+            <div class="detail-name" id="detail-name"></div>
+            <div class="detail-type" id="detail-type"></div>
+          </div>
+          <div class="detail-preview" id="detail-preview"></div>
+          <div class="detail-meta" id="detail-meta"></div>
+          <div class="detail-actions" id="detail-actions"></div>
+        </div>
+      </aside>
+
+    </div><!-- /.vault-body -->
+
+    <!-- Context menu (right-click on file cards) -->
+    <div id="context-menu" class="context-menu" role="menu" aria-label="File options" hidden>
+      <!-- TODO(backend): rename/delete/download wired to api.js -->
+      <button class="ctx-item" id="ctx-open" role="menuitem">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M8 3l3 3-3 3"/></svg>
+        Open
+      </button>
+      <button class="ctx-item" id="ctx-rename" role="menuitem">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M8 2l2 2-6 6H2V8z"/></svg>
+        Rename
+      </button>
+      <button class="ctx-item" id="ctx-duplicate" role="menuitem">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><path d="M8 4V2H1v7h2"/></svg>
+        Duplicate
+      </button>
+      <div class="ctx-separator" role="separator"></div>
+      <button class="ctx-item" id="ctx-download" role="menuitem">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2v6M3 6l3 3 3-3"/><path d="M2 9.5h8"/></svg>
+        Download
+      </button>
+      <div class="ctx-separator" role="separator"></div>
+      <button class="ctx-item ctx-item--danger" id="ctx-delete" role="menuitem">
+        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 3h8M5 3V2h2v1M4 5l.5 5M8 5l-.5 5M3 3l.5 7h5L9 3"/></svg>
+        Delete
       </button>
     </div>
 
-  </div>
-</div>
+  </div><!-- /#screen-vault -->
 
-<!-- ═══════════════════════════════════════ VAULT SCREEN ═══════════════════════════════════════ -->
-<div id="vault-screen" class="screen hidden">
-
-  <!-- Top bar -->
-  <div class="topbar">
-    <div class="topbar-left">
-      <div class="topbar-logo">
-        <div class="tl-icon">
-          <svg viewBox="0 0 10 10"><rect x="1" y="3" width="8" height="6" rx="0.5"/><path d="M3 3V2a2 2 0 0 1 4 0v1"/><circle cx="5" cy="6.5" r="0.8"/></svg>
-        </div>
-        <span>Vault</span>
-      </div>
-      <div class="breadcrumb" id="breadcrumb">
-        <span class="crumb active" onclick="navigateTo('root')">/ root</span>
-      </div>
-    </div>
-    <div class="topbar-right">
-      <div class="session-badge">
-        <div class="s-dot"></div>
-        <span>Authenticated</span>
-      </div>
-      <div class="tb-divider"></div>
-      <button class="tb-btn" onclick="showToast('Session management — coming soon')">
-        <svg viewBox="0 0 14 14"><rect x="1" y="1" width="12" height="12" rx="1.5"/><line x1="4" y1="7" x2="10" y2="7"/><line x1="7" y1="4" x2="7" y2="10"/></svg>
-        Sessions
-      </button>
-      <button class="tb-btn danger" onclick="lockVault()">
-        <svg viewBox="0 0 14 14"><rect x="2" y="6" width="10" height="7" rx="1"/><path d="M4 6V4a3 3 0 0 1 6 0v2"/></svg>
-        Lock
-      </button>
-    </div>
-  </div>
-
-  <!-- Body -->
-  <div class="vault-body">
-
-    <!-- Sidebar -->
-    <div class="sidebar">
-      <div class="sidebar-section-label">Folders</div>
-      <div class="folder-tree" id="folder-tree">
-        <div class="tree-item active" onclick="selectFolder('all', this)">
-          <svg viewBox="0 0 14 14"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2H6l1.5 2H12a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 12 13H2.5A1.5 1.5 0 0 1 1 11.5z"/></svg>
-          All Files
-          <span class="count">18</span>
-        </div>
-        <div class="tree-item" onclick="selectFolder('projects', this)">
-          <svg viewBox="0 0 14 14"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2H6l1.5 2H12a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 12 13H2.5A1.5 1.5 0 0 1 1 11.5z"/></svg>
-          Projects
-          <span class="count">6</span>
-        </div>
-        <div class="tree-item indent1" onclick="selectFolder('projects-web', this)">
-          <svg viewBox="0 0 14 14"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2H6l1.5 2H12a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 12 13H2.5A1.5 1.5 0 0 1 1 11.5z"/></svg>
-          Web Apps
-          <span class="count">3</span>
-        </div>
-        <div class="tree-item indent1" onclick="selectFolder('projects-scripts', this)">
-          <svg viewBox="0 0 14 14"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2H6l1.5 2H12a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 12 13H2.5A1.5 1.5 0 0 1 1 11.5z"/></svg>
-          Scripts
-          <span class="count">3</span>
-        </div>
-        <div class="tree-item indent2" onclick="selectFolder('scripts-python', this)">
-          <svg viewBox="0 0 14 14"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2H6l1.5 2H12a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 12 13H2.5A1.5 1.5 0 0 1 1 11.5z"/></svg>
-          Python
-          <span class="count">2</span>
-        </div>
-        <div class="tree-item" onclick="selectFolder('notes', this)">
-          <svg viewBox="0 0 14 14"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2H6l1.5 2H12a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 12 13H2.5A1.5 1.5 0 0 1 1 11.5z"/></svg>
-          Notes
-          <span class="count">4</span>
-        </div>
-        <div class="tree-item" onclick="selectFolder('media', this)">
-          <svg viewBox="0 0 14 14"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2H6l1.5 2H12a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 12 13H2.5A1.5 1.5 0 0 1 1 11.5z"/></svg>
-          Media
-          <span class="count">2</span>
-        </div>
-        <div class="tree-item" onclick="selectFolder('archives', this)">
-          <svg viewBox="0 0 14 14"><path d="M1 3.5A1.5 1.5 0 0 1 2.5 2H6l1.5 2H12a1.5 1.5 0 0 1 1.5 1.5v6A1.5 1.5 0 0 1 12 13H2.5A1.5 1.5 0 0 1 1 11.5z"/></svg>
-          Archives
-          <span class="count">2</span>
-        </div>
-      </div>
-      <div class="sidebar-footer">
-        <div class="storage-label">Storage · 3.4 GB / 10 GB</div>
-        <div class="storage-bar"><div class="storage-fill"></div></div>
-      </div>
-    </div>
-
-    <!-- Main panel -->
-    <div class="main-panel">
-      <!-- Action bar -->
-      <div class="action-bar">
-        <button class="action-btn primary-action" onclick="openNewFolder()">
-          <svg viewBox="0 0 12 12"><path d="M1 2.5A1 1 0 0 1 2 1.5h3L6.5 3H10a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/><line x1="5.5" y1="6" x2="8.5" y2="6"/><line x1="7" y1="4.5" x2="7" y2="7.5"/></svg>
-          New Folder
-        </button>
-        <button class="action-btn" onclick="showToast('Upload — connect to Supabase storage')">
-          <svg viewBox="0 0 12 12"><path d="M6 9V3M3 5.5L6 3l3 2.5"/><path d="M2 9.5h8"/></svg>
-          Upload File
-        </button>
-        <button class="action-btn" onclick="openNewNote()">
-          <svg viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><line x1="3.5" y1="4" x2="8.5" y2="4"/><line x1="3.5" y1="6" x2="8.5" y2="6"/><line x1="3.5" y1="8" x2="6" y2="8"/></svg>
-          New Note
-        </button>
-        <button class="action-btn" onclick="openNewCode()">
-          <svg viewBox="0 0 12 12"><polyline points="3,3.5 1,6 3,8.5"/><polyline points="9,3.5 11,6 9,8.5"/><line x1="7" y1="2" x2="5" y2="10"/></svg>
-          Code Snippet
-        </button>
-        <div class="search-wrap">
-          <svg viewBox="0 0 12 12"><circle cx="5" cy="5" r="3.5"/><line x1="7.5" y1="7.5" x2="10" y2="10"/></svg>
-          <input type="text" class="search-input" placeholder="Search vault..." oninput="filterFiles(this.value)">
-        </div>
-      </div>
-
-      <!-- File area -->
-      <div class="file-area" id="file-area" oncontextmenu="return false;">
-        <div class="section-header">Folders</div>
-        <div class="file-grid" id="folder-grid"></div>
-        <div class="section-header">Files</div>
-        <div class="file-grid" id="files-grid"></div>
-      </div>
-    </div>
-
-    <!-- Detail panel -->
-    <div class="detail-panel" id="detail-panel">
-      <div class="detail-header">
-        <div class="detail-title" id="detail-name">Select a file</div>
-        <div class="detail-type" id="detail-type">No selection</div>
-      </div>
-      <div class="detail-preview" id="detail-preview">
-        <svg viewBox="0 0 40 40"><rect x="6" y="8" width="28" height="24" rx="2" stroke-width="1"/><line x1="11" y1="15" x2="29" y2="15" stroke-width="1"/><line x1="11" y1="19" x2="29" y2="19" stroke-width="1"/><line x1="11" y1="23" x2="22" y2="23" stroke-width="1"/></svg>
-      </div>
-      <div class="detail-meta" id="detail-meta"></div>
-      <div class="detail-actions" id="detail-actions">
-        <div style="font-family:var(--mono);font-size:10px;color:var(--text3);text-align:center;padding:16px 0">Click a file to inspect</div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Context menu -->
-  <div class="ctx-menu" id="ctx-menu">
-    <div class="ctx-item" onclick="ctxOpen()">
-      <svg viewBox="0 0 12 12"><path d="M2 6h8M8 3l3 3-3 3"/></svg>
-      Open
-    </div>
-    <div class="ctx-item" onclick="ctxRename()">
-      <svg viewBox="0 0 12 12"><path d="M8 2l2 2-6 6H2V8z"/></svg>
-      Rename
-    </div>
-    <div class="ctx-item" onclick="ctxCopy()">
-      <svg viewBox="0 0 12 12"><rect x="4" y="4" width="7" height="7" rx="1"/><path d="M8 4V2H1v7h2"/></svg>
-      Duplicate
-    </div>
-    <div class="ctx-sep"></div>
-    <div class="ctx-item" onclick="ctxDownload()">
-      <svg viewBox="0 0 12 12"><path d="M6 2v6M3 6l3 3 3-3"/><path d="M2 9.5h8"/></svg>
-      Download
-    </div>
-    <div class="ctx-sep"></div>
-    <div class="ctx-item danger" onclick="ctxDelete()">
-      <svg viewBox="0 0 12 12"><path d="M2 3h8M5 3V2h2v1M4 5l.5 5M8 5l-.5 5M3 3l.5 7h5L9 3"/></svg>
-      Delete
-    </div>
-  </div>
-
-  <!-- Modals -->
-  <div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
-    <div class="modal" id="modal-box">
-      <div class="modal-title" id="modal-title">New Folder</div>
-      <div class="modal-sub" id="modal-sub">Enter a name for the new folder</div>
-      <input type="text" class="modal-input" id="modal-input" placeholder="Folder name...">
-      <div class="modal-row">
-        <button class="btn-ghost" style="flex:1" onclick="closeModal()">Cancel</button>
-        <button class="btn-primary" style="flex:2" onclick="confirmModal()">Create</button>
+  <!-- ═══════════════════════════════════════════════════════
+       MODAL OVERLAY
+       Single modal instance reused for all dialogs.
+       Content injected by modal.js.
+  ════════════════════════════════════════════════════════ -->
+  <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal" id="modal-box" role="document">
+      <h2 class="modal-title" id="modal-title"></h2>
+      <p class="modal-sub" id="modal-sub"></p>
+      <input
+        id="modal-input"
+        type="text"
+        class="modal-input"
+        autocomplete="off"
+      />
+      <div class="modal-actions">
+        <button class="btn-ghost" id="btn-modal-cancel" type="button">Cancel</button>
+        <button class="btn-primary btn-primary--flex" id="btn-modal-confirm" type="button">Confirm</button>
       </div>
     </div>
   </div>
 
-  <!-- Toast -->
-  <div class="toast" id="toast"></div>
+  <!-- Toast notification (ARIA live region) -->
+  <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-</div>
+  <!-- ═══════════════════════════════════════════════════════
+       SCRIPTS
+       Load order matters: state → api (future) → modal → explorer → app
+  ════════════════════════════════════════════════════════ -->
+  <script src="state.js"></script>
+  <script src="modal.js"></script>
+  <script src="explorer.js"></script>
+  <script src="app.js"></script>
 
-<script>
-// ── DATA ──────────────────────────────────────────────────────────
-const allFiles = [
-  { id:1, type:'folder', name:'Projects', meta:'6 items', folder:'root' },
-  { id:2, type:'folder', name:'Notes',    meta:'4 items', folder:'root' },
-  { id:3, type:'folder', name:'Media',    meta:'2 items', folder:'root' },
-  { id:4, type:'folder', name:'Archives', meta:'2 files', folder:'root' },
-  { id:5, type:'code',   name:'vault-auth.js',   meta:'1.2 KB · JS',  folder:'root', lang:'javascript', content:'// Supabase Edge Function\nimport { createClient } from "@supabase/supabase-js"\n\nexport async function handler(req) {\n  const token = await generateToken()\n  const hash = await crypto.subtle.digest("SHA-256", token)\n  await db.from("auth_tokens").insert({ hashed_token: hash, expires_at: fiveMinutesFromNow() })\n  await sendEmail(AUTHORIZED_EMAIL, token)\n  return { ok: true }\n}' },
-  { id:6, type:'note',   name:'Vault Spec v2',    meta:'12 KB · MD',   folder:'root', content:'# Private Cloud Vault\n\nThis system is a secure, single-owner cloud-based vault designed for global access via ephemeral authentication tokens.\n\n## Auth Model\n- Email allowlist\n- One-time token delivery\n- Hash-only storage\n- 5 minute expiry' },
-  { id:7, type:'code',   name:'setup.py',         meta:'834 B · PY',   folder:'root', lang:'python', content:'#!/usr/bin/env python3\n# Vault setup script\nimport os\nimport hashlib\nimport secrets\n\ndef generate_token(segments=8, length=4):\n    chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"\n    parts = [\n        "".join(secrets.choice(chars) for _ in range(length))\n        for _ in range(segments)\n    ]\n    return "-".join(parts)\n\nprint(generate_token())' },
-  { id:8, type:'file',   name:'backup-2025-05.zip', meta:'240 MB · ZIP', folder:'root' },
-  { id:9, type:'image',  name:'screenshot-ui.png', meta:'1.4 MB · PNG', folder:'root' },
-  { id:10,type:'note',   name:'API Keys',          meta:'3 KB · MD',   folder:'root', content:'# API Keys\n> Stored here for reference — all keys rotated monthly.\n\n- **Supabase**: see .env file\n- **Resend**: see secrets manager\n- **GitHub**: PAT stored in keychain' },
-  { id:11,type:'code',   name:'cron-cleanup.sh',   meta:'512 B · SH',  folder:'root', lang:'bash', content:'#!/bin/bash\n# Cleanup expired tokens\necho "Purging expired auth tokens..."\npsql $DATABASE_URL -c "\n  DELETE FROM auth_tokens\n  WHERE expires_at < NOW()\n  OR used = TRUE;\n"\necho "Done."' },
-  { id:12,type:'file',   name:'design-spec.pdf',   meta:'5.2 MB · PDF', folder:'root' },
-];
-
-let currentFolder = 'all';
-let selectedFile = null;
-let countdownTimer = null;
-let countdownSecs = 300;
-let modalCallback = null;
-
-// ── LOGIN ────────────────────────────────────────────────────────
-function requestToken() {
-  const btn = document.getElementById('req-token-btn');
-  btn.disabled = true;
-  btn.textContent = 'Generating token...';
-  setTimeout(() => {
-    document.getElementById('step-1').classList.remove('active');
-    document.getElementById('step-2').classList.add('active');
-    startCountdown();
-    btn.disabled = false;
-    btn.textContent = 'Request Access Token';
-  }, 1400);
-}
-
-function startCountdown() {
-  countdownSecs = 300;
-  clearInterval(countdownTimer);
-  countdownTimer = setInterval(() => {
-    countdownSecs--;
-    if (countdownSecs <= 0) {
-      clearInterval(countdownTimer);
-      document.getElementById('countdown').textContent = 'Expired';
-      document.getElementById('countdown').style.color = 'var(--red)';
-      return;
-    }
-    const m = Math.floor(countdownSecs/60);
-    const s = countdownSecs % 60;
-    document.getElementById('countdown').textContent = m+':'+(s<10?'0':'')+s;
-  }, 1000);
-}
-
-function handlePaste(e) {
-  setTimeout(() => {
-    const v = document.getElementById('token-input').value.trim();
-    document.getElementById('unlock-btn').disabled = v.length < 10;
-  }, 50);
-}
-
-function handleInput(el) {
-  document.getElementById('unlock-btn').disabled = el.value.trim().length < 10;
-}
-
-function unlockVault() {
-  const btn = document.getElementById('unlock-btn');
-  btn.disabled = true;
-  btn.textContent = 'Validating...';
-  clearInterval(countdownTimer);
-  setTimeout(() => {
-    document.getElementById('login-screen').classList.add('hidden');
-    document.getElementById('vault-screen').classList.remove('hidden');
-    renderFiles();
-  }, 1200);
-}
-
-function goBack() {
-  document.getElementById('step-2').classList.remove('active');
-  document.getElementById('step-1').classList.add('active');
-  document.getElementById('token-input').value = '';
-  document.getElementById('unlock-btn').disabled = true;
-  clearInterval(countdownTimer);
-}
-
-// ── VAULT ────────────────────────────────────────────────────────
-function renderFiles(filter='') {
-  const folders = allFiles.filter(f => f.type === 'folder' && matchFolder(f) && matchSearch(f, filter));
-  const files   = allFiles.filter(f => f.type !== 'folder' && matchFolder(f) && matchSearch(f, filter));
-
-  const fg = document.getElementById('folder-grid');
-  const fi = document.getElementById('files-grid');
-
-  fg.innerHTML = folders.length ? folders.map(f => fileCard(f)).join('') : '<div class="empty-state"><p>No folders</p></div>';
-  fi.innerHTML = files.length   ? files.map(f => fileCard(f)).join('')   : '<div class="empty-state"><p>No files</p></div>';
-}
-
-function matchFolder(f) {
-  if (currentFolder === 'all') return true;
-  return f.folder === currentFolder || f.name.toLowerCase().includes(currentFolder.replace('projects-','').replace('scripts-',''));
-}
-function matchSearch(f, q) {
-  if (!q) return true;
-  return f.name.toLowerCase().includes(q.toLowerCase());
-}
-
-function fileCard(f) {
-  const icons = {
-    folder: '<svg viewBox="0 0 18 18"><path d="M1.5 3.75A1.5 1.5 0 0 1 3 2.25H7.5L9.75 4.5H15A1.5 1.5 0 0 1 16.5 6v7.5a1.5 1.5 0 0 1-1.5 1.5H3a1.5 1.5 0 0 1-1.5-1.5z"/></svg>',
-    note:   '<svg viewBox="0 0 18 18"><rect x="2.25" y="2.25" width="13.5" height="13.5" rx="1.5"/><line x1="5" y1="6" x2="13" y2="6"/><line x1="5" y1="9" x2="13" y2="9"/><line x1="5" y1="12" x2="9" y2="12"/></svg>',
-    code:   '<svg viewBox="0 0 18 18"><polyline points="4,4.5 1.5,9 4,13.5"/><polyline points="14,4.5 16.5,9 14,13.5"/><line x1="10.5" y1="2.25" x2="7.5" y2="15.75"/></svg>',
-    image:  '<svg viewBox="0 0 18 18"><rect x="1.5" y="3" width="15" height="12" rx="1.5"/><circle cx="6" cy="7.5" r="1.5"/><path d="M1.5 12l4-4 3 3 2.5-2.5L16.5 13"/></svg>',
-    file:   '<svg viewBox="0 0 18 18"><path d="M3.75 2.25h7.5L15 6v9.75a.75.75 0 0 1-.75.75H3.75a.75.75 0 0 1-.75-.75V3a.75.75 0 0 1 .75-.75z"/><polyline points="11.25,2.25 11.25,6.75 15,6.75"/></svg>',
-  };
-  const typeMap = { folder:'Folder', note:'Note', code:'Code', image:'Image', file:'File' };
-  return `<div class="file-card" onclick="selectFile(${f.id})" oncontextmenu="openCtx(event, ${f.id})">
-    <span class="fc-type-badge">${typeMap[f.type]||f.type}</span>
-    <div class="fc-icon ${f.type}">${icons[f.type]||icons.file}</div>
-    <div class="fc-name" title="${f.name}">${f.name}</div>
-    <div class="fc-meta">${f.meta||''}</div>
-  </div>`;
-}
-
-function selectFolder(id, el) {
-  currentFolder = id;
-  document.querySelectorAll('.tree-item').forEach(t => t.classList.remove('active'));
-  el.classList.add('active');
-  selectedFile = null;
-  resetDetail();
-  renderFiles();
-  updateBreadcrumb(id);
-}
-
-function updateBreadcrumb(id) {
-  const map = {
-    all:'all files', projects:'projects', 'projects-web':'web apps',
-    'projects-scripts':'scripts', 'scripts-python':'python',
-    notes:'notes', media:'media', archives:'archives', root:'root'
-  };
-  document.getElementById('breadcrumb').innerHTML =
-    `<span class="crumb active">/ ${map[id]||id}</span>`;
-}
-
-function selectFile(id) {
-  selectedFile = allFiles.find(f => f.id === id);
-  document.querySelectorAll('.file-card').forEach(c => c.classList.remove('selected'));
-  event.currentTarget.classList.add('selected');
-  showDetail(selectedFile);
-}
-
-function showDetail(f) {
-  document.getElementById('detail-name').textContent = f.name;
-  document.getElementById('detail-type').textContent = f.type.toUpperCase() + ' · ' + (f.meta||'');
-
-  const previewEl = document.getElementById('detail-preview');
-  if (f.type === 'code') {
-    previewEl.outerHTML; // kept as-is
-    document.getElementById('detail-preview').innerHTML = '';
-    document.getElementById('detail-preview').style.height = 'auto';
-    document.getElementById('detail-preview').style.padding = '0';
-    document.getElementById('detail-preview').style.background = 'none';
-    document.getElementById('detail-preview').style.border = 'none';
-    // show code viewer
-    const cv = document.createElement('pre');
-    cv.className = 'code-viewer';
-    cv.textContent = f.content || '// empty';
-    document.getElementById('detail-preview').appendChild(cv);
-  } else if (f.type === 'note') {
-    document.getElementById('detail-preview').innerHTML = '';
-    document.getElementById('detail-preview').style.height = 'auto';
-    document.getElementById('detail-preview').style.padding = '0';
-    document.getElementById('detail-preview').style.background = 'none';
-    document.getElementById('detail-preview').style.border = 'none';
-    const nv = document.createElement('div');
-    nv.className = 'note-viewer';
-    nv.textContent = f.content || '';
-    document.getElementById('detail-preview').appendChild(nv);
-  } else {
-    document.getElementById('detail-preview').innerHTML = `<svg viewBox="0 0 40 40" style="width:40px;height:40px;stroke:var(--text3);fill:none;stroke-width:1"><rect x="6" y="8" width="28" height="24" rx="2"/><line x1="11" y1="15" x2="29" y2="15" stroke-width="1"/><line x1="11" y1="19" x2="29" y2="19" stroke-width="1"/><line x1="11" y1="23" x2="22" y2="23" stroke-width="1"/></svg>`;
-    document.getElementById('detail-preview').style.cssText = 'margin:14px;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);border-radius:2px;height:140px;display:flex;align-items:center;justify-content:center;';
-  }
-
-  const now = new Date();
-  document.getElementById('detail-meta').innerHTML = `
-    <div class="meta-row"><span class="meta-key">Type</span><span class="meta-val">${f.type}</span></div>
-    <div class="meta-row"><span class="meta-key">Size</span><span class="meta-val">${f.meta||'—'}</span></div>
-    <div class="meta-row"><span class="meta-key">Modified</span><span class="meta-val">Just now</span></div>
-    <div class="meta-row"><span class="meta-key">Location</span><span class="meta-val">/ root</span></div>
-  `;
-
-  document.getElementById('detail-actions').innerHTML = `
-    <button class="detail-action-btn" onclick="showToast('Opening ${f.name}...')">
-      <svg viewBox="0 0 11 11"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg>
-      Open
-    </button>
-    ${f.type !== 'folder' ? `<button class="detail-action-btn" onclick="showToast('Downloading ${f.name}...')">
-      <svg viewBox="0 0 11 11"><path d="M5.5 2v5M3 5.5l2.5 2.5 2.5-2.5"/><path d="M2 8.5h7"/></svg>
-      Download
-    </button>` : ''}
-    <button class="detail-action-btn del" onclick="showToast('Move ${f.name} to trash?')">
-      <svg viewBox="0 0 11 11"><path d="M2 2.5h7M4.5 2.5V1.5h2v1M3.5 4l.5 5M7.5 4l-.5 5M2.5 2.5l.5 7h5l.5-7"/></svg>
-      Delete
-    </button>
-  `;
-}
-
-function resetDetail() {
-  document.getElementById('detail-name').textContent = 'Select a file';
-  document.getElementById('detail-type').textContent = 'No selection';
-  document.getElementById('detail-preview').innerHTML = `<svg viewBox="0 0 40 40" style="width:40px;height:40px;stroke:var(--text3);fill:none;stroke-width:1"><rect x="6" y="8" width="28" height="24" rx="2"/><line x1="11" y1="15" x2="29" y2="15"/><line x1="11" y1="19" x2="29" y2="19"/><line x1="11" y1="23" x2="22" y2="23"/></svg>`;
-  document.getElementById('detail-preview').style.cssText = 'margin:14px;flex-shrink:0;background:var(--bg3);border:1px solid var(--border);border-radius:2px;height:140px;display:flex;align-items:center;justify-content:center;';
-  document.getElementById('detail-meta').innerHTML = '';
-  document.getElementById('detail-actions').innerHTML = `<div style="font-family:var(--mono);font-size:10px;color:var(--text3);text-align:center;padding:16px 0">Click a file to inspect</div>`;
-}
-
-function filterFiles(q) { renderFiles(q); }
-
-// ── MODALS ───────────────────────────────────────────────────────
-function openNewFolder() {
-  document.getElementById('modal-title').textContent = 'New Folder';
-  document.getElementById('modal-sub').textContent = 'Enter a name for the new folder';
-  document.getElementById('modal-input').value = '';
-  document.getElementById('modal-input').placeholder = 'Folder name...';
-  modalCallback = (val) => {
-    if (!val) return;
-    allFiles.push({ id: Date.now(), type:'folder', name:val, meta:'0 items', folder:'root' });
-    renderFiles();
-    showToast('Folder "' + val + '" created');
-  };
-  document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('modal-input').focus(), 100);
-}
-
-function openNewNote() {
-  document.getElementById('modal-title').textContent = 'New Note';
-  document.getElementById('modal-sub').textContent = 'Enter a name for the note';
-  document.getElementById('modal-input').value = '';
-  document.getElementById('modal-input').placeholder = 'Note title...';
-  modalCallback = (val) => {
-    if (!val) return;
-    allFiles.push({ id: Date.now(), type:'note', name:val+'.md', meta:'0 B · MD', folder:'root', content:'' });
-    renderFiles();
-    showToast('Note created');
-  };
-  document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('modal-input').focus(), 100);
-}
-
-function openNewCode() {
-  document.getElementById('modal-title').textContent = 'New Code Snippet';
-  document.getElementById('modal-sub').textContent = 'Enter a filename with extension';
-  document.getElementById('modal-input').value = '';
-  document.getElementById('modal-input').placeholder = 'e.g. script.py';
-  modalCallback = (val) => {
-    if (!val) return;
-    allFiles.push({ id: Date.now(), type:'code', name:val, meta:'0 B', folder:'root', content:'// New snippet' });
-    renderFiles();
-    showToast('Code snippet created');
-  };
-  document.getElementById('modal-overlay').classList.add('open');
-  setTimeout(() => document.getElementById('modal-input').focus(), 100);
-}
-
-function confirmModal() {
-  const val = document.getElementById('modal-input').value.trim();
-  if (modalCallback) modalCallback(val);
-  document.getElementById('modal-overlay').classList.remove('open');
-}
-
-function closeModal(e) {
-  if (!e || e.target === document.getElementById('modal-overlay')) {
-    document.getElementById('modal-overlay').classList.remove('open');
-  }
-}
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Enter' && document.getElementById('modal-overlay').classList.contains('open')) confirmModal();
-  if (e.key === 'Escape') {
-    closeModal();
-    document.getElementById('ctx-menu').classList.remove('open');
-  }
-});
-
-// ── CONTEXT MENU ─────────────────────────────────────────────────
-let ctxTarget = null;
-function openCtx(e, id) {
-  e.preventDefault();
-  ctxTarget = id;
-  const m = document.getElementById('ctx-menu');
-  m.style.left = e.clientX + 'px';
-  m.style.top = e.clientY + 'px';
-  m.classList.add('open');
-}
-document.addEventListener('click', () => document.getElementById('ctx-menu').classList.remove('open'));
-function ctxOpen()     { showToast('Opening file...'); }
-function ctxRename()   { showToast('Rename — coming soon'); }
-function ctxCopy()     { showToast('Duplicated'); }
-function ctxDownload() { showToast('Downloading...'); }
-function ctxDelete()   {
-  const idx = allFiles.findIndex(f => f.id === ctxTarget);
-  if (idx !== -1) { allFiles.splice(idx, 1); renderFiles(); showToast('Deleted'); }
-}
-
-// ── TOAST ────────────────────────────────────────────────────────
-let toastTimer;
-function showToast(msg, isError=false) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.className = 'toast' + (isError ? ' error' : '');
-  void t.offsetWidth;
-  t.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
-}
-
-// ── LOCK ────────────────────────────────────────────────────────
-function lockVault() {
-  document.getElementById('vault-screen').classList.add('hidden');
-  document.getElementById('login-screen').classList.remove('hidden');
-  document.getElementById('step-2').classList.remove('active');
-  document.getElementById('step-1').classList.add('active');
-  document.getElementById('token-input').value = '';
-  clearInterval(countdownTimer);
-}
-
-function navigateTo(id) { selectFolder(id, document.querySelector('.tree-item')); }
-</script>
 </body>
 </html>
-
