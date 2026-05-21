@@ -1,8 +1,11 @@
 /**
  * api.js — Supabase data layer
- * Full CRUD for files table
+ * Handles all database operations for files table
  */
 
+// ─────────────────────────────────────────────
+// READ (load everything)
+// ─────────────────────────────────────────────
 async function loadItems() {
   const { data, error } = await supabase
     .from('files')
@@ -12,6 +15,9 @@ async function loadItems() {
   return data;
 }
 
+// ─────────────────────────────────────────────
+// CREATE (new file/folder)
+// ─────────────────────────────────────────────
 async function createItem(item) {
   const { data, error } = await supabase
     .from('files')
@@ -23,6 +29,9 @@ async function createItem(item) {
   return data;
 }
 
+// ─────────────────────────────────────────────
+// UPDATE (rename/edit content)
+// ─────────────────────────────────────────────
 async function updateItem(id, updates) {
   const { data, error } = await supabase
     .from('files')
@@ -35,6 +44,9 @@ async function updateItem(id, updates) {
   return data;
 }
 
+// ─────────────────────────────────────────────
+// DELETE (remove file/folder)
+// ─────────────────────────────────────────────
 async function deleteItem(id) {
   const { error } = await supabase
     .from('files')
@@ -43,3 +55,13 @@ async function deleteItem(id) {
 
   if (error) throw error;
 }
+
+// ─────────────────────────────────────────────
+// GLOBAL ACCESS (IMPORTANT FIX)
+// ─────────────────────────────────────────────
+window.API = {
+  loadItems,
+  createItem,
+  updateItem,
+  deleteItem
+};
