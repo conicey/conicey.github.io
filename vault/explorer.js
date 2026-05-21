@@ -8,9 +8,9 @@
  * Reads from State; mutates State; re-renders on demand.
  *
  * BACKEND INTEGRATION:
- *   _createItem  → API.createItem()  → Supabase INSERT
- *   _deleteItem  → API.deleteItem()  → Supabase DELETE
- *   ctx-rename   → API.updateItem()  → Supabase UPDATE
+ *   _createItem  → supabase.from('items').insert()
+ *   _deleteItem  → supabase.from('items').delete()
+ *   ctx-rename   → supabase.from('items').update()
  *
  * DB uses snake_case; State uses camelCase.
  * _normalize() converts DB rows → State shape.
