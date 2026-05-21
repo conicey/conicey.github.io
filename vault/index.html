@@ -300,11 +300,27 @@
   <!-- ═══════════════════════════════════════════════════════
        SCRIPTS — load order: state → toast → modal → explorer → app
   ════════════════════════════════════════════════════════ -->
-  <script src="state.js"></script>
-  <script src="toast.js"></script>
-  <script src="modal.js"></script>
-  <script src="explorer.js"></script>
-  <script src="app.js"></script>
+<!-- Supabase SDK -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<!-- Supabase init -->
+<script>
+  const SUPABASE_URL = 'https://bpdgllhwfzaqhmppoftu.supabase.co';
+
+  const SUPABASE_ANON_KEY = 'sb_publishable__qwV9qGyXhC9-8QfiXvuqg_W9lEh6Jz';
+
+  const supabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+  );
+</script>
+
+<!-- App scripts -->
+<script src="state.js"></script>
+<script src="toast.js"></script>
+<script src="modal.js"></script>
+<script src="explorer.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
