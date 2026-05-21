@@ -6,6 +6,14 @@
  *   context menu, action bar, search filtering.
  *
  * Reads from State; mutates State; re-renders on demand.
+ *
+ * BACKEND INTEGRATION:
+ *   _createItem  → API.createItem()  → Supabase INSERT
+ *   _deleteItem  → API.deleteItem()  → Supabase DELETE
+ *   ctx-rename   → API.updateItem()  → Supabase UPDATE
+ *
+ * DB uses snake_case; State uses camelCase.
+ * _normalize() converts DB rows → State shape.
  */
 
 const Explorer = (() => {
@@ -332,31 +340,73 @@ const Explorer = (() => {
     });
   }
 
-  // ── Create item ──────────────────────────────────────────────
-  function _createItem({ type, name, content = null }) {
-    const activeFolderId = State.get('activeFolderId');
-    const item = {
-      id:          State.makeId(),
-      type,
-      name,
-      parentId:    activeFolderId === 'root' ? null : activeFolderId,
-      content,
-      storagePath: null,
-      size:        null,
-      lang:        null,
-      createdAt:   State.now(),
-      updatedAt:   State.now(),
+  // ── Normalization (DB → State) ───────────────────────────────
+  // Supabase returns snake_case. State expects camelCase.
+  // Run every row returned from the DB through this before
+  // passing it to State.addItem() or State.updateItem().
+  function _normalize(row) {
+    return {
+      id:          row.id,
+      type:        row.type,
+      name:        row.name,
+      parentId:    row.parent_id   ?? null,
+      content:     row.content     ?? null,
+      storagePath: row.storage_path ?? null,
+      size:        row.size        ?? null,
+      lang:        row.lang        ?? null,
+      createdAt:   row.created_at  ?? null,
+      updatedAt:   row.updated_at  ?? null,
     };
-    State.addItem(item);
-    renderAll();
-    Toast.show('"' + name + '" created');
   }
 
-  // ── Delete item ──────────────────────────────────────────────
-  function _deleteItem(item) {
+  // ── Create item → Supabase INSERT ────────────────────────────
+  async function _createItem({ type, name, content = null }) {
+    const activeFolderId = State.get('activeFolderId');
+
+    // Build the DB-shape payload (snake_case, no id — Supabase generates it).
+    const payload = {
+      type,
+      name,
+      parent_id:    activeFolderId === 'root' ? null : activeFolderId,
+      content,
+      storage_path: null,
+      size:         null,
+      lang:         null,
+    };
+
+    try {
+      // TODO(backend): API.createItem calls supabase.from('files').insert(payload)
+      const saved = await API.createItem(payload);
+
+      // Normalize DB row → camelCase State shape, then add to local State.
+      State.addItem(_normalize(saved));
+      renderAll();
+      Toast.show('"' + name + '" created');
+
+    } catch (err) {
+      console.error('[Explorer] createItem failed:', err);
+      Toast.show('Failed to create "' + name + '" — check console', true);
+    }
+  }
+
+  // ── Delete item → Supabase DELETE ───────────────────────────
+  async function _deleteItem(item) {
+    // Optimistic: remove from local State immediately for snappy UI.
     State.removeItem(item.id);
     renderAll();
-    Toast.show('"' + item.name + '" deleted');
+
+    try {
+      // TODO(backend): API.deleteItem calls supabase.from('files').delete().eq('id', id)
+      await API.deleteItem(item.id);
+      Toast.show('"' + item.name + '" deleted');
+
+    } catch (err) {
+      // Rollback: re-add the item to State so nothing silently disappears.
+      console.error('[Explorer] deleteItem failed:', err);
+      State.addItem(item);
+      renderAll();
+      Toast.show('Failed to delete "' + item.name + '" — restored', true);
+    }
   }
 
   // ── Search ───────────────────────────────────────────────────
@@ -387,31 +437,56 @@ const Explorer = (() => {
       }
     });
 
+    // ── Rename → Supabase UPDATE ─────────────────────────────
     document.getElementById('ctx-rename').addEventListener('click', async () => {
       const item = State.getItem(State.get('contextTargetId'));
       _closeContextMenu();
       if (!item) return;
+
       const name = await Modal.open({
-        title: 'Rename', subtitle: 'Enter a new name',
-        placeholder: item.name, initial: item.name, confirmLabel: 'Rename',
+        title:        'Rename',
+        subtitle:     'Enter a new name',
+        placeholder:  item.name,
+        initial:      item.name,
+        confirmLabel: 'Rename',
       });
+
       if (!name || name === item.name) return;
-      State.updateItem(item.id, { name, updatedAt: State.now() });
+
+      // Optimistic update.
+      State.updateItem(item.id, { name, updatedAt: new Date().toISOString() });
       renderAll();
-      Toast.show('Renamed to "' + name + '"');
+
+      try {
+        // TODO(backend): API.updateItem calls supabase.from('files').update({name}).eq('id', id)
+        const saved = await API.updateItem(item.id, {
+          name,
+          updated_at: new Date().toISOString(),
+        });
+
+        // Sync the real updatedAt returned by DB.
+        State.updateItem(item.id, { updatedAt: saved.updated_at });
+        Toast.show('Renamed to "' + name + '"');
+
+      } catch (err) {
+        // Rollback to original name.
+        console.error('[Explorer] updateItem failed:', err);
+        State.updateItem(item.id, { name: item.name, updatedAt: item.updatedAt });
+        renderAll();
+        Toast.show('Rename failed — reverted', true);
+      }
     });
 
     document.getElementById('ctx-duplicate').addEventListener('click', () => {
       const item = State.getItem(State.get('contextTargetId'));
       _closeContextMenu();
       if (!item) return;
-      const copy = Object.assign({}, item, {
-        id: State.makeId(), name: 'Copy of ' + item.name,
-        createdAt: State.now(), updatedAt: State.now(),
+      // Duplicate goes through _createItem so it also persists to DB.
+      _createItem({
+        type:    item.type,
+        name:    'Copy of ' + item.name,
+        content: item.content,
       });
-      State.addItem(copy);
-      renderAll();
-      Toast.show('Duplicated "' + item.name + '"');
     });
 
     document.getElementById('ctx-download').addEventListener('click', () => {
