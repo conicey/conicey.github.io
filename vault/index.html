@@ -297,9 +297,10 @@
   <!-- Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-  <!-- ═══════════════════════════════════════════════════════
-       SCRIPTS — load order: state → toast → modal → explorer → app
-  ════════════════════════════════════════════════════════ -->
+<!-- ═══════════════════════════════════════════════════════
+     SCRIPTS — load order: supabase → api → state → toast → modal → explorer → app
+═══════════════════════════════════════════════════════ -->
+
 <!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -314,12 +315,15 @@
   );
 </script>
 
+<!-- API (IMPORTANT: must load BEFORE explorer.js) -->
+<script src="lib/api.js"></script>
+
 <!-- App scripts -->
 <script src="state.js"></script>
 <script src="toast.js"></script>
 <script src="modal.js"></script>
 <script src="explorer.js"></script>
 <script src="app.js"></script>
-  
+
 </body>
 </html>
