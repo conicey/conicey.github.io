@@ -27,14 +27,37 @@ document.addEventListener('DOMContentLoaded', () => {
   const countdown  = document.getElementById('login-countdown');
 
   // ─────────────────────────────────────────────
-  // Init all modules  ← THIS WAS THE MISSING FIX
+  // INIT MODULES
   // ─────────────────────────────────────────────
   Toast.init();
   Modal.init();
   Explorer.init();
 
   // ─────────────────────────────────────────────
-  // Fake login flow (TEMP — replace with Supabase)
+  // SUPABASE FUNCTIONS (NEW STEP 2)
+  // ─────────────────────────────────────────────
+  async function loadItems() {
+    const { data, error } = await supabase
+      .from('files')
+      .select('*');
+
+    if (error) throw error;
+    return data;
+  }
+
+  async function createItem(item) {
+    const { data, error } = await supabase
+      .from('files')
+      .insert(item)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data;
+  }
+
+  // ─────────────────────────────────────────────
+  // LOGIN FLOW
   // ─────────────────────────────────────────────
   btnRequest.addEventListener('click', () => {
     step1.classList.remove('active');
@@ -59,21 +82,39 @@ document.addEventListener('DOMContentLoaded', () => {
     btnUnlock.disabled = true;
   });
 
-  btnUnlock.addEventListener('click', () => {
-    // TEMP AUTH — replace with real Supabase JWT validation
+  btnUnlock.addEventListener('click', async () => {
+
+    // TEMP AUTH
     State.set('sessionToken', 'temporary-session');
 
     loginScreen.classList.add('hidden');
     vaultScreen.classList.remove('hidden');
 
-    loadMockData();
-    Explorer.renderAll();
+    // ─────────────────────────────────────────────
+    // STEP 2: LOAD FROM SUPABASE (REPLACES MOCK DATA)
+    // ─────────────────────────────────────────────
+    try {
+      const items = await loadItems();
+
+      State.set('items', items);
+
+      Explorer.renderAll();
+
+      console.log("Loaded from Supabase:", items);
+
+    } catch (err) {
+      console.error("Failed to load Supabase data:", err);
+
+      // fallback to mock data if DB fails
+      loadMockData();
+      Explorer.renderAll();
+    }
 
     Toast.show('Vault unlocked');
   });
 
   // ─────────────────────────────────────────────
-  // Lock vault
+  // LOCK VAULT
   // ─────────────────────────────────────────────
   btnLock.addEventListener('click', () => {
     State.set('sessionToken', null);
@@ -86,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ─────────────────────────────────────────────
-  // Countdown timer
+  // COUNTDOWN TIMER
   // ─────────────────────────────────────────────
   function startCountdown(seconds) {
     let remaining = seconds;
@@ -107,12 +148,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // ─────────────────────────────────────────────
-  // Mock data (TEMP — replace with Supabase fetch)
+  // MOCK DATA (fallback only)
   // ─────────────────────────────────────────────
   function loadMockData() {
     if (State.get('items').length > 0) return;
 
-    const now      = State.now();
+    const now = State.now();
     const folderId = State.makeId();
 
     State.addItem({
