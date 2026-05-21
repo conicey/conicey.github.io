@@ -1,4 +1,4 @@
-import { supabase } from './supabaseClient';
+const supabase = window.supabaseClient;
 
 const API = {
   async createItem(payload) {
@@ -7,20 +7,16 @@ const API = {
       .insert(payload)
       .select()
       .single();
-
     if (error) throw error;
     return data;
   },
-
   async deleteItem(id) {
     const { error } = await supabase
       .from('items')
       .delete()
       .eq('id', id);
-
     if (error) throw error;
   },
-
   async updateItem(id, updates) {
     const { data, error } = await supabase
       .from('items')
@@ -28,20 +24,16 @@ const API = {
       .eq('id', id)
       .select()
       .single();
-
     if (error) throw error;
     return data;
   },
-
   async fetchItems() {
     const { data, error } = await supabase
       .from('items')
       .select('*');
-
     if (error) throw error;
     return data;
   }
 };
 
-// make API visible to explorer.js
 window.API = API;
