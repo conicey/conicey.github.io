@@ -7,6 +7,7 @@ const API = {
       .insert(payload)
       .select()
       .single();
+
     if (error) throw error;
     return data;
   },
@@ -16,6 +17,7 @@ const API = {
       .from('items')
       .delete()
       .eq('id', id);
+
     if (error) throw error;
   },
 
@@ -26,6 +28,7 @@ const API = {
       .eq('id', id)
       .select()
       .single();
+
     if (error) throw error;
     return data;
   },
@@ -34,7 +37,11 @@ const API = {
     const { data, error } = await supabase
       .from('items')
       .select('*');
+
     if (error) throw error;
     return data;
   }
 };
+
+// make API visible to explorer.js
+window.API = API;
