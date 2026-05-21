@@ -1,8 +1,8 @@
-const supabase = window.supabaseClient;
+const _db = window.supabaseClient;
 
 const API = {
   async createItem(payload) {
-    const { data, error } = await supabase
+    const { data, error } = await _db
       .from('items')
       .insert(payload)
       .select()
@@ -11,14 +11,14 @@ const API = {
     return data;
   },
   async deleteItem(id) {
-    const { error } = await supabase
+    const { error } = await _db
       .from('items')
       .delete()
       .eq('id', id);
     if (error) throw error;
   },
   async updateItem(id, updates) {
-    const { data, error } = await supabase
+    const { data, error } = await _db
       .from('items')
       .update(updates)
       .eq('id', id)
@@ -28,7 +28,7 @@ const API = {
     return data;
   },
   async fetchItems() {
-    const { data, error } = await supabase
+    const { data, error } = await _db
       .from('items')
       .select('*');
     if (error) throw error;
