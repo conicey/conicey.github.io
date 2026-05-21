@@ -97,7 +97,18 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const items = await loadItems();
 
-      State.set('items', items);
+      State.set('items', items.map(row => ({
+        id:          row.id,
+        type:        row.type,
+        name:        row.name,
+        parentId:    row.parent_id   ?? null,
+        content:     row.content     ?? null,
+        storagePath: row.storage_path ?? null,
+        size:        row.size        ?? null,
+        lang:        row.lang        ?? null,
+        createdAt:   row.created_at  ?? null,
+        updatedAt:   row.updated_at  ?? null,
+      })));
 
       Explorer.renderAll();
 
