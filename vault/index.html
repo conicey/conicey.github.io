@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Vault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -12,9 +13,6 @@
 
   <!-- ═══════════════════════════════════════════════════════
        LOGIN SCREEN
-       Auth is handled entirely by Supabase Edge Functions.
-       This screen collects the token and forwards it to the
-       backend via api.js (future). All fake auth is removed.
   ════════════════════════════════════════════════════════ -->
   <div id="screen-login" class="screen" role="main" aria-label="Login">
 
@@ -26,7 +24,6 @@
 
       <div class="vault-logo" aria-label="Vault">
         <div class="vault-icon" aria-hidden="true">
-          <!-- Lock icon -->
           <svg viewBox="0 0 16 16" aria-hidden="true">
             <rect x="2" y="6" width="12" height="9" rx="1"/>
             <path d="M5 6V4a3 3 0 0 1 6 0v2"/>
@@ -41,12 +38,11 @@
       <p class="login-sub">// token-based authentication</p>
 
       <!-- Step 1: Request token -->
-      <div id="login-step-1" class="login-step active">
-        <p class="step-label">Step 01 — Request Access</p>
+      <div id="login-step-1" class="login-step active" aria-hidden="false">
+        <p class="step-label">Step 01 &mdash; Request Access</p>
         <div class="info-box">
           <p>A one-time access token will be dispatched to your authorized address. Tokens expire in 5 minutes and are single-use.</p>
         </div>
-        <!-- TODO(backend): clicking this calls POST /functions/v1/request-token via api.js -->
         <button id="btn-request-token" class="btn-primary" type="button">
           Request Access Token
         </button>
@@ -57,10 +53,10 @@
 
       <!-- Step 2: Paste token -->
       <div id="login-step-2" class="login-step" aria-hidden="true">
-        <p class="step-label">Step 02 — Paste Token</p>
+        <p class="step-label">Step 02 &mdash; Paste Token</p>
         <div class="status-row" id="login-status-row">
           <span class="status-dot" id="login-status-dot" aria-hidden="true"></span>
-          <span class="status-text" id="login-status-text">Waiting…</span>
+          <span class="status-text" id="login-status-text">Waiting&hellip;</span>
         </div>
         <div class="info-box">
           <p>Copy the token from your email and paste it below. Do not type it manually.</p>
@@ -69,7 +65,6 @@
           <span class="countdown-label">Token expires in:</span>
           <span id="login-countdown" class="countdown-value">5:00</span>
         </div>
-        <!-- TODO(backend): on submit, POST /functions/v1/validate-token via api.js -->
         <input
           id="token-input"
           type="text"
@@ -83,7 +78,7 @@
           Unlock Vault
         </button>
         <button id="btn-back" class="btn-back" type="button">
-          ← Request new token
+          &larr; Request new token
         </button>
       </div>
 
@@ -92,9 +87,6 @@
 
   <!-- ═══════════════════════════════════════════════════════
        VAULT SCREEN
-       Shown after successful auth. All data is loaded from
-       Supabase via api.js (future). Local state mirrors
-       the server state; see state.js.
   ════════════════════════════════════════════════════════ -->
   <div id="screen-vault" class="screen hidden" role="main" aria-label="Vault explorer">
 
@@ -112,18 +104,16 @@
           <span>Vault</span>
         </div>
         <nav class="breadcrumb" id="breadcrumb" aria-label="Current location">
-          <span class="crumb active">/ root</span>
+          <span class="crumb active">root</span>
         </nav>
       </div>
 
       <div class="topbar-right">
         <div class="session-badge" aria-label="Session active">
           <span class="session-dot" aria-hidden="true"></span>
-          <!-- TODO(backend): show real session expiry from Supabase JWT -->
           <span>Session Active</span>
         </div>
         <div class="tb-divider" aria-hidden="true"></div>
-        <!-- TODO(backend): open session management panel — list/revoke sessions via Supabase -->
         <button class="tb-btn" id="btn-sessions" type="button" aria-label="Manage sessions">
           <svg viewBox="0 0 14 14" aria-hidden="true">
             <rect x="1" y="1" width="12" height="12" rx="1.5"/>
@@ -132,7 +122,6 @@
           </svg>
           Sessions
         </button>
-        <!-- TODO(backend): call POST /functions/v1/revoke-session to lock out -->
         <button class="tb-btn tb-btn--danger" id="btn-lock" type="button" aria-label="Lock vault">
           <svg viewBox="0 0 14 14" aria-hidden="true">
             <rect x="2" y="6" width="10" height="7" rx="1"/>
@@ -143,19 +132,16 @@
       </div>
     </header>
 
-    <!-- Body: sidebar + main panel + detail panel -->
+    <!-- Body: sidebar + main + detail -->
     <div class="vault-body">
 
-      <!-- Left sidebar: folder tree -->
+      <!-- Left sidebar -->
       <aside class="sidebar" id="sidebar" aria-label="Folder tree">
         <div class="sidebar-section-label">Folders</div>
-        <!-- TODO(backend): folder tree is populated dynamically by explorer.js
-             after fetching from Supabase `folders` table -->
         <nav class="folder-tree" id="folder-tree" role="tree" aria-label="Folder navigation">
           <!-- Rendered by explorer.js -->
         </nav>
         <div class="sidebar-footer">
-          <!-- TODO(backend): storage usage from Supabase storage API -->
           <div class="storage-label" id="storage-label">Storage</div>
           <div class="storage-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Storage used">
             <div class="storage-fill" id="storage-fill"></div>
@@ -163,27 +149,25 @@
         </div>
       </aside>
 
-      <!-- Main file explorer panel -->
+      <!-- Main file explorer -->
       <main class="main-panel" id="main-panel">
 
         <!-- Action bar -->
         <div class="action-bar" role="toolbar" aria-label="File actions">
-          <!-- TODO(backend): each create action calls Supabase INSERT via api.js -->
           <button class="action-btn action-btn--accent" id="btn-new-folder" type="button">
             <svg viewBox="0 0 12 12" aria-hidden="true">
               <path d="M1 2.5A1 1 0 0 1 2 1.5h3L6.5 3H10a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/>
               <line x1="5.5" y1="6" x2="8.5" y2="6"/>
               <line x1="7" y1="4.5" x2="7" y2="7.5"/>
             </svg>
-            New Folder
+            <span>New Folder</span>
           </button>
-          <!-- TODO(backend): file upload via Supabase Storage SDK -->
           <button class="action-btn" id="btn-upload" type="button">
             <svg viewBox="0 0 12 12" aria-hidden="true">
               <path d="M6 9V3M3 5.5L6 3l3 2.5"/>
               <path d="M2 9.5h8"/>
             </svg>
-            Upload File
+            <span>Upload</span>
           </button>
           <button class="action-btn" id="btn-new-note" type="button">
             <svg viewBox="0 0 12 12" aria-hidden="true">
@@ -192,7 +176,7 @@
               <line x1="3.5" y1="6" x2="8.5" y2="6"/>
               <line x1="3.5" y1="8" x2="6" y2="8"/>
             </svg>
-            New Note
+            <span>New Note</span>
           </button>
           <button class="action-btn" id="btn-new-code" type="button">
             <svg viewBox="0 0 12 12" aria-hidden="true">
@@ -200,7 +184,7 @@
               <polyline points="9,3.5 11,6 9,8.5"/>
               <line x1="7" y1="2" x2="5" y2="10"/>
             </svg>
-            Code Snippet
+            <span>Code Snippet</span>
           </button>
 
           <div class="search-wrap">
@@ -208,28 +192,25 @@
               <circle cx="5" cy="5" r="3.5"/>
               <line x1="7.5" y1="7.5" x2="10" y2="10"/>
             </svg>
-            <!-- TODO(backend): global search via Supabase full-text search -->
             <input
               id="search-input"
               type="search"
               class="search-input"
-              placeholder="Search vault…"
+              placeholder="Search vault&hellip;"
               aria-label="Search files and folders"
             />
           </div>
         </div>
 
-        <!-- File grid area -->
+        <!-- File grid -->
         <div class="file-area" id="file-area">
-          <!-- Empty state shown before data loads -->
           <div class="empty-state" id="empty-state">
             <svg viewBox="0 0 32 32" aria-hidden="true">
               <path d="M4 6a2 2 0 0 1 2-2h8l3 4h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
             </svg>
             <p>No files yet</p>
-            <p class="empty-sub">Connect to Supabase to load your vault</p>
+            <p class="empty-sub">Unlock the vault to load your files</p>
           </div>
-          <!-- File sections rendered by explorer.js -->
           <div id="section-folders" class="file-section hidden">
             <div class="section-header">Folders</div>
             <div class="file-grid" id="grid-folders"></div>
@@ -252,7 +233,6 @@
           </svg>
           <p>Select a file to inspect</p>
         </div>
-        <!-- Detail content shown when a file is selected — rendered by explorer.js -->
         <div id="detail-content" class="hidden">
           <div class="detail-header">
             <div class="detail-name" id="detail-name"></div>
@@ -266,9 +246,8 @@
 
     </div><!-- /.vault-body -->
 
-    <!-- Context menu (right-click on file cards) -->
+    <!-- Context menu -->
     <div id="context-menu" class="context-menu" role="menu" aria-label="File options" hidden>
-      <!-- TODO(backend): rename/delete/download wired to api.js -->
       <button class="ctx-item" id="ctx-open" role="menuitem">
         <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M8 3l3 3-3 3"/></svg>
         Open
@@ -296,9 +275,7 @@
   </div><!-- /#screen-vault -->
 
   <!-- ═══════════════════════════════════════════════════════
-       MODAL OVERLAY
-       Single modal instance reused for all dialogs.
-       Content injected by modal.js.
+       MODAL
   ════════════════════════════════════════════════════════ -->
   <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
     <div class="modal" id="modal-box" role="document">
@@ -317,14 +294,14 @@
     </div>
   </div>
 
-  <!-- Toast notification (ARIA live region) -->
+  <!-- Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
   <!-- ═══════════════════════════════════════════════════════
-       SCRIPTS
-       Load order matters: state → api (future) → modal → explorer → app
+       SCRIPTS — load order: state → toast → modal → explorer → app
   ════════════════════════════════════════════════════════ -->
   <script src="state.js"></script>
+  <script src="toast.js"></script>
   <script src="modal.js"></script>
   <script src="explorer.js"></script>
   <script src="app.js"></script>
