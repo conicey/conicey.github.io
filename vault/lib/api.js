@@ -1,6 +1,6 @@
 import { supabase } from './supabaseClient';
 
-export const API = {
+const API = {
   async createItem(payload) {
     const { data, error } = await supabase
       .from('items')
