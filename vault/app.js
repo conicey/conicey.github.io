@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // SUPABASE FUNCTIONS (NEW STEP 2)
   // ─────────────────────────────────────────────
   async function loadItems() {
-    const { data, error } = await supabase
+    const { data, error } = await window.supabaseClient
       .from('files')
       .select('*');
 
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   async function createItem(item) {
-    const { data, error } = await supabase
+    const { data, error } = await window.supabaseClient
       .from('files')
       .insert(item)
       .select()
@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // LOGIN FLOW
   // ─────────────────────────────────────────────
   btnRequest.addEventListener('click', () => {
+    document.activeElement.blur();
     step1.classList.remove('active');
     step2.classList.add('active');
 
