@@ -3,7 +3,7 @@ const _db = window.supabaseClient;
 const API = {
   async createItem(payload) {
     const { data, error } = await _db
-      .from('items')
+      .from('files')
       .insert(payload)
       .select()
       .single();
@@ -12,14 +12,14 @@ const API = {
   },
   async deleteItem(id) {
     const { error } = await _db
-      .from('items')
+      .from('files')
       .delete()
       .eq('id', id);
     if (error) throw error;
   },
   async updateItem(id, updates) {
     const { data, error } = await _db
-      .from('items')
+      .from('files')
       .update(updates)
       .eq('id', id)
       .select()
@@ -29,7 +29,7 @@ const API = {
   },
   async fetchItems() {
     const { data, error } = await _db
-      .from('items')
+      .from('files')
       .select('*');
     if (error) throw error;
     return data;
