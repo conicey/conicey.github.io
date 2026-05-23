@@ -1,24 +1,9 @@
 /**
  * explorer.js — File explorer rendering + interaction
- *
- * Owns everything inside the vault screen:
- *   sidebar folder tree, file grid, detail panel,
- *   context menu, action bar, search filtering.
- *
- * Reads from State; mutates State; re-renders on demand.
- *
- * BACKEND INTEGRATION:
- *   _createItem  → supabase.from('items').insert()
- *   _deleteItem  → supabase.from('items').delete()
- *   ctx-rename   → supabase.from('items').update()
- *
- * DB uses snake_case; State uses camelCase.
- * _normalize() converts DB rows → State shape.
  */
 
 const Explorer = (() => {
 
-  // ── SVG icon paths ───────────────────────────────────────────
   const ICONS = {
     folder:  `<svg viewBox="0 0 18 18" aria-hidden="true"><path d="M1.5 3.75A1.5 1.5 0 0 1 3 2.25H7.5L9.75 4.5H15A1.5 1.5 0 0 1 16.5 6v7.5a1.5 1.5 0 0 1-1.5 1.5H3a1.5 1.5 0 0 1-1.5-1.5z"/></svg>`,
     note:    `<svg viewBox="0 0 18 18" aria-hidden="true"><rect x="2.25" y="2.25" width="13.5" height="13.5" rx="1.5"/><line x1="5" y1="6" x2="13" y2="6"/><line x1="5" y1="9" x2="13" y2="9"/><line x1="5" y1="12" x2="9" y2="12"/></svg>`,
@@ -28,7 +13,8 @@ const Explorer = (() => {
     generic: `<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="8" width="28" height="24" rx="2" stroke-width="1"/><line x1="11" y1="15" x2="29" y2="15" stroke-width="1"/><line x1="11" y1="19" x2="29" y2="19" stroke-width="1"/><line x1="11" y1="23" x2="22" y2="23" stroke-width="1"/></svg>`,
   };
 
-  // ── DOM refs ─────────────────────────────────────────────────
+  // Hidden file input for uploads
+  let _fileInput = null;
   let _els = {};
 
   function _cacheEls() {
@@ -54,16 +40,24 @@ const Explorer = (() => {
     };
   }
 
-  // ── Init ─────────────────────────────────────────────────────
+  function _createFileInput() {
+    _fileInput = document.createElement('input');
+    _fileInput.type     = 'file';
+    _fileInput.multiple = true;
+    _fileInput.style.display = 'none';
+    document.body.appendChild(_fileInput);
+    _fileInput.addEventListener('change', _handleFileInputChange);
+  }
+
   function init() {
     _cacheEls();
+    _createFileInput();
     _bindActionBar();
     _bindContextMenu();
     _bindSearch();
     renderAll();
   }
 
-  // ── Full render ──────────────────────────────────────────────
   function renderAll() {
     _renderSidebar();
     _renderGrid();
@@ -77,21 +71,13 @@ const Explorer = (() => {
     const activeId = State.get('activeFolderId');
     const folders  = items.filter(i => i.type === 'folder');
 
-    let html = _sidebarItem({
-      id: 'root', name: 'All Files', icon: ICONS.folder,
-      count: items.length, activeId, indent: 0,
-    });
-
+    let html = _sidebarItem({ id: 'root', name: 'All Files', icon: ICONS.folder, count: items.length, activeId, indent: 0 });
     folders.forEach(f => {
       const childCount = items.filter(i => i.parentId === f.id).length;
-      html += _sidebarItem({
-        id: f.id, name: f.name, icon: ICONS.folder,
-        count: childCount, activeId, indent: 1,
-      });
+      html += _sidebarItem({ id: f.id, name: f.name, icon: ICONS.folder, count: childCount, activeId, indent: 1 });
     });
 
     _els.folderTree.innerHTML = html;
-
     _els.folderTree.querySelectorAll('[data-folder-id]').forEach(el => {
       el.addEventListener('click', () => {
         State.navigateToFolder(el.dataset.folderId, el.dataset.folderName);
@@ -99,8 +85,21 @@ const Explorer = (() => {
       });
     });
 
-    _els.storageLabel.textContent = 'Storage · connect Supabase';
-    _els.storageFill.style.width  = '0%';
+    // Update storage bar with real usage
+    _updateStorageBar();
+  }
+
+  async function _updateStorageBar() {
+    try {
+      const items = State.get('items');
+      const totalBytes = items.reduce((sum, i) => sum + (i.size || 0), 0);
+      const limitBytes = 50 * 1024 * 1024; // 50 MB Supabase free tier
+      const pct = Math.min((totalBytes / limitBytes) * 100, 100).toFixed(1);
+      _els.storageLabel.textContent = `Storage · ${_formatBytes(totalBytes)} / 50 MB`;
+      _els.storageFill.style.width  = pct + '%';
+    } catch {
+      _els.storageLabel.textContent = 'Storage';
+    }
   }
 
   function _sidebarItem({ id, name, icon, count, activeId, indent }) {
@@ -125,7 +124,7 @@ const Explorer = (() => {
 
     _els.emptyState.classList.toggle('hidden', !isEmpty);
     _els.sectionFolders.classList.toggle('hidden', folders.length === 0);
-    _els.sectionFiles.classList.toggle('hidden',   files.length === 0);
+    _els.sectionFiles.classList.toggle('hidden', files.length === 0);
 
     _els.gridFolders.innerHTML = folders.map(f => _fileCard(f)).join('');
     _els.gridFiles.innerHTML   = files.map(f => _fileCard(f)).join('');
@@ -137,14 +136,12 @@ const Explorer = (() => {
         const item = State.getItem(id);
         if (!item) return;
 
-        // Folders: navigate in on single click
         if (item.type === 'folder') {
           State.navigateToFolder(item.id, item.name);
           renderAll();
           return;
         }
 
-        // Files: select and expand detail panel
         document.querySelectorAll('.file-card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
         State.set('selectedItemId', id);
@@ -238,25 +235,17 @@ const Explorer = (() => {
       div.textContent = item.content;
       el.appendChild(div);
 
-    } else if (item.type === 'image') {
-      // If the item has a public Supabase Storage URL, show the image.
-      // Otherwise fall back to the image icon placeholder.
-      if (item.storagePath) {
-        const img = document.createElement('img');
-        img.src   = item.storagePath;
-        img.alt   = item.name;
-        img.style.cssText = 'max-width:100%;max-height:160px;object-fit:contain;border-radius:3px;';
-        el.appendChild(img);
-      } else {
-        // Placeholder until Supabase Storage is wired up
-        el.innerHTML = ICONS.image;
-        el.style.flexDirection = 'column';
-        el.style.gap = '6px';
-        const hint = document.createElement('span');
-        hint.style.cssText = 'font-family:var(--font-mono);font-size:9px;color:var(--text-muted);';
-        hint.textContent = 'Connect Storage to preview';
-        el.appendChild(hint);
-      }
+    } else if (item.type === 'image' && item.storagePath) {
+      const url = API.getPublicUrl(item.storagePath);
+      const img = document.createElement('img');
+      img.src   = url;
+      img.alt   = item.name;
+      img.style.cssText = 'max-width:100%;max-height:160px;object-fit:contain;border-radius:3px;';
+      el.appendChild(img);
+
+    } else if (item.storagePath) {
+      // Generic file with a storage path — show icon + name
+      el.innerHTML = ICONS.file;
 
     } else {
       el.innerHTML = ICONS.generic;
@@ -317,14 +306,108 @@ const Explorer = (() => {
       if (item.type === 'folder') {
         State.navigateToFolder(item.id, item.name);
         renderAll();
+      } else if (item.storagePath) {
+        // Open public URL in a new tab
+        const url = API.getPublicUrl(item.storagePath);
+        window.open(url, '_blank', 'noopener');
+      } else if (item.content != null) {
+        // Notes/code: already visible in the detail panel
+        Toast.show('Content shown in the panel');
       } else {
-        Toast.show('Open — connect Supabase to view files');
+        Toast.show('No file attached yet');
       }
     } else if (action === 'download') {
-      Toast.show('Download — connect Supabase Storage');
+      _downloadItem(item);
     } else if (action === 'delete') {
       _deleteItem(item);
     }
+  }
+
+  // ── Upload ───────────────────────────────────────────────────
+  function _triggerUpload() {
+    _fileInput.value = '';
+    _fileInput.click();
+  }
+
+  async function _handleFileInputChange() {
+    const files = Array.from(_fileInput.files);
+    if (!files.length) return;
+
+    for (const file of files) {
+      await _uploadFile(file);
+    }
+  }
+
+  async function _uploadFile(file) {
+    const activeFolderId = State.get('activeFolderId');
+    const folder = activeFolderId !== 'root' ? activeFolderId + '/' : '';
+    const path   = folder + Date.now() + '_' + file.name;
+
+    Toast.show('Uploading ' + file.name + '…');
+
+    try {
+      const publicUrl = await API.uploadFile(file, path);
+
+      // Detect type from MIME
+      let type = 'file';
+      if (file.type.startsWith('image/')) type = 'image';
+      else if (file.type === 'text/plain' || file.name.endsWith('.md')) type = 'note';
+
+      const payload = {
+        type,
+        name:         file.name,
+        parent_id:    activeFolderId === 'root' ? null : activeFolderId,
+        content:      null,
+        storage_path: path,
+        size:         file.size,
+        lang:         null,
+      };
+
+      const saved = await API.createItem(payload);
+      State.addItem(_normalize(saved));
+      renderAll();
+      Toast.show(file.name + ' uploaded');
+
+    } catch (err) {
+      console.error('[Explorer] upload failed:', err);
+      Toast.show('Upload failed: ' + file.name, true);
+    }
+  }
+
+  // ── Download ─────────────────────────────────────────────────
+  async function _downloadItem(item) {
+    if (!item.storagePath) {
+      // For notes/code with no storage path, build a blob and download it
+      if (item.content != null) {
+        const blob = new Blob([item.content], { type: 'text/plain' });
+        _triggerBlobDownload(blob, item.name);
+      } else {
+        Toast.show('Nothing to download');
+      }
+      return;
+    }
+
+    try {
+      const url = API.getPublicUrl(item.storagePath);
+      // Fetch as blob so we get a proper download prompt (not a new tab)
+      const res  = await fetch(url);
+      const blob = await res.blob();
+      _triggerBlobDownload(blob, item.name);
+    } catch (err) {
+      console.error('[Explorer] download failed:', err);
+      Toast.show('Download failed', true);
+    }
+  }
+
+  function _triggerBlobDownload(blob, filename) {
+    const url = URL.createObjectURL(blob);
+    const a   = document.createElement('a');
+    a.href     = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
   }
 
   // ── Action bar ───────────────────────────────────────────────
@@ -357,11 +440,7 @@ const Explorer = (() => {
     });
 
     document.getElementById('btn-upload').addEventListener('click', () => {
-      Toast.show('Upload — connect Supabase Storage to enable');
-    });
-
-    document.getElementById('btn-sessions').addEventListener('click', () => {
-      Toast.show('Sessions — connect Supabase to manage sessions');
+      _triggerUpload();
     });
   }
 
@@ -381,10 +460,9 @@ const Explorer = (() => {
     };
   }
 
-  // ── Create item → Supabase INSERT ────────────────────────────
+  // ── Create item ──────────────────────────────────────────────
   async function _createItem({ type, name, content = null }) {
     const activeFolderId = State.get('activeFolderId');
-
     const payload = {
       type,
       name,
@@ -394,7 +472,6 @@ const Explorer = (() => {
       size:         null,
       lang:         null,
     };
-
     try {
       const saved = await API.createItem(payload);
       State.addItem(_normalize(saved));
@@ -402,16 +479,20 @@ const Explorer = (() => {
       Toast.show('"' + name + '" created');
     } catch (err) {
       console.error('[Explorer] createItem failed:', err);
-      Toast.show('Failed to create "' + name + '" — check console', true);
+      Toast.show('Failed to create "' + name + '"', true);
     }
   }
 
-  // ── Delete item → Supabase DELETE ───────────────────────────
+  // ── Delete item ──────────────────────────────────────────────
   async function _deleteItem(item) {
     State.removeItem(item.id);
     renderAll();
 
     try {
+      // If it has a storage file, delete that too
+      if (item.storagePath) {
+        await API.deleteFile(item.storagePath);
+      }
       await API.deleteItem(item.id);
       Toast.show('"' + item.name + '" deleted');
     } catch (err) {
@@ -445,8 +526,11 @@ const Explorer = (() => {
       if (item.type === 'folder') {
         State.navigateToFolder(item.id, item.name);
         renderAll();
+      } else if (item.storagePath) {
+        window.open(API.getPublicUrl(item.storagePath), '_blank', 'noopener');
       } else {
-        Toast.show('Open — connect Supabase to view files');
+        State.set('selectedItemId', item.id);
+        _renderDetail();
       }
     });
 
@@ -456,23 +540,16 @@ const Explorer = (() => {
       if (!item) return;
 
       const name = await Modal.open({
-        title:        'Rename',
-        subtitle:     'Enter a new name',
-        placeholder:  item.name,
-        initial:      item.name,
-        confirmLabel: 'Rename',
+        title: 'Rename', subtitle: 'Enter a new name',
+        placeholder: item.name, initial: item.name, confirmLabel: 'Rename',
       });
-
       if (!name || name === item.name) return;
 
       State.updateItem(item.id, { name, updatedAt: new Date().toISOString() });
       renderAll();
 
       try {
-        const saved = await API.updateItem(item.id, {
-          name,
-          updated_at: new Date().toISOString(),
-        });
+        const saved = await API.updateItem(item.id, { name, updated_at: new Date().toISOString() });
         State.updateItem(item.id, { updatedAt: saved.updated_at });
         Toast.show('Renamed to "' + name + '"');
       } catch (err) {
@@ -487,16 +564,14 @@ const Explorer = (() => {
       const item = State.getItem(State.get('contextTargetId'));
       _closeContextMenu();
       if (!item) return;
-      _createItem({
-        type:    item.type,
-        name:    'Copy of ' + item.name,
-        content: item.content,
-      });
+      _createItem({ type: item.type, name: 'Copy of ' + item.name, content: item.content });
     });
 
     document.getElementById('ctx-download').addEventListener('click', () => {
+      const item = State.getItem(State.get('contextTargetId'));
       _closeContextMenu();
-      Toast.show('Download — connect Supabase Storage');
+      if (!item) return;
+      _downloadItem(item);
     });
 
     document.getElementById('ctx-delete').addEventListener('click', () => {
@@ -511,12 +586,8 @@ const Explorer = (() => {
     const menu   = _els.ctxMenu;
     const margin = 8;
     menu.removeAttribute('hidden');
-
-    const menuW = 170;
-    const menuH = 200;
-    const left  = Math.min(x, window.innerWidth  - menuW - margin);
-    const top   = Math.min(y, window.innerHeight - menuH - margin);
-
+    const left = Math.min(x, window.innerWidth  - 178 - margin);
+    const top  = Math.min(y, window.innerHeight - 210 - margin);
     menu.style.left = left + 'px';
     menu.style.top  = top  + 'px';
   }
@@ -554,12 +625,8 @@ const Explorer = (() => {
 
   function _formatDate(iso) {
     try {
-      return new Date(iso).toLocaleDateString(undefined, {
-        month: 'short', day: 'numeric', year: 'numeric',
-      });
-    } catch {
-      return '—';
-    }
+      return new Date(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    } catch { return '—'; }
   }
 
   return { init, renderAll };
