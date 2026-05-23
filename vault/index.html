@@ -11,20 +11,13 @@
 </head>
 <body>
 
-  <!-- ═══════════════════════════════════════════════════════
-       LOGIN SCREEN
-  ════════════════════════════════════════════════════════ -->
+  <!-- LOGIN SCREEN -->
   <div id="screen-login" class="screen" role="main" aria-label="Login">
-
-    <div class="login-bg" aria-hidden="true">
-      <div class="grid-lines"></div>
-    </div>
-
+    <div class="login-bg" aria-hidden="true"><div class="grid-lines"></div></div>
     <div class="login-box">
-
       <div class="vault-logo" aria-label="Vault">
         <div class="vault-icon" aria-hidden="true">
-          <svg viewBox="0 0 16 16" aria-hidden="true">
+          <svg viewBox="0 0 16 16">
             <rect x="2" y="6" width="12" height="9" rx="1"/>
             <path d="M5 6V4a3 3 0 0 1 6 0v2"/>
             <circle cx="8" cy="10.5" r="1.2"/>
@@ -33,59 +26,35 @@
         </div>
         <span class="vault-name">Vault</span>
       </div>
-
       <h1 class="login-title">Secure Access - CONICEY</h1>
-
-      <!-- Step 1: Request token -->
       <div id="login-step-1" class="login-step active" aria-hidden="false">
-        <button id="btn-request-token" class="btn-primary" type="button">
-          Request Access Token
-        </button>
+        <button id="btn-request-token" class="btn-primary" type="button">Request Access Token</button>
       </div>
-
-      <!-- Step 2: Paste token -->
       <div id="login-step-2" class="login-step" aria-hidden="true">
-        <div class="status-row" id="login-status-row">
-          <span class="status-dot" id="login-status-dot" aria-hidden="true"></span>
+        <div class="status-row">
+          <span class="status-dot" id="login-status-dot"></span>
           <span class="status-text" id="login-status-text">Waiting…</span>
         </div>
-        <div class="info-box">
-          <p>Token has been sent.</p>
-        </div>
+        <div class="info-box"><p>Token has been sent.</p></div>
         <div class="countdown-row">
           <span class="countdown-label">Token expires in:</span>
           <span id="login-countdown" class="countdown-value">5:00</span>
         </div>
-        <input
-          id="token-input"
-          type="text"
-          class="paste-field"
-          placeholder="Paste access token here"
-          autocomplete="off"
-          spellcheck="false"
-          aria-label="Access token"
-        />
-        <button id="btn-unlock" class="btn-primary" type="button" disabled>
-          Verify
-        </button>
-        <button id="btn-back" class="btn-back" type="button">
-          ← Request new token
-        </button>
+        <input id="token-input" type="text" class="paste-field" placeholder="Paste access token here" autocomplete="off" spellcheck="false" aria-label="Access token" />
+        <button id="btn-unlock" class="btn-primary" type="button" disabled>Verify</button>
+        <button id="btn-back" class="btn-back" type="button">← Request new token</button>
       </div>
-
     </div>
   </div>
 
-  <!-- ═══════════════════════════════════════════════════════
-       VAULT SCREEN
-  ════════════════════════════════════════════════════════ -->
-  <div id="screen-vault" class="screen hidden" role="main" aria-label="Vault explorer">
+  <!-- VAULT SCREEN -->
+  <div id="screen-vault" class="screen hidden" role="main" aria-label="Vault">
 
     <!-- Top bar -->
     <header class="topbar" role="banner">
       <div class="topbar-left">
-        <div class="topbar-logo" aria-label="Vault home">
-          <div class="tl-icon" aria-hidden="true">
+        <div class="topbar-logo">
+          <div class="tl-icon">
             <svg viewBox="0 0 10 10">
               <rect x="1" y="3" width="8" height="6" rx="0.5"/>
               <path d="M3 3V2a2 2 0 0 1 4 0v1"/>
@@ -94,126 +63,82 @@
           </div>
           <span>Vault</span>
         </div>
-        <nav class="breadcrumb" id="breadcrumb" aria-label="Current location">
-          <span class="crumb active">root</span>
+        <nav class="breadcrumb" id="breadcrumb" aria-label="Location">
+          <span class="crumb active">All Files</span>
         </nav>
       </div>
-
       <div class="topbar-right">
-        <div class="session-badge" aria-label="Session active">
-          <span class="session-dot" aria-hidden="true"></span>
+        <!-- Action bar inline in topbar -->
+        <button class="action-btn" id="btn-upload" type="button">
+          <svg viewBox="0 0 12 12"><path d="M6 9V3M3 5.5L6 3l3 2.5"/><path d="M2 9.5h8"/></svg>
+          <span>Upload</span>
+        </button>
+        <button class="action-btn" id="btn-new-note" type="button">
+          <svg viewBox="0 0 12 12"><rect x="1.5" y="1.5" width="9" height="9" rx="1"/><line x1="3.5" y1="4" x2="8.5" y2="4"/><line x1="3.5" y1="6" x2="8.5" y2="6"/><line x1="3.5" y1="8" x2="6" y2="8"/></svg>
+          <span>New Note</span>
+        </button>
+        <button class="action-btn" id="btn-new-code" type="button">
+          <svg viewBox="0 0 12 12"><polyline points="3,3.5 1,6 3,8.5"/><polyline points="9,3.5 11,6 9,8.5"/><line x1="7" y1="2" x2="5" y2="10"/></svg>
+          <span>Code</span>
+        </button>
+        <div class="search-wrap">
+          <svg viewBox="0 0 12 12"><circle cx="5" cy="5" r="3.5"/><line x1="7.5" y1="7.5" x2="10" y2="10"/></svg>
+          <input id="search-input" type="search" class="search-input" placeholder="Search…" aria-label="Search files" />
+        </div>
+        <div class="session-badge">
+          <span class="session-dot"></span>
           <span>Session Active</span>
         </div>
-        <button class="tb-btn tb-btn--danger" id="btn-lock" type="button" aria-label="Lock vault">
-          <svg viewBox="0 0 14 14" aria-hidden="true">
-            <rect x="2" y="6" width="10" height="7" rx="1"/>
-            <path d="M4 6V4a3 3 0 0 1 6 0v2"/>
-          </svg>
+        <button class="tb-btn tb-btn--danger" id="btn-lock" type="button">
+          <svg viewBox="0 0 14 14"><rect x="2" y="6" width="10" height="7" rx="1"/><path d="M4 6V4a3 3 0 0 1 6 0v2"/></svg>
           Lock
         </button>
       </div>
     </header>
 
-    <!-- Body: sidebar + main + detail -->
-    <div class="vault-body">
+    <!-- 3-panel body -->
+    <div class="vault-body" id="vault-body">
 
-      <!-- Left sidebar -->
-      <aside class="sidebar" id="sidebar" aria-label="Folder tree">
-        <div class="sidebar-section-label">Folders</div>
-        <nav class="folder-tree" id="folder-tree" role="tree" aria-label="Folder navigation">
-          <!-- Rendered by explorer.js -->
-        </nav>
-        <div class="sidebar-footer">
-          <div class="storage-label" id="storage-label">Storage</div>
-          <div class="storage-bar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-label="Storage used">
-            <div class="storage-fill" id="storage-fill"></div>
-          </div>
-        </div>
-      </aside>
-
-      <!-- Main file explorer -->
-      <main class="main-panel" id="main-panel">
-
-        <!-- Action bar -->
-        <div class="action-bar" role="toolbar" aria-label="File actions">
-          <button class="action-btn action-btn--accent" id="btn-new-folder" type="button">
-            <svg viewBox="0 0 12 12" aria-hidden="true">
-              <path d="M1 2.5A1 1 0 0 1 2 1.5h3L6.5 3H10a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H2a1 1 0 0 1-1-1z"/>
-              <line x1="5.5" y1="6" x2="8.5" y2="6"/>
-              <line x1="7" y1="4.5" x2="7" y2="7.5"/>
-            </svg>
-            <span>New Folder</span>
-          </button>
-          <button class="action-btn" id="btn-upload" type="button">
-            <svg viewBox="0 0 12 12" aria-hidden="true">
-              <path d="M6 9V3M3 5.5L6 3l3 2.5"/>
-              <path d="M2 9.5h8"/>
-            </svg>
-            <span>Upload</span>
-          </button>
-          <button class="action-btn" id="btn-new-note" type="button">
-            <svg viewBox="0 0 12 12" aria-hidden="true">
-              <rect x="1.5" y="1.5" width="9" height="9" rx="1"/>
-              <line x1="3.5" y1="4" x2="8.5" y2="4"/>
-              <line x1="3.5" y1="6" x2="8.5" y2="6"/>
-              <line x1="3.5" y1="8" x2="6" y2="8"/>
-            </svg>
-            <span>New Note</span>
-          </button>
-          <button class="action-btn" id="btn-new-code" type="button">
-            <svg viewBox="0 0 12 12" aria-hidden="true">
-              <polyline points="3,3.5 1,6 3,8.5"/>
-              <polyline points="9,3.5 11,6 9,8.5"/>
-              <line x1="7" y1="2" x2="5" y2="10"/>
-            </svg>
-            <span>Code Snippet</span>
-          </button>
-
-          <div class="search-wrap">
-            <svg viewBox="0 0 12 12" aria-hidden="true">
-              <circle cx="5" cy="5" r="3.5"/>
-              <line x1="7.5" y1="7.5" x2="10" y2="10"/>
-            </svg>
-            <input
-              id="search-input"
-              type="search"
-              class="search-input"
-              placeholder="Search vault…"
-              aria-label="Search files and folders"
-            />
-          </div>
-        </div>
-
-        <!-- File grid -->
-        <div class="file-area" id="file-area">
-          <div class="empty-state" id="empty-state">
-            <svg viewBox="0 0 32 32" aria-hidden="true">
-              <path d="M4 6a2 2 0 0 1 2-2h8l3 4h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/>
-            </svg>
+      <!-- LEFT: File list -->
+      <div class="list-panel" id="list-panel">
+        <div class="list-panel-inner">
+          <div class="empty-state" id="empty-state" style="display:none;">
+            <svg viewBox="0 0 32 32"><path d="M4 6a2 2 0 0 1 2-2h8l3 4h9a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/></svg>
             <p>No files yet</p>
-            <p class="empty-sub">Unlock the vault to load your files</p>
           </div>
-          <div id="section-folders" class="file-section hidden">
-            <div class="section-header">Folders</div>
-            <div class="file-grid" id="grid-folders"></div>
-          </div>
-          <div id="section-files" class="file-section hidden">
-            <div class="section-header">Files</div>
-            <div class="file-grid" id="grid-files"></div>
-          </div>
+          <div id="file-list" class="file-list"></div>
         </div>
-      </main>
+        <div class="list-footer">
+          <div class="storage-label" id="storage-label">Storage</div>
+          <div class="storage-bar"><div class="storage-fill" id="storage-fill"></div></div>
+        </div>
+      </div>
 
-      <!-- Right detail panel -->
-      <aside class="detail-panel" id="detail-panel" aria-label="File details">
+      <!-- DIVIDER A -->
+      <div class="divider" id="divider-a" title="Drag to resize"></div>
+
+      <!-- MIDDLE: Notepad (hidden by default) -->
+      <div class="notepad-panel" id="notepad-panel" style="display:none;">
+        <div class="notepad-header">
+          <span class="notepad-title" id="notepad-title">Untitled</span>
+          <button class="notepad-close" id="notepad-close" title="Close">✕</button>
+        </div>
+        <textarea
+          id="notepad-area"
+          class="notepad-area"
+          placeholder="Start typing…"
+          spellcheck="true"
+        ></textarea>
+      </div>
+
+      <!-- DIVIDER B (hidden when notepad closed) -->
+      <div class="divider" id="divider-b" title="Drag to resize" style="display:none;"></div>
+
+      <!-- RIGHT: Detail panel -->
+      <aside class="detail-panel" id="detail-panel">
         <div class="detail-empty" id="detail-empty">
-          <svg viewBox="0 0 32 32" aria-hidden="true">
-            <rect x="4" y="4" width="24" height="24" rx="2"/>
-            <line x1="9" y1="11" x2="23" y2="11"/>
-            <line x1="9" y1="16" x2="23" y2="16"/>
-            <line x1="9" y1="21" x2="17" y2="21"/>
-          </svg>
-          <p>Select a file to inspect</p>
+          <svg viewBox="0 0 32 32"><rect x="4" y="4" width="24" height="24" rx="2"/><line x1="9" y1="11" x2="23" y2="11"/><line x1="9" y1="16" x2="23" y2="16"/><line x1="9" y1="21" x2="17" y2="21"/></svg>
+          <p>Select a file</p>
         </div>
         <div id="detail-content" class="hidden">
           <div class="detail-header">
@@ -229,46 +154,34 @@
     </div><!-- /.vault-body -->
 
     <!-- Context menu -->
-    <div id="context-menu" class="context-menu" role="menu" aria-label="File options" hidden>
+    <div id="context-menu" class="context-menu" role="menu" hidden>
       <button class="ctx-item" id="ctx-open" role="menuitem">
-        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 6h8M8 3l3 3-3 3"/></svg>
-        Open
+        <svg viewBox="0 0 12 12"><path d="M2 6h8M8 3l3 3-3 3"/></svg> Open
       </button>
       <button class="ctx-item" id="ctx-rename" role="menuitem">
-        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M8 2l2 2-6 6H2V8z"/></svg>
-        Rename
+        <svg viewBox="0 0 12 12"><path d="M8 2l2 2-6 6H2V8z"/></svg> Rename
       </button>
       <button class="ctx-item" id="ctx-duplicate" role="menuitem">
-        <svg viewBox="0 0 12 12" aria-hidden="true"><rect x="4" y="4" width="7" height="7" rx="1"/><path d="M8 4V2H1v7h2"/></svg>
-        Duplicate
+        <svg viewBox="0 0 12 12"><rect x="4" y="4" width="7" height="7" rx="1"/><path d="M8 4V2H1v7h2"/></svg> Duplicate
       </button>
-      <div class="ctx-separator" role="separator"></div>
+      <div class="ctx-separator"></div>
       <button class="ctx-item" id="ctx-download" role="menuitem">
-        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M6 2v6M3 6l3 3 3-3"/><path d="M2 9.5h8"/></svg>
-        Download
+        <svg viewBox="0 0 12 12"><path d="M6 2v6M3 6l3 3 3-3"/><path d="M2 9.5h8"/></svg> Download
       </button>
-      <div class="ctx-separator" role="separator"></div>
+      <div class="ctx-separator"></div>
       <button class="ctx-item ctx-item--danger" id="ctx-delete" role="menuitem">
-        <svg viewBox="0 0 12 12" aria-hidden="true"><path d="M2 3h8M5 3V2h2v1M4 5l.5 5M8 5l-.5 5M3 3l.5 7h5L9 3"/></svg>
-        Delete
+        <svg viewBox="0 0 12 12"><path d="M2 3h8M5 3V2h2v1M4 5l.5 5M8 5l-.5 5M3 3l.5 7h5L9 3"/></svg> Delete
       </button>
     </div>
 
   </div><!-- /#screen-vault -->
 
-  <!-- ═══════════════════════════════════════════════════════
-       MODAL
-  ════════════════════════════════════════════════════════ -->
+  <!-- Modal -->
   <div id="modal-overlay" class="modal-overlay" role="dialog" aria-modal="true" aria-hidden="true">
-    <div class="modal" id="modal-box" role="document">
+    <div class="modal" id="modal-box">
       <h2 class="modal-title" id="modal-title"></h2>
       <p class="modal-sub" id="modal-sub"></p>
-      <input
-        id="modal-input"
-        type="text"
-        class="modal-input"
-        autocomplete="off"
-      />
+      <input id="modal-input" type="text" class="modal-input" autocomplete="off" />
       <div class="modal-actions">
         <button class="btn-ghost" id="btn-modal-cancel" type="button">Cancel</button>
         <button class="btn-primary btn-primary--flex" id="btn-modal-confirm" type="button">Confirm</button>
@@ -276,21 +189,19 @@
     </div>
   </div>
 
-  <!-- Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const SUPABASE_URL = 'https://bpdgllhwfzaqhmppoftu.supabase.co';
-  const SUPABASE_ANON_KEY = 'sb_publishable__qwV9qGyXhC9-8QfiXvuqg_W9lEh6Jz';
-  window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-</script>
-<script src="lib/api.js"></script>
-<script src="state.js"></script>
-<script src="toast.js"></script>
-<script src="modal.js"></script>
-<script src="explorer.js"></script>
-<script src="app.js"></script>
-
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://bpdgllhwfzaqhmppoftu.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable__qwV9qGyXhC9-8QfiXvuqg_W9lEh6Jz';
+    window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  </script>
+  <script src="lib/api.js"></script>
+  <script src="state.js"></script>
+  <script src="toast.js"></script>
+  <script src="modal.js"></script>
+  <script src="explorer.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
