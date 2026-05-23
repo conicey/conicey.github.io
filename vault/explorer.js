@@ -13,7 +13,6 @@ const Explorer = (() => {
     generic: `<svg viewBox="0 0 40 40" aria-hidden="true"><rect x="6" y="8" width="28" height="24" rx="2" stroke-width="1"/><line x1="11" y1="15" x2="29" y2="15" stroke-width="1"/><line x1="11" y1="19" x2="29" y2="19" stroke-width="1"/><line x1="11" y1="23" x2="22" y2="23" stroke-width="1"/></svg>`,
   };
 
-  // Hidden file input for uploads
   let _fileInput = null;
   let _els = {};
 
@@ -85,21 +84,16 @@ const Explorer = (() => {
       });
     });
 
-    // Update storage bar with real usage
     _updateStorageBar();
   }
 
-  async function _updateStorageBar() {
-    try {
-      const items = State.get('items');
-      const totalBytes = items.reduce((sum, i) => sum + (i.size || 0), 0);
-      const limitBytes = 50 * 1024 * 1024; // 50 MB Supabase free tier
-      const pct = Math.min((totalBytes / limitBytes) * 100, 100).toFixed(1);
-      _els.storageLabel.textContent = `Storage · ${_formatBytes(totalBytes)} / 50 MB`;
-      _els.storageFill.style.width  = pct + '%';
-    } catch {
-      _els.storageLabel.textContent = 'Storage';
-    }
+  function _updateStorageBar() {
+    const items = State.get('items');
+    const totalBytes = items.reduce((sum, i) => sum + (i.size || 0), 0);
+    const limitBytes = 50 * 1024 * 1024;
+    const pct = Math.min((totalBytes / limitBytes) * 100, 100).toFixed(1);
+    _els.storageLabel.textContent = `Storage · ${_formatBytes(totalBytes)} / 50 MB`;
+    _els.storageFill.style.width  = pct + '%';
   }
 
   function _sidebarItem({ id, name, icon, count, activeId, indent }) {
@@ -221,35 +215,57 @@ const Explorer = (() => {
     el.style.cssText = '';
     el.innerHTML     = '';
 
-    if (item.type === 'code' && item.content != null) {
-      el.classList.add('detail-preview--code');
-      const pre = document.createElement('pre');
-      pre.className   = 'code-viewer';
-      pre.textContent = item.content;
-      el.appendChild(pre);
-
-    } else if (item.type === 'note' && item.content != null) {
+    if (item.type === 'note') {
       el.classList.add('detail-preview--note');
-      const div = document.createElement('div');
-      div.className   = 'note-viewer';
-      div.textContent = item.content;
-      el.appendChild(div);
+      const textarea = document.createElement('textarea');
+      textarea.className   = 'note-viewer';
+      textarea.value       = item.content || '';
+      textarea.placeholder = 'Start writing…';
+      textarea.style.cssText = 'width:100%;height:100%;border:none;background:transparent;color:inherit;font-family:inherit;font-size:inherit;resize:none;outline:none;padding:12px 14px;box-sizing:border-box;';
+      textarea.addEventListener('input', () => _autoSave(item, textarea.value));
+      el.appendChild(textarea);
+
+    } else if (item.type === 'code') {
+      el.classList.add('detail-preview--code');
+      const textarea = document.createElement('textarea');
+      textarea.className   = 'code-viewer';
+      textarea.value       = item.content || '';
+      textarea.placeholder = '// Start coding…';
+      textarea.style.cssText = 'width:100%;height:100%;border:none;background:transparent;color:inherit;font-family:var(--font-mono);font-size:12px;resize:none;outline:none;padding:12px 14px;box-sizing:border-box;';
+      textarea.addEventListener('input', () => _autoSave(item, textarea.value));
+      el.appendChild(textarea);
 
     } else if (item.type === 'image' && item.storagePath) {
       const url = API.getPublicUrl(item.storagePath);
       const img = document.createElement('img');
       img.src   = url;
       img.alt   = item.name;
-      img.style.cssText = 'max-width:100%;max-height:160px;object-fit:contain;border-radius:3px;';
+      img.style.cssText = 'max-width:100%;max-height:220px;object-fit:contain;border-radius:4px;display:block;margin:auto;';
       el.appendChild(img);
 
     } else if (item.storagePath) {
-      // Generic file with a storage path — show icon + name
-      el.innerHTML = ICONS.file;
+      // Generic uploaded file — show icon + download hint
+      el.innerHTML = `<div style="text-align:center;padding:20px;">${ICONS.file}<p style="margin-top:8px;font-size:11px;color:var(--text-muted);">Use Download to save this file</p></div>`;
 
     } else {
-      el.innerHTML = ICONS.generic;
+      el.innerHTML = `<div style="text-align:center;padding:20px;">${ICONS.generic}</div>`;
     }
+  }
+
+  // Auto-save debounced
+  let _saveTimer = null;
+  function _autoSave(item, value) {
+    clearTimeout(_saveTimer);
+    _saveTimer = setTimeout(async () => {
+      try {
+        State.updateItem(item.id, { content: value, updatedAt: new Date().toISOString() });
+        await API.updateItem(item.id, { content: value, updated_at: new Date().toISOString() });
+        Toast.show('Saved');
+      } catch (err) {
+        console.error('[Explorer] auto-save failed:', err);
+        Toast.show('Save failed', true);
+      }
+    }, 800);
   }
 
   function _renderDetailMeta(item) {
@@ -267,13 +283,13 @@ const Explorer = (() => {
   }
 
   function _renderDetailActions(item) {
-    const canDownload = item.type !== 'folder' && item.storagePath;
+    const canDownload = item.type !== 'folder';
 
-    let html = `
-      <button class="detail-action-btn" data-detail-action="open">
-        <svg viewBox="0 0 11 11" aria-hidden="true"><path d="M2 5.5h7M6 2.5l3 3-3 3"/></svg>
-        Open
-      </button>`;
+    let html = '';
+
+    if (item.type === 'folder') {
+      html += `<button class="detail-action-btn" data-detail-action="open">Open Folder</button>`;
+    }
 
     if (canDownload) {
       html += `
@@ -284,6 +300,10 @@ const Explorer = (() => {
     }
 
     html += `
+      <button class="detail-action-btn" data-detail-action="rename">
+        <svg viewBox="0 0 11 11" aria-hidden="true"><path d="M7 1.5l2.5 2.5-5 5H2V6.5z"/></svg>
+        Rename
+      </button>
       <button class="detail-action-btn detail-action-btn--danger" data-detail-action="delete">
         <svg viewBox="0 0 11 11" aria-hidden="true"><path d="M2 2.5h7M4.5 2.5V1.5h2v1M3.5 4l.5 5M7.5 4l-.5 5M2.5 2.5l.5 7h5l.5-7"/></svg>
         Delete
@@ -303,21 +323,15 @@ const Explorer = (() => {
 
   function _handleDetailAction(action, item) {
     if (action === 'open') {
+      // Only folders use this now — files are shown inline on click
       if (item.type === 'folder') {
         State.navigateToFolder(item.id, item.name);
         renderAll();
-      } else if (item.storagePath) {
-        // Open public URL in a new tab
-        const url = API.getPublicUrl(item.storagePath);
-        window.open(url, '_blank', 'noopener');
-      } else if (item.content != null) {
-        // Notes/code: already visible in the detail panel
-        Toast.show('Content shown in the panel');
-      } else {
-        Toast.show('No file attached yet');
       }
     } else if (action === 'download') {
       _downloadItem(item);
+    } else if (action === 'rename') {
+      _renameItem(item);
     } else if (action === 'delete') {
       _deleteItem(item);
     }
@@ -332,7 +346,6 @@ const Explorer = (() => {
   async function _handleFileInputChange() {
     const files = Array.from(_fileInput.files);
     if (!files.length) return;
-
     for (const file of files) {
       await _uploadFile(file);
     }
@@ -346,9 +359,8 @@ const Explorer = (() => {
     Toast.show('Uploading ' + file.name + '…');
 
     try {
-      const publicUrl = await API.uploadFile(file, path);
+      await API.uploadFile(file, path);
 
-      // Detect type from MIME
       let type = 'file';
       if (file.type.startsWith('image/')) type = 'image';
       else if (file.type === 'text/plain' || file.name.endsWith('.md')) type = 'note';
@@ -377,7 +389,6 @@ const Explorer = (() => {
   // ── Download ─────────────────────────────────────────────────
   async function _downloadItem(item) {
     if (!item.storagePath) {
-      // For notes/code with no storage path, build a blob and download it
       if (item.content != null) {
         const blob = new Blob([item.content], { type: 'text/plain' });
         _triggerBlobDownload(blob, item.name);
@@ -388,8 +399,8 @@ const Explorer = (() => {
     }
 
     try {
-      const url = API.getPublicUrl(item.storagePath);
-      // Fetch as blob so we get a proper download prompt (not a new tab)
+      Toast.show('Downloading…');
+      const url  = API.getPublicUrl(item.storagePath);
       const res  = await fetch(url);
       const blob = await res.blob();
       _triggerBlobDownload(blob, item.name);
@@ -408,6 +419,28 @@ const Explorer = (() => {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+  }
+
+  // ── Rename ───────────────────────────────────────────────────
+  async function _renameItem(item) {
+    const name = await Modal.open({
+      title: 'Rename', subtitle: 'Enter a new name',
+      placeholder: item.name, initial: item.name, confirmLabel: 'Rename',
+    });
+    if (!name || name === item.name) return;
+
+    State.updateItem(item.id, { name, updatedAt: new Date().toISOString() });
+    renderAll();
+
+    try {
+      await API.updateItem(item.id, { name, updated_at: new Date().toISOString() });
+      Toast.show('Renamed to "' + name + '"');
+    } catch (err) {
+      console.error('[Explorer] rename failed:', err);
+      State.updateItem(item.id, { name: item.name });
+      renderAll();
+      Toast.show('Rename failed — reverted', true);
+    }
   }
 
   // ── Action bar ───────────────────────────────────────────────
@@ -450,13 +483,13 @@ const Explorer = (() => {
       id:          row.id,
       type:        row.type,
       name:        row.name,
-      parentId:    row.parent_id   ?? null,
-      content:     row.content     ?? null,
+      parentId:    row.parent_id    ?? null,
+      content:     row.content      ?? null,
       storagePath: row.storage_path ?? null,
-      size:        row.size        ?? null,
-      lang:        row.lang        ?? null,
-      createdAt:   row.created_at  ?? null,
-      updatedAt:   row.updated_at  ?? null,
+      size:        row.size         ?? null,
+      lang:        row.lang         ?? null,
+      createdAt:   row.created_at   ?? null,
+      updatedAt:   row.updated_at   ?? null,
     };
   }
 
@@ -475,6 +508,10 @@ const Explorer = (() => {
     try {
       const saved = await API.createItem(payload);
       State.addItem(_normalize(saved));
+      // Auto-select newly created note/code so it opens immediately
+      if (type === 'note' || type === 'code') {
+        State.set('selectedItemId', saved.id);
+      }
       renderAll();
       Toast.show('"' + name + '" created');
     } catch (err) {
@@ -489,7 +526,6 @@ const Explorer = (() => {
     renderAll();
 
     try {
-      // If it has a storage file, delete that too
       if (item.storagePath) {
         await API.deleteFile(item.storagePath);
       }
@@ -526,9 +562,8 @@ const Explorer = (() => {
       if (item.type === 'folder') {
         State.navigateToFolder(item.id, item.name);
         renderAll();
-      } else if (item.storagePath) {
-        window.open(API.getPublicUrl(item.storagePath), '_blank', 'noopener');
       } else {
+        // Select and show in detail panel
         State.set('selectedItemId', item.id);
         _renderDetail();
       }
@@ -538,26 +573,7 @@ const Explorer = (() => {
       const item = State.getItem(State.get('contextTargetId'));
       _closeContextMenu();
       if (!item) return;
-
-      const name = await Modal.open({
-        title: 'Rename', subtitle: 'Enter a new name',
-        placeholder: item.name, initial: item.name, confirmLabel: 'Rename',
-      });
-      if (!name || name === item.name) return;
-
-      State.updateItem(item.id, { name, updatedAt: new Date().toISOString() });
-      renderAll();
-
-      try {
-        const saved = await API.updateItem(item.id, { name, updated_at: new Date().toISOString() });
-        State.updateItem(item.id, { updatedAt: saved.updated_at });
-        Toast.show('Renamed to "' + name + '"');
-      } catch (err) {
-        console.error('[Explorer] updateItem failed:', err);
-        State.updateItem(item.id, { name: item.name, updatedAt: item.updatedAt });
-        renderAll();
-        Toast.show('Rename failed — reverted', true);
-      }
+      _renameItem(item);
     });
 
     document.getElementById('ctx-duplicate').addEventListener('click', () => {
