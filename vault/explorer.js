@@ -134,18 +134,21 @@ const Explorer = (() => {
       const id = card.dataset.itemId;
 
       card.addEventListener('click', () => {
+        const item = State.getItem(id);
+        if (!item) return;
+
+        // Folders: navigate in on single click
+        if (item.type === 'folder') {
+          State.navigateToFolder(item.id, item.name);
+          renderAll();
+          return;
+        }
+
+        // Files: select and expand detail panel
         document.querySelectorAll('.file-card').forEach(c => c.classList.remove('selected'));
         card.classList.add('selected');
         State.set('selectedItemId', id);
         _renderDetail();
-      });
-
-      card.addEventListener('dblclick', () => {
-        const item = State.getItem(id);
-        if (item && item.type === 'folder') {
-          State.navigateToFolder(item.id, item.name);
-          renderAll();
-        }
       });
 
       card.addEventListener('contextmenu', (e) => {
@@ -227,12 +230,34 @@ const Explorer = (() => {
       pre.className   = 'code-viewer';
       pre.textContent = item.content;
       el.appendChild(pre);
+
     } else if (item.type === 'note' && item.content != null) {
       el.classList.add('detail-preview--note');
       const div = document.createElement('div');
       div.className   = 'note-viewer';
       div.textContent = item.content;
       el.appendChild(div);
+
+    } else if (item.type === 'image') {
+      // If the item has a public Supabase Storage URL, show the image.
+      // Otherwise fall back to the image icon placeholder.
+      if (item.storagePath) {
+        const img = document.createElement('img');
+        img.src   = item.storagePath;
+        img.alt   = item.name;
+        img.style.cssText = 'max-width:100%;max-height:160px;object-fit:contain;border-radius:3px;';
+        el.appendChild(img);
+      } else {
+        // Placeholder until Supabase Storage is wired up
+        el.innerHTML = ICONS.image;
+        el.style.flexDirection = 'column';
+        el.style.gap = '6px';
+        const hint = document.createElement('span');
+        hint.style.cssText = 'font-family:var(--font-mono);font-size:9px;color:var(--text-muted);';
+        hint.textContent = 'Connect Storage to preview';
+        el.appendChild(hint);
+      }
+
     } else {
       el.innerHTML = ICONS.generic;
     }
@@ -341,9 +366,6 @@ const Explorer = (() => {
   }
 
   // ── Normalization (DB → State) ───────────────────────────────
-  // Supabase returns snake_case. State expects camelCase.
-  // Run every row returned from the DB through this before
-  // passing it to State.addItem() or State.updateItem().
   function _normalize(row) {
     return {
       id:          row.id,
@@ -363,7 +385,6 @@ const Explorer = (() => {
   async function _createItem({ type, name, content = null }) {
     const activeFolderId = State.get('activeFolderId');
 
-    // Build the DB-shape payload (snake_case, no id — Supabase generates it).
     const payload = {
       type,
       name,
@@ -375,14 +396,10 @@ const Explorer = (() => {
     };
 
     try {
-      // TODO(backend): API.createItem calls supabase.from('files').insert(payload)
       const saved = await API.createItem(payload);
-
-      // Normalize DB row → camelCase State shape, then add to local State.
       State.addItem(_normalize(saved));
       renderAll();
       Toast.show('"' + name + '" created');
-
     } catch (err) {
       console.error('[Explorer] createItem failed:', err);
       Toast.show('Failed to create "' + name + '" — check console', true);
@@ -391,17 +408,13 @@ const Explorer = (() => {
 
   // ── Delete item → Supabase DELETE ───────────────────────────
   async function _deleteItem(item) {
-    // Optimistic: remove from local State immediately for snappy UI.
     State.removeItem(item.id);
     renderAll();
 
     try {
-      // TODO(backend): API.deleteItem calls supabase.from('files').delete().eq('id', id)
       await API.deleteItem(item.id);
       Toast.show('"' + item.name + '" deleted');
-
     } catch (err) {
-      // Rollback: re-add the item to State so nothing silently disappears.
       console.error('[Explorer] deleteItem failed:', err);
       State.addItem(item);
       renderAll();
@@ -437,7 +450,6 @@ const Explorer = (() => {
       }
     });
 
-    // ── Rename → Supabase UPDATE ─────────────────────────────
     document.getElementById('ctx-rename').addEventListener('click', async () => {
       const item = State.getItem(State.get('contextTargetId'));
       _closeContextMenu();
@@ -453,23 +465,17 @@ const Explorer = (() => {
 
       if (!name || name === item.name) return;
 
-      // Optimistic update.
       State.updateItem(item.id, { name, updatedAt: new Date().toISOString() });
       renderAll();
 
       try {
-        // TODO(backend): API.updateItem calls supabase.from('files').update({name}).eq('id', id)
         const saved = await API.updateItem(item.id, {
           name,
           updated_at: new Date().toISOString(),
         });
-
-        // Sync the real updatedAt returned by DB.
         State.updateItem(item.id, { updatedAt: saved.updated_at });
         Toast.show('Renamed to "' + name + '"');
-
       } catch (err) {
-        // Rollback to original name.
         console.error('[Explorer] updateItem failed:', err);
         State.updateItem(item.id, { name: item.name, updatedAt: item.updatedAt });
         renderAll();
@@ -481,7 +487,6 @@ const Explorer = (() => {
       const item = State.getItem(State.get('contextTargetId'));
       _closeContextMenu();
       if (!item) return;
-      // Duplicate goes through _createItem so it also persists to DB.
       _createItem({
         type:    item.type,
         name:    'Copy of ' + item.name,
