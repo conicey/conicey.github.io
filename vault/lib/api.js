@@ -51,13 +51,40 @@ const API = {
   async uploadFile(file, path) {
     const { error } = await _db.storage
       .from(BUCKET)
-      .upload(path, file, { upsert: false });
+      .upload(path, file, { upsert: true });
     if (error) throw error;
 
     const { data } = _db.storage
       .from(BUCKET)
       .getPublicUrl(path);
     return data.publicUrl;
+  },
+
+  /**
+   * Update text content for a file in Storage.
+   */
+  async updateFileContent(path, content) {
+    const blob = new Blob([content], { type: 'text/plain' });
+    const { error } = await _db.storage
+      .from(BUCKET)
+      .upload(path, blob, { upsert: true });
+    if (error) throw error;
+
+    const { data } = _db.storage
+      .from(BUCKET)
+      .getPublicUrl(path);
+    return data.publicUrl;
+  },
+
+  /**
+   * Download file content from Storage.
+   */
+  async downloadFile(path) {
+    const { data, error } = await _db.storage
+      .from(BUCKET)
+      .download(path);
+    if (error) throw error;
+    return data;
   },
 
   /**
