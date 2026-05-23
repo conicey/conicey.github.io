@@ -38,13 +38,9 @@
 
       <!-- Step 1: Request token -->
       <div id="login-step-1" class="login-step active" aria-hidden="false">
-        <div class="info-box">
-        </div>
         <button id="btn-request-token" class="btn-primary" type="button">
           Request Access Token
         </button>
-        <div class="security-note" aria-label="Security properties">
-        </div>
       </div>
 
       <!-- Step 2: Paste token -->
@@ -292,28 +288,13 @@
   <!-- Toast -->
   <div id="toast" class="toast" role="status" aria-live="polite" aria-atomic="true"></div>
 
-<!-- ═══════════════════════════════════════════════════════
-     SCRIPTS — load order: supabase → api → state → toast → modal → explorer → app
-═══════════════════════════════════════════════════════ -->
-
-<!-- Supabase SDK -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<!-- Supabase init -->
 <script>
   const SUPABASE_URL = 'https://bpdgllhwfzaqhmppoftu.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable__qwV9qGyXhC9-8QfiXvuqg_W9lEh6Jz';
-
-  window.supabaseClient = window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-  );
+  window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 </script>
-
-<!-- API (IMPORTANT: must load BEFORE explorer.js) -->
 <script src="lib/api.js"></script>
-
-<!-- App scripts -->
 <script src="state.js"></script>
 <script src="toast.js"></script>
 <script src="modal.js"></script>
