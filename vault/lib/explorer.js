@@ -21,7 +21,6 @@ const EXPLORER = {
 
   init() {
     this.attachEventListeners();
-    State.subscribe(() => this.render());
   },
 
   attachEventListeners() {
@@ -30,7 +29,6 @@ const EXPLORER = {
     document.getElementById('btn-new-note').addEventListener('click', () => this.promptNewNote());
     document.getElementById('btn-new-code').addEventListener('click', () => this.promptNewCode());
     document.getElementById('search-input').addEventListener('input', () => this.render());
-    document.getElementById('btn-lock').addEventListener('click', () => State.logout());
 
     // Context menu
     document.getElementById('ctx-open').addEventListener('click', () => this.handleContextOpen());
@@ -45,7 +43,7 @@ const EXPLORER = {
     });
   },
 
-  async render() {
+  render() {
     try {
       const items = State.get('items') || [];
       this.items = items;
@@ -81,6 +79,7 @@ const EXPLORER = {
       crumb.addEventListener('click', () => {
         const id = crumb.dataset.id === 'null' ? null : crumb.dataset.id;
         State.set('currentFolderId', id);
+        this.render();
       });
     });
   },
@@ -95,13 +94,13 @@ const EXPLORER = {
         e.stopPropagation();
         const id = item.dataset.id;
         State.set('currentFolderId', id);
+        this.render();
       });
     });
   },
 
   renderTreeItem(folder, depth = 0) {
     const children = this.items.filter(i => i.parent_id === folder.id);
-    const hasChildren = children.some(c => c.type === 'folder');
     const isActive = folder.id === this.currentFolderId;
 
     return `
@@ -164,6 +163,7 @@ const EXPLORER = {
         const item = this.items.find(i => i.id === id);
         if (item.type === 'folder') {
           State.set('currentFolderId', id);
+          this.render();
         }
       });
 
@@ -201,10 +201,14 @@ const EXPLORER = {
 
         if (targetItem.type === 'folder' && draggedId !== id) {
           const draggedItem = this.items.find(i => i.id === draggedId);
-          await API.updateItem(draggedId, { parent_id: id });
-          draggedItem.parent_id = id;
-          this.render();
-          Toast.show('Item moved successfully');
+          try {
+            await API.updateItem(draggedId, { parent_id: id });
+            draggedItem.parent_id = id;
+            this.render();
+            Toast.show('Item moved successfully');
+          } catch (err) {
+            Toast.show('Failed to move item', 'error');
+          }
         }
       });
     });
@@ -229,10 +233,14 @@ const EXPLORER = {
 
         if (draggedId !== targetId) {
           const draggedItem = this.items.find(i => i.id === draggedId);
-          await API.updateItem(draggedId, { parent_id: targetId });
-          draggedItem.parent_id = targetId;
-          this.render();
-          Toast.show('Item moved successfully');
+          try {
+            await API.updateItem(draggedId, { parent_id: targetId });
+            draggedItem.parent_id = targetId;
+            this.render();
+            Toast.show('Item moved successfully');
+          } catch (err) {
+            Toast.show('Failed to move item', 'error');
+          }
         }
       });
     });
@@ -383,6 +391,7 @@ const EXPLORER = {
         switch (action) {
           case 'open-folder':
             State.set('currentFolderId', item.id);
+            this.render();
             break;
           case 'download':
             await this._downloadItem(item);
@@ -446,7 +455,7 @@ const EXPLORER = {
           name: file.name,
           type: isImage ? 'image' : 'file',
           parent_id: this.currentFolderId,
-          storagePath,
+          storage_path: storagePath,
           size: file.size,
           created_at: new Date().toISOString(),
         });
@@ -509,6 +518,7 @@ const EXPLORER = {
     if (!item) return;
     if (item.type === 'folder') {
       State.set('currentFolderId', item.id);
+      this.render();
     }
   },
 
@@ -624,4 +634,6 @@ const EXPLORER = {
   },
 };
 
-document.addEventListener('DOMContentLoaded', () => EXPLORER.init());
+document.addEventListener('DOMContentLoaded', () => {
+  // EXPLORER will be initialized by app.js
+});

@@ -5,15 +5,11 @@
 
 const State = (() => {
   const _state = {
-    sessionToken:   null,
-    activeFolderId: 'root',
-    breadcrumb:     [{ id: 'root', name: 'root' }],
-    selectedItemId: null,
-    searchQuery:    '',
-    viewMode:       'grid',
-    modalOpen:      false,
-    contextTargetId: null,
-    items:          [],
+    sessionToken:     null,
+    currentFolderId:  null,
+    selectedItemId:   null,
+    searchQuery:      '',
+    items:            [],
   };
 
   function get(key) {
@@ -28,17 +24,6 @@ const State = (() => {
     return _state.items.find(item => item.id === id) || null;
   }
 
-  function getItemsInActiveFolder() {
-    const folderId = _state.activeFolderId;
-    const query    = _state.searchQuery.toLowerCase();
-
-    return _state.items.filter(item => {
-      const inFolder = item.parentId === (folderId === 'root' ? null : folderId);
-      if (!query) return inFolder;
-      return inFolder && item.name.toLowerCase().includes(query);
-    });
-  }
-
   function set(key, value) {
     if (!(key in _state)) {
       console.warn('[State] Unknown key:', key);
@@ -47,30 +32,13 @@ const State = (() => {
     _state[key] = value;
   }
 
-  function navigateToFolder(id, name) {
-    _state.activeFolderId = id;
-    _state.selectedItemId = null;
-
-    if (id === 'root') {
-      _state.breadcrumb = [{ id: 'root', name: 'root' }];
-    } else {
-      const existingIndex = _state.breadcrumb.findIndex(c => c.id === id);
-      if (existingIndex !== -1) {
-        _state.breadcrumb = _state.breadcrumb.slice(0, existingIndex + 1);
-      } else {
-        _state.breadcrumb.push({ id, name });
-      }
-    }
-  }
-
   function addItem(item) {
     _state.items.push(item);
   }
 
   function removeItem(id) {
     _state.items = _state.items.filter(item => item.id !== id);
-    if (_state.selectedItemId === id)  _state.selectedItemId  = null;
-    if (_state.contextTargetId === id) _state.contextTargetId = null;
+    if (_state.selectedItemId === id) _state.selectedItemId = null;
   }
 
   function updateItem(id, patch) {
@@ -79,17 +47,14 @@ const State = (() => {
     _state.items[index] = Object.assign({}, _state.items[index], patch);
   }
 
-  function makeId() {
-    return 'local-' + Date.now() + '-' + Math.random().toString(36).slice(2, 7);
-  }
-
-  function now() {
-    return new Date().toISOString();
+  function logout() {
+    _state.sessionToken = null;
+    _state.currentFolderId = null;
+    _state.selectedItemId = null;
+    _state.items = [];
   }
 
   return {
-    get, getAll, getItem, getItemsInActiveFolder,
-    set, navigateToFolder, addItem, removeItem, updateItem,
-    makeId, now,
+    get, getAll, getItem, set, addItem, removeItem, updateItem, logout,
   };
 })();

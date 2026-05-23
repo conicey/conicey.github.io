@@ -1,17 +1,14 @@
 /**
  * app.js — Application bootstrap
  *
- * Temporary frontend-only boot logic.
- * No backend yet. Simulates auth + loads demo data.
- *
- * TODO(backend): Replace ALL fake auth and mock data with Supabase.
+ * Handles login flow and Supabase integration.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
   // DOM refs
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
   const loginScreen = document.getElementById('screen-login');
   const vaultScreen = document.getElementById('screen-vault');
 
@@ -25,50 +22,51 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const tokenInput = document.getElementById('token-input');
   const countdown  = document.getElementById('login-countdown');
+  const statusDot  = document.getElementById('login-status-dot');
+  const statusText = document.getElementById('login-status-text');
 
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
   // INIT MODULES
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
   Toast.init();
   Modal.init();
-  Explorer.init();
+  EXPLORER.init();
 
-  // ─────────────────────────────────────────────
-  // SUPABASE FUNCTIONS (NEW STEP 2)
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
+  // SUPABASE FUNCTIONS
+  // ────────────────────────────────────────────
   async function loadItems() {
     const { data, error } = await window.supabaseClient
       .from('files')
       .select('*');
 
     if (error) throw error;
-    return data;
+    return data || [];
   }
 
-  async function createItem(item) {
-    const { data, error } = await window.supabaseClient
-      .from('files')
-      .insert(item)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
-  }
-
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
   // LOGIN FLOW
-  // ─────────────────────────────────────────────
-  btnRequest.addEventListener('click', () => {
+  // ────────────────────────────────────────────
+  btnRequest.addEventListener('click', async () => {
     document.activeElement.blur();
+    
+    // Hide step 1, show step 2
     step1.classList.remove('active');
     step2.classList.add('active');
-
     step1.setAttribute('aria-hidden', 'true');
     step2.setAttribute('aria-hidden', 'false');
 
+    // Reset inputs
+    tokenInput.value = '';
+    btnUnlock.disabled = true;
+
+    // Update status
+    statusDot.className = 'status-dot status-dot--ready';
+    statusText.textContent = 'Ready to paste token';
+
+    // Start countdown
     startCountdown(300);
-    Toast.show('Temporary token generated');
+    Toast.show('Token ready - paste it above');
   });
 
   tokenInput.addEventListener('input', () => {
@@ -78,69 +76,78 @@ document.addEventListener('DOMContentLoaded', () => {
   btnBack.addEventListener('click', () => {
     step2.classList.remove('active');
     step1.classList.add('active');
+    step2.setAttribute('aria-hidden', 'true');
+    step1.setAttribute('aria-hidden', 'false');
 
-    tokenInput.value  = '';
+    tokenInput.value = '';
     btnUnlock.disabled = true;
   });
 
   btnUnlock.addEventListener('click', async () => {
-
-    // TEMP AUTH
-    State.set('sessionToken', 'temporary-session');
-
-    loginScreen.classList.add('hidden');
-    vaultScreen.classList.remove('hidden');
-
-    // ─────────────────────────────────────────────
-    // STEP 2: LOAD FROM SUPABASE (REPLACES MOCK DATA)
-    // ─────────────────────────────────────────────
+    btnUnlock.disabled = true;
+    
     try {
-      const items = await loadItems();
+      // Temporary session token
+      State.set('sessionToken', 'temporary-session-' + Date.now());
 
-      State.set('items', items.map(row => ({
-        id:          row.id,
-        type:        row.type,
-        name:        row.name,
-        parentId:    row.parent_id   ?? null,
-        content:     row.content     ?? null,
-        storagePath: row.storage_path ?? null,
-        size:        row.size        ?? null,
-        lang:        row.lang        ?? null,
-        createdAt:   row.created_at  ?? null,
-        updatedAt:   row.updated_at  ?? null,
-      })));
+      // Switch screens
+      loginScreen.classList.add('hidden');
+      vaultScreen.classList.remove('hidden');
 
-      Explorer.renderAll();
+      // Load from Supabase
+      try {
+        const items = await loadItems();
 
-      console.log("Loaded from Supabase:", items);
+        State.set('items', items.map(row => ({
+          id:          row.id,
+          type:        row.type,
+          name:        row.name,
+          parent_id:   row.parent_id   ?? null,
+          content:     row.content     ?? null,
+          storagePath: row.storage_path ?? null,
+          size:        row.size        ?? null,
+          created_at:  row.created_at  ?? null,
+        })));
 
+        EXPLORER.render();
+        console.log('Loaded from Supabase:', items);
+      } catch (err) {
+        console.error('Failed to load Supabase data:', err);
+        EXPLORER.render();
+      }
+
+      Toast.show('Vault unlocked');
     } catch (err) {
-      console.error("Failed to load Supabase data:", err);
-
-      // fallback to mock data if DB fails
-      loadMockData();
-      Explorer.renderAll();
+      console.error('Unlock error:', err);
+      Toast.show('Failed to unlock vault', 'error');
+      btnUnlock.disabled = false;
     }
-
-    Toast.show('Vault unlocked');
   });
 
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
   // LOCK VAULT
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
   btnLock.addEventListener('click', () => {
     State.set('sessionToken', null);
+    State.set('currentFolderId', null);
+    State.set('selectedItemId', null);
 
     vaultScreen.classList.add('hidden');
     loginScreen.classList.remove('hidden');
 
+    step1.classList.add('active');
+    step2.classList.remove('active');
+    step1.setAttribute('aria-hidden', 'false');
+    step2.setAttribute('aria-hidden', 'true');
+
     tokenInput.value = '';
+    btnUnlock.disabled = true;
     Toast.show('Vault locked');
   });
 
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
   // COUNTDOWN TIMER
-  // ─────────────────────────────────────────────
+  // ────────────────────────────────────────────
   function startCountdown(seconds) {
     let remaining = seconds;
 
@@ -157,36 +164,6 @@ document.addEventListener('DOMContentLoaded', () => {
         countdown.classList.add('countdown-value--expired');
       }
     }, 1000);
-  }
-
-  // ─────────────────────────────────────────────
-  // MOCK DATA (fallback only)
-  // ─────────────────────────────────────────────
-  function loadMockData() {
-    if (State.get('items').length > 0) return;
-
-    const now = State.now();
-    const folderId = State.makeId();
-
-    State.addItem({
-      id: folderId, type: 'folder', name: 'Projects',
-      parentId: null, content: null, storagePath: null,
-      size: null, lang: null, createdAt: now, updatedAt: now,
-    });
-
-    State.addItem({
-      id: State.makeId(), type: 'note', name: 'README.md',
-      parentId: null,
-      content: `# Vault\n\nTemporary frontend-only build.\n\nWaiting for Supabase backend integration.`,
-      storagePath: null, size: 1200, lang: null, createdAt: now, updatedAt: now,
-    });
-
-    State.addItem({
-      id: State.makeId(), type: 'code', name: 'main.js',
-      parentId: folderId,
-      content: `console.log("Vault initialized");`,
-      storagePath: null, size: 430, lang: 'javascript', createdAt: now, updatedAt: now,
-    });
   }
 
 });
