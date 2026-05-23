@@ -154,6 +154,20 @@ const Explorer = (() => {
     const typeClass  = item.type in ICONS ? item.type : 'file';
     const meta       = _formatMeta(item);
     const isSelected = State.get('selectedItemId') === item.id;
+
+    let iconHtml;
+    if (item.type === 'image' && item.storagePath) {
+      const thumbUrl = API.getPublicUrl(item.storagePath);
+      iconHtml = `<div class="fc-icon fc-icon--image" style="background:none;padding:0;overflow:hidden;border-radius:4px;">
+        <img src="${thumbUrl}" alt=""
+          style="width:100%;height:100%;object-fit:cover;display:block;border-radius:4px;"
+          onerror="this.style.display='none';this.parentElement.style.background='var(--surface-2)'"
+        />
+      </div>`;
+    } else {
+      iconHtml = `<div class="fc-icon fc-icon--${_esc(typeClass)}">${ICONS[typeClass] || ICONS.file}</div>`;
+    }
+
     return `<div
       class="file-card ${isSelected ? 'selected' : ''}"
       data-item-id="${_esc(item.id)}"
@@ -162,7 +176,7 @@ const Explorer = (() => {
       aria-label="${_esc(item.name)}"
     >
       <span class="fc-badge">${_esc(item.type)}</span>
-      <div class="fc-icon fc-icon--${_esc(typeClass)}">${ICONS[typeClass] || ICONS.file}</div>
+      ${iconHtml}
       <div class="fc-name" title="${_esc(item.name)}">${_esc(item.name)}</div>
       <div class="fc-meta">${_esc(meta)}</div>
     </div>`;
