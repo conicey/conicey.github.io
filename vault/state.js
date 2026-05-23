@@ -13,6 +13,7 @@ const State = (() => {
     contextTargetId: null,
     searchQuery:     '',
     breadcrumb:      [ROOT_CRUMB],
+    modalOpen:       false,
     items:           [],
   };
 
@@ -114,6 +115,7 @@ const State = (() => {
     _state.contextTargetId = null;
     _state.searchQuery     = '';
     _state.breadcrumb      = [ROOT_CRUMB];
+    _state.modalOpen       = false;
     _state.items           = [];
   }
 
