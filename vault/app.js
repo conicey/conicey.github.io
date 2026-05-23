@@ -30,43 +30,54 @@ document.addEventListener('DOMContentLoaded', () => {
   // ────────────────────────────────────────────
   Toast.init();
   Modal.init();
-  EXPLORER.init();
+  Explorer.init();   // was EXPLORER.init()
 
   // ────────────────────────────────────────────
-  // SUPABASE FUNCTIONS
+  // SUPABASE — load all rows from `files` table
   // ────────────────────────────────────────────
   async function loadItems() {
     const { data, error } = await window.supabaseClient
       .from('files')
       .select('*');
-
     if (error) throw error;
     return data || [];
+  }
+
+  /** Normalize a DB row to the shape State / Explorer expect. */
+  function normalizeRow(row) {
+    return {
+      id:          row.id,
+      type:        row.type,
+      name:        row.name,
+      parentId:    row.parent_id    ?? null,
+      content:     row.content      ?? null,
+      storagePath: row.storage_path ?? null,
+      size:        row.size         ?? null,
+      lang:        row.lang         ?? null,
+      createdAt:   row.created_at   ?? null,
+      updatedAt:   row.updated_at   ?? null,
+    };
   }
 
   // ────────────────────────────────────────────
   // LOGIN FLOW
   // ────────────────────────────────────────────
-  btnRequest.addEventListener('click', async () => {
+  btnRequest.addEventListener('click', () => {
     document.activeElement.blur();
-    
-    // Hide step 1, show step 2
+
     step1.classList.remove('active');
     step2.classList.add('active');
     step1.setAttribute('aria-hidden', 'true');
     step2.setAttribute('aria-hidden', 'false');
 
-    // Reset inputs
-    tokenInput.value = '';
+    tokenInput.value   = '';
     btnUnlock.disabled = true;
 
-    // Update status
-    statusDot.className = 'status-dot status-dot--ready';
+    statusDot.className    = 'status-dot status-dot--ready';
     statusText.textContent = 'Ready to paste token';
 
-    // Start countdown
     startCountdown(300);
-    Toast.show('Token ready - paste it above');
+    Toast.show('Token ready — paste it above');
   });
 
   tokenInput.addEventListener('input', () => {
@@ -79,46 +90,33 @@ document.addEventListener('DOMContentLoaded', () => {
     step2.setAttribute('aria-hidden', 'true');
     step1.setAttribute('aria-hidden', 'false');
 
-    tokenInput.value = '';
+    tokenInput.value   = '';
     btnUnlock.disabled = true;
   });
 
   btnUnlock.addEventListener('click', async () => {
     btnUnlock.disabled = true;
-    
-    try {
-      // Temporary session token
-      State.set('sessionToken', 'temporary-session-' + Date.now());
 
-      // Switch screens
+    try {
+      State.set('sessionToken', 'session-' + Date.now());
+
       loginScreen.classList.add('hidden');
       vaultScreen.classList.remove('hidden');
 
-      // Load from Supabase
       try {
-        const items = await loadItems();
-
-        State.set('items', items.map(row => ({
-          id:          row.id,
-          type:        row.type,
-          name:        row.name,
-          parent_id:   row.parent_id   ?? null,
-          content:     row.content     ?? null,
-          storagePath: row.storage_path ?? null,
-          size:        row.size        ?? null,
-          created_at:  row.created_at  ?? null,
-        })));
-
-        EXPLORER.render();
-        console.log('Loaded from Supabase:', items);
+        const rows  = await loadItems();
+        const items = rows.map(normalizeRow);
+        State.set('items', items);
+        Explorer.renderAll();
+        console.log('[app] Loaded', items.length, 'items from Supabase');
       } catch (err) {
-        console.error('Failed to load Supabase data:', err);
-        EXPLORER.render();
+        console.error('[app] Failed to load items:', err);
+        Explorer.renderAll();  // render empty state
       }
 
       Toast.show('Vault unlocked');
     } catch (err) {
-      console.error('Unlock error:', err);
+      console.error('[app] Unlock error:', err);
       Toast.show('Failed to unlock vault', 'error');
       btnUnlock.disabled = false;
     }
@@ -128,9 +126,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // LOCK VAULT
   // ────────────────────────────────────────────
   btnLock.addEventListener('click', () => {
-    State.set('sessionToken', null);
-    State.set('currentFolderId', null);
-    State.set('selectedItemId', null);
+    State.logout();
 
     vaultScreen.classList.add('hidden');
     loginScreen.classList.remove('hidden');
@@ -140,8 +136,9 @@ document.addEventListener('DOMContentLoaded', () => {
     step1.setAttribute('aria-hidden', 'false');
     step2.setAttribute('aria-hidden', 'true');
 
-    tokenInput.value = '';
+    tokenInput.value   = '';
     btnUnlock.disabled = true;
+
     Toast.show('Vault locked');
   });
 
@@ -154,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const interval = setInterval(() => {
       const mins = Math.floor(remaining / 60);
       const secs = remaining % 60;
-
       countdown.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
       remaining--;
 
