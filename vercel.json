@@ -1,12 +1,5 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "vault/api/*.js", "use": "@vercel/node" },
-    { "src": "vault/**", "use": "@vercel/static" }
-  ],
-  "routes": [
-    { "src": "/vault/api/(.*)", "dest": "/vault/api/$1" },
-    { "src": "/vault/(.*)", "dest": "/vault/$1" },
-    { "src": "/(.*)", "dest": "/$1" }
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/vault/api/:path*" }
   ]
 }
