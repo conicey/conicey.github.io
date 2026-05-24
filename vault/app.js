@@ -1,6 +1,6 @@
 /**
  * app.js — Application bootstrap
- * Auth: email OTP via clipboard paste
+ * Auth: email OTP, clipboard-only unlock
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -23,11 +23,28 @@ document.addEventListener('DOMContentLoaded', () => {
   Modal.init();
   Explorer.init();
 
-  // ── Cooldown state ────────────────────────────────────────────
-  let _requestCooldown = false;
   let _countdownInterval = null;
 
-  // ── Load items from Supabase ──────────────────────────────────
+  // ── Auto-unlock if token in URL (from email button) ───────────
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlToken  = urlParams.get('token');
+  if (urlToken) {
+    // Copy to clipboard silently, then show step 2 ready to unlock
+    navigator.clipboard.writeText(urlToken).catch(() => {});
+    // Clean URL so token isn't visible
+    window.history.replaceState({}, '', window.location.pathname);
+    // Show step 2 with token pre-loaded
+    step1.classList.remove('active');
+    step2.classList.add('active');
+    step1.setAttribute('aria-hidden', 'true');
+    step2.setAttribute('aria-hidden', 'false');
+    statusDot.className    = 'status-dot status-dot--ready';
+    statusText.textContent = 'Token copied — click Paste & Unlock';
+    btnUnlock.disabled = false;
+    startCountdown(600);
+  }
+
+  // ── Load items ────────────────────────────────────────────────
   async function loadItems() {
     const { data, error } = await window.supabaseClient
       .from('files').select('*');
@@ -53,71 +70,63 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ── Step 1: Request token ─────────────────────────────────────
   btnRequest.addEventListener('click', async () => {
-    if (_requestCooldown) {
-      Toast.show('Please wait before requesting another token');
-      return;
-    }
-
-    btnRequest.disabled = true;
+    btnRequest.disabled    = true;
     btnRequest.textContent = 'Sending…';
 
     try {
-      const res = await fetch('/api/request-token', { method: 'POST' });
+      const res  = await fetch('/api/request-token', { method: 'POST' });
       const json = await res.json();
 
-      if (!res.ok) throw new Error(json.error || 'Failed to send token');
+      if (!res.ok) {
+        Toast.show(json.error || 'Failed to send token');
+        return;
+      }
 
-      // Start 60s cooldown
-      _requestCooldown = true;
-      setTimeout(() => { _requestCooldown = false; }, 60000);
-
-      // Show step 2
       step1.classList.remove('active');
       step2.classList.add('active');
       step1.setAttribute('aria-hidden', 'true');
       step2.setAttribute('aria-hidden', 'false');
 
       statusDot.className    = 'status-dot status-dot--ready';
-      statusText.textContent = 'Email sent — check your inbox';
+      statusText.textContent = 'Check your email';
+      btnUnlock.disabled     = false;
 
-      startCountdown(300);
-      Toast.show('Token emailed to your inbox');
+      startCountdown(600);
+      Toast.show('Token emailed — check your inbox');
 
     } catch (err) {
       console.error('[app] Request token failed:', err);
-      Toast.show('Failed to send token — try again');
+      Toast.show('Failed to send — try again');
     } finally {
-      btnRequest.disabled = false;
+      btnRequest.disabled    = false;
       btnRequest.textContent = 'Request Access Token';
     }
   });
 
   // ── Step 2: Paste & Unlock ────────────────────────────────────
   btnUnlock.addEventListener('click', async () => {
-    btnUnlock.disabled = true;
-    btnUnlock.textContent = 'Checking…';
+    btnUnlock.disabled     = true;
+    btnUnlock.textContent  = 'Checking…';
 
     try {
-      // Read token from clipboard
       let token;
       try {
         token = await navigator.clipboard.readText();
-      } catch (err) {
-        Toast.show('Clipboard access denied — please allow it and try again');
-        btnUnlock.disabled = false;
+      } catch {
+        Toast.show('Clipboard access denied — allow it in your browser and retry');
+        btnUnlock.disabled    = false;
         btnUnlock.textContent = 'Paste & Unlock';
         return;
       }
 
       token = token.trim();
       if (!token) {
-        Toast.show('Clipboard is empty — copy the token from your email first');
-        btnUnlock.disabled = false;
+        Toast.show('Clipboard empty — copy token from email first');
+        btnUnlock.disabled    = false;
         btnUnlock.textContent = 'Paste & Unlock';
         return;
       }
 
-      // Verify with server
       const res  = await fetch('/api/verify-token', {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -127,14 +136,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
       if (!res.ok || !json.valid) {
         Toast.show(json.error || 'Access denied');
-        btnUnlock.disabled = false;
+        btnUnlock.disabled    = false;
         btnUnlock.textContent = 'Paste & Unlock';
         return;
       }
 
-      // ── Unlock ────────────────────────────────────────────────
+      // ── Unlock vault ──────────────────────────────────────────
       if (_countdownInterval) clearInterval(_countdownInterval);
-
       State.set('sessionToken', 'session-' + Date.now());
       loginScreen.classList.add('hidden');
       vaultScreen.classList.remove('hidden');
@@ -154,18 +162,19 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       console.error('[app] Unlock error:', err);
       Toast.show('Something went wrong — try again');
-      btnUnlock.disabled = false;
+      btnUnlock.disabled    = false;
       btnUnlock.textContent = 'Paste & Unlock';
     }
   });
 
-  // ── Back button ───────────────────────────────────────────────
+  // ── Back ──────────────────────────────────────────────────────
   btnBack.addEventListener('click', () => {
     if (_countdownInterval) clearInterval(_countdownInterval);
     step2.classList.remove('active');
     step1.classList.add('active');
     step2.setAttribute('aria-hidden', 'true');
     step1.setAttribute('aria-hidden', 'false');
+    btnUnlock.disabled = true;
   });
 
   // ── Lock vault ────────────────────────────────────────────────
@@ -177,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     step2.classList.remove('active');
     step1.setAttribute('aria-hidden', 'false');
     step2.setAttribute('aria-hidden', 'true');
+    btnUnlock.disabled = true;
     Toast.show('Vault locked');
   });
 
@@ -184,6 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function startCountdown(seconds) {
     if (_countdownInterval) clearInterval(_countdownInterval);
     let remaining = seconds;
+    countdown.classList.remove('countdown-value--expired');
 
     _countdownInterval = setInterval(() => {
       const mins = Math.floor(remaining / 60);
