@@ -88,7 +88,7 @@ export default async function handler(req, res) {
   `;
 
   const { error: emailError } = await resend.emails.send({
-    from:    'Vault <noreply@yourdomain.com>',
+    from:    'Vault <onboarding@resend.dev>',
     to:      'conicey@null.net',
     subject: 'Vault Access Token',
     html:    emailHtml,
