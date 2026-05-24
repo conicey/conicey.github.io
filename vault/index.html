@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600&family=Space+Grotesk:wght@300;400;500;600&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="/vault/styles.css" />
 </head>
 <body>
 
@@ -40,10 +40,8 @@
         <div class="info-box"><p>Token has been sent.</p></div>
         <div class="countdown-row">
           <span class="countdown-label">Token expires in:</span>
-          <span id="login-countdown" class="countdown-value">5:00</span>
+          <span id="login-countdown" class="countdown-value">10:00</span>
         </div>
-        <input id="token-input" type="text" class="paste-field"
-          
         <button id="btn-unlock" class="btn-primary" type="button" disabled>Paste &amp; Unlock</button>
         <button id="btn-back" class="btn-back" type="button">← Request new token</button>
       </div>
@@ -139,10 +137,10 @@
         </div>
       </div>
 
-      <!-- DIVIDER A: list | notepad or detail -->
+      <!-- DIVIDER A -->
       <div class="divider" id="divider-a" aria-hidden="true"></div>
 
-      <!-- MIDDLE: Notepad (hidden until text file opened) -->
+      <!-- MIDDLE: Notepad -->
       <div class="notepad-panel" id="notepad-panel" style="display:none;">
         <div class="notepad-header">
           <span class="notepad-title" id="notepad-title">Untitled</span>
@@ -151,7 +149,7 @@
         <textarea class="notepad-area" id="notepad-area" placeholder="Start typing…" spellcheck="true"></textarea>
       </div>
 
-      <!-- DIVIDER B: notepad | detail (hidden until notepad open) -->
+      <!-- DIVIDER B -->
       <div class="divider" id="divider-b" style="display:none;" aria-hidden="true"></div>
 
       <!-- RIGHT: Detail panel -->
@@ -223,12 +221,12 @@
     const SUPABASE_ANON_KEY = 'sb_publishable__qwV9qGyXhC9-8QfiXvuqg_W9lEh6Jz';
     window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
   </script>
-  <script src="lib/api.js"></script>
-  <script src="state.js"></script>
-  <script src="toast.js"></script>
-  <script src="modal.js"></script>
-  <script src="explorer.js"></script>
-  <script src="app.js"></script>
+  <script src="/vault/lib/api.js"></script>
+  <script src="/vault/state.js"></script>
+  <script src="/vault/toast.js"></script>
+  <script src="/vault/modal.js"></script>
+  <script src="/vault/explorer.js"></script>
+  <script src="/vault/app.js"></script>
 
 </body>
 </html>
