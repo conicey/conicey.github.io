@@ -1,5 +1,14 @@
 {
+  "functions": {
+    "vault/api/request-token.js": {
+      "runtime": "@vercel/node@3"
+    },
+    "vault/api/verify-token.js": {
+      "runtime": "@vercel/node@3"
+    }
+  },
   "rewrites": [
-    { "source": "/api/:path*", "destination": "/vault/api/:path*" }
+    { "source": "/api/request-token", "destination": "/vault/api/request-token" },
+    { "source": "/api/verify-token", "destination": "/vault/api/verify-token" }
   ]
 }
