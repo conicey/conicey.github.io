@@ -1,5 +1,7 @@
 {
   "rewrites": [
-    { "source": "/(.*)", "destination": "/vault/$1" }
+    { "source": "/vault/:path*", "destination": "/vault/:path*" },
+    { "source": "/api/:path*", "destination": "/vault/api/:path*" },
+    { "source": "/:path*", "destination": "/vault/:path*" }
   ]
 }
