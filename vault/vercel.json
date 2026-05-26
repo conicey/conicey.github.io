@@ -1,6 +1,0 @@
-{
-  "rewrites": [
-    { "source": "/api/request-token", "destination": "/vault/api/request-token.js" },
-    { "source": "/api/verify-token", "destination": "/vault/api/verify-token.js" }
-  ]
-}
